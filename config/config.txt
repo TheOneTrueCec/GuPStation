@@ -21,7 +21,7 @@ SERVERNAME Russ Station
 SERVERSQLNAME RussStationSQL
 
 ## Station name: The name of the station as it is referred to in-game. If commented out, the game will generate a random name instead.
-#STATIONNAME Russ Station
+#STATIONNAME GuP Station
 
 ## Put on byond hub: Uncomment this to put your server on the byond hub.
 HUB
