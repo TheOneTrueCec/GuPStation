@@ -25,8 +25,9 @@
 	if(!..())
 		return
 	var/mob/living/M = A.affected_mob
+	var/slimestate = 1
 	if(isslimeperson(M))
-		var/slimestate = -1
+		slimestate = -1
 	switch(A.stage)
 		if(4, 5)
 			var/effectiveness = CanHeal(A)
