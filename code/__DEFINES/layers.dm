@@ -93,6 +93,8 @@
 #define CAMERA_STATIC_PLANE 19
 #define CAMERA_STATIC_LAYER 19
 
+#define CHAT_LAYER 12.1
+
 //HUD layer defines
 
 #define FULLSCREEN_PLANE 20
