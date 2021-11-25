@@ -25,6 +25,8 @@
 	if(!..())
 		return
 	var/mob/living/M = A.affected_mob
+	if(isslimeperson(M))
+		var/slimestate = -1
 	switch(A.stage)
 		if(4, 5)
 			var/effectiveness = CanHeal(A)
@@ -83,7 +85,7 @@
 	if(M.getToxLoss() && prob(5))
 		to_chat(M, "<span class='notice'>Your skin tingles as the starlight seems to heal you.</span>")
 
-	M.adjustToxLoss(-(4 * heal_amt)) //most effective on toxins
+	M.adjustToxLoss(-(4 * heal_amt)*slimestate) //most effective on toxins
 
 	var/list/parts = M.get_damaged_bodyparts(1,1, null, BODYPART_ORGANIC)
 
@@ -424,7 +426,7 @@
 		if(prob(5))
 			to_chat(M, "<span class='notice'>You feel warmer.</span>")
 
-	M.adjustToxLoss(-heal_amt)
+	M.adjustToxLoss(-heal_amt*slimestate)
 
 	var/list/parts = M.get_damaged_bodyparts(1,1, null, BODYPART_ORGANIC)
 	if(!parts.len)
@@ -484,7 +486,7 @@
 	if(cellular_damage)
 		M.adjustCloneLoss(-heal_amt * 0.5)
 
-	M.adjustToxLoss(-(2 * heal_amt))
+	M.adjustToxLoss(-(2 * heal_amt)*slimestate)
 
 	var/list/parts = M.get_damaged_bodyparts(1,1, null, BODYPART_ORGANIC)
 
