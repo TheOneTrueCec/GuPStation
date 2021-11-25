@@ -10,6 +10,7 @@
 	symptom_delay_min = 1
 	symptom_delay_max = 1
 	var/passive_message = "" //random message to infected but not actively healing people
+	var/Slimestate = 1 //Fixing Spaghetti Code with Elbow Macaroni
 	threshold_descs = list(
 		"Stage Speed 6" = "Doubles healing speed.",
 		"Stealth 4" = "Healing will no longer be visible to onlookers.",
@@ -25,9 +26,8 @@
 	if(!..())
 		return
 	var/mob/living/M = A.affected_mob
-	var/slimestate = 1
 	if(isslimeperson(M))
-		slimestate = -1
+		Slimestate = -1
 	switch(A.stage)
 		if(4, 5)
 			var/effectiveness = CanHeal(A)
@@ -86,7 +86,7 @@
 	if(M.getToxLoss() && prob(5))
 		to_chat(M, "<span class='notice'>Your skin tingles as the starlight seems to heal you.</span>")
 
-	M.adjustToxLoss(-(4 * heal_amt)*slimestate) //most effective on toxins
+	M.adjustToxLoss(-(4 * heal_amt)*Slimestate) //most effective on toxins
 
 	var/list/parts = M.get_damaged_bodyparts(1,1, null, BODYPART_ORGANIC)
 
@@ -427,7 +427,7 @@
 		if(prob(5))
 			to_chat(M, "<span class='notice'>You feel warmer.</span>")
 
-	M.adjustToxLoss(-heal_amt*slimestate)
+	M.adjustToxLoss(-heal_amt*Slimestate)
 
 	var/list/parts = M.get_damaged_bodyparts(1,1, null, BODYPART_ORGANIC)
 	if(!parts.len)
@@ -487,7 +487,7 @@
 	if(cellular_damage)
 		M.adjustCloneLoss(-heal_amt * 0.5)
 
-	M.adjustToxLoss(-(2 * heal_amt)*slimestate)
+	M.adjustToxLoss(-(2 * heal_amt)*Slimestate)
 
 	var/list/parts = M.get_damaged_bodyparts(1,1, null, BODYPART_ORGANIC)
 
