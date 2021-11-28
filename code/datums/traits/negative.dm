@@ -96,9 +96,12 @@
 /datum/quirk/family_heirloom/on_spawn()
 	var/mob/living/carbon/human/H = quirk_holder
 	var/obj/item/heirloom_type
+	var/special_heirloom_holder["ValkoinenSusi","Cecplays"]
 
 	if(is_species(H, /datum/species/moth) && prob(50))
 		heirloom_type = /obj/item/flashlight/lantern/heirloom_moth
+	else if(ckey(H) in special_heirloom_holder)
+		heirloom_type = /obj/item/crowbar/power
 	else
 		switch(quirk_holder.mind.assigned_role)
 			//Service jobs
