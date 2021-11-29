@@ -105,7 +105,7 @@
 		switch(H.real_name)
 			if("Karina Ivanov")
 				heirloom_type = /obj/item/bikehorn/golden
-				to_chat(H, "<span class='boldnotice'>There is a precious family [quirkholder.real_name]||| DEBUG TEXT|||</span>")
+				to_chat(H, "<span class='boldnotice'>There is a precious family [H.real_name]||| DEBUG TEXT|||</span>")
 	else
 		switch(quirk_holder.mind.assigned_role)
 			//Service jobs
