@@ -100,12 +100,12 @@
 
 	if(is_species(H, /datum/species/moth) && prob(50))
 		heirloom_type = /obj/item/flashlight/lantern/heirloom_moth
-	else if(ckey(quirk_holder) in special_heirloom_holder)
-		to_chat(quirk_holder, "<span class='boldnotice'>There is a precious family [quirkholder.real_name]||| DEBUG TEXT|||</span>")
-		switch(quirk_holder.real_name)
+	else if(ckey(H) in special_heirloom_holder)
+		to_chat(H, "<span class='boldnotice'>There is a precious family [quirkholder.real_name]||| DEBUG TEXT|||</span>")
+		switch(H.real_name)
 			if("Karina Ivanov")
 				heirloom_type = /obj/item/bikehorn/golden
-				to_chat(quirk_holder, "<span class='boldnotice'>There is a precious family [quirkholder.real_name]||| DEBUG TEXT|||</span>")
+				to_chat(H, "<span class='boldnotice'>There is a precious family [quirkholder.real_name]||| DEBUG TEXT|||</span>")
 	else
 		switch(quirk_holder.mind.assigned_role)
 			//Service jobs
