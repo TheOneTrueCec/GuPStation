@@ -180,20 +180,21 @@
 	var/where
 
 /datum/quirk/old_guard/on_spawn()
-	var/ckey_quirk_holder = ckey(quirk_holder)
+	var/mob/living/carbon/human/H = quirk_holder
+	var/name_quirk_holder = H.real_name
 
-	switch(ckey_quirk_holder)
+	switch(name_quirk_holder)
 
-		if("valkoinensusi")
+		if("Karina Ivanov")
 			old_guard_item_type = /obj/item/storage/briefcase/launchpad
 		
-		if("cecplays")
+		if("Aphomia Lampshade")
 			old_guard_item_type = /obj/item/grenade/c4
 	
 	if(!old_guard_item_type)
 		old_guard_item_type = /obj/item/trash/	
 	old_guard_item = new old_guard_item_type
-	var/mob/living/carbon/human/H = quirk_holder
+
 	
 	var/list/slots = list(
 		"in your left pocket" = ITEM_SLOT_LPOCKET,
@@ -208,3 +209,5 @@
 		SEND_SIGNAL(H.back, COMSIG_TRY_STORAGE_SHOW, H)
 
 	to_chat(quirk_holder, "<span class='boldnotice'>Your Signature Item is [where]</span>")
+
+
