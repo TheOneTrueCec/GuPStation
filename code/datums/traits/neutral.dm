@@ -168,3 +168,47 @@
 		SEND_SIGNAL(H.back, COMSIG_TRY_STORAGE_SHOW, H)
 
 	to_chat(quirk_holder, "<span class='notice'>There is a pinpointer [where], which can help you find your way around. Click in-hand to activate.</span>")
+
+/datum/quirk/old_guard
+	name = "Signature Item"
+	desc = "Long-term employees can start their shifts with an item from their past"
+	value = 0
+	medical_record_text = "REDACTED"
+
+	var/obj/item/old_guard_item_type
+	var/obj/item/old_guard_item
+	var/where
+
+/datum/quirk/old_guard/on_spawn()
+	var/mod/living/carbon/human/H = quirk_holder
+	var/ckey_quirk_holder = ckey(quirk_holder)
+	
+	switch(ckey_quirk_holder)
+
+		if("valkoinensusi")
+			old_guard_item_type = /obj/item/storage/briefcase/launchpad
+		
+		if("cecplays")
+			old_guard_item_type = /obj/item/grenade/c4
+	
+	if(!old_guard_item_type)
+		old_guard_item_type = /obj/item/trash/	
+	old_guard_item = new old_guard_item_type
+	old_guard_item.owner = H.real_name
+	old_guard_item.roundstart = TRUE
+	
+	var/list/slots = list(
+		"in your left pocket" = ITEM_SLOT_LPOCKET,
+		"in your right pocket" = ITEM_SLOT_RPOCKET,
+		"in your backpack" = ITEM_SLOT_BACKPACK
+	)
+	where = H.equip_in_one_of_slots(old_guard_item, slots, FALSE) || "at your feet"
+
+/datum/quirk/old_guard/post_add()
+	if(where == "in your backpack")
+		var/mob/living/carbon/human/H = quirk_holder
+		SEND_SIGNAL(H.back, COMSIG_TRY_STORAGE_SHOW, H)
+
+	to_chat(quirk_holder, "<span class='boldnotice'>Your Signature Item is [where]</span>")
+
+
