@@ -96,16 +96,16 @@
 /datum/quirk/family_heirloom/on_spawn()
 	var/mob/living/carbon/human/H = quirk_holder
 	var/obj/item/heirloom_type
-	var/list/special_heirloom_holder = ["ValkoinenSusi","Cecplays"]
+	var/list/special_heirloom_holder = ["cecplays"]
 
 	if(is_species(H, /datum/species/moth) && prob(50))
 		heirloom_type = /obj/item/flashlight/lantern/heirloom_moth
-	//else if(ckey(H) in special_heirloom_holder)
-	//	to_chat(H, "<span class='boldnotice'>||| DEBUG TEXT|||</span>")
-	//	switch(H.real_name)
-	//		if("Karina Ivanov")
-	//			heirloom_type = /obj/item/bikehorn/golden
-	//			to_chat(H, "<span class='boldnotice'>||| DEBUG TEXT|||</span>")
+	else if(ckey(H) in special_heirloom_holder)
+		to_chat(H, "<span class='boldnotice'>||| DEBUG TEXT|||</span>")
+		switch(H.real_name)
+			if("Karina Ivanov")
+				heirloom_type = /obj/item/bikehorn/golden
+				to_chat(H, "<span class='boldnotice'>||| DEBUG TEXT|||</span>")
 	else
 		switch(quirk_holder.mind.assigned_role)
 			//Service jobs
@@ -175,7 +175,7 @@
 			if("Cargo Technician")
 				heirloom_type = /obj/item/clipboard
 			if("Shaft Miner")
-				heirloom_type = /obj/item/bikehorn/golden //pick(/obj/item/pickaxe/mini, /obj/item/shovel)
+				heirloom_type = pick(/obj/item/pickaxe/mini, /obj/item/shovel)
 
 	if(!heirloom_type)
 		heirloom_type = pick(
@@ -195,7 +195,7 @@
 		var/mob/living/carbon/human/H = quirk_holder
 		SEND_SIGNAL(H.back, COMSIG_TRY_STORAGE_SHOW, H)
 
-	to_chat(quirk_holder, "<span class='boldnotice'>There is a precious family [heirloom.name] [where], passed down from generation to generation. Keep it safe!...Your Real Name is [H.real_name]. Your Ckey is [ckey(H)]</span>")
+	to_chat(quirk_holder, "<span class='boldnotice'>There is a precious family [heirloom.name] [where], passed down from generation to generation. Keep it safe!</span>")
 
 	var/list/names = splittext(quirk_holder.real_name, " ")
 	var/family_name = names[names.len]
