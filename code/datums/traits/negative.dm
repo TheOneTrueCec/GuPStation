@@ -101,7 +101,7 @@
 	if(is_species(H, /datum/species/moth) && prob(50))
 		heirloom_type = /obj/item/flashlight/lantern/heirloom_moth
 	else if(ckey(H) in special_heirloom_holder)
-		to_chat(H, "<span class='boldnotice'>There is a precious family [quirkholder.real_name]||| DEBUG TEXT|||</span>")
+		to_chat(H, "<span class='boldnotice'>There is a precious family [H.real_name]||| DEBUG TEXT|||</span>")
 		switch(H.real_name)
 			if("Karina Ivanov")
 				heirloom_type = /obj/item/bikehorn/golden
