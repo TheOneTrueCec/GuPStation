@@ -101,7 +101,9 @@
 	if(is_species(H, /datum/species/moth) && prob(50))
 		heirloom_type = /obj/item/flashlight/lantern/heirloom_moth
 	else if(ckey(H) in special_heirloom_holder)
-		heirloom_type = /obj/item/crowbar/power
+		switch(quirk_holder.real_name)
+			if("Karina Ivanov")
+				heirloom_type = /obj/item/bikehorn/golden
 	else
 		switch(quirk_holder.mind.assigned_role)
 			//Service jobs
