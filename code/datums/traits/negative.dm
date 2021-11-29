@@ -96,16 +96,16 @@
 /datum/quirk/family_heirloom/on_spawn()
 	var/mob/living/carbon/human/H = quirk_holder
 	var/obj/item/heirloom_type
-	var/list/special_heirloom_holder = ["ValkoinenSusi","Cecplays"]
+	var/list/special_heirloom_holder = ["cecplays"]
 
 	if(is_species(H, /datum/species/moth) && prob(50))
 		heirloom_type = /obj/item/flashlight/lantern/heirloom_moth
 	else if(ckey(H) in special_heirloom_holder)
-		to_chat(H, "<span class='boldnotice'>There is a precious family [H.real_name]||| DEBUG TEXT|||</span>")
+		to_chat(H, "<span class='boldnotice'>||| DEBUG TEXT|||</span>")
 		switch(H.real_name)
 			if("Karina Ivanov")
 				heirloom_type = /obj/item/bikehorn/golden
-				to_chat(H, "<span class='boldnotice'>There is a precious family [H.real_name]||| DEBUG TEXT|||</span>")
+				to_chat(H, "<span class='boldnotice'>||| DEBUG TEXT|||</span>")
 	else
 		switch(quirk_holder.mind.assigned_role)
 			//Service jobs
