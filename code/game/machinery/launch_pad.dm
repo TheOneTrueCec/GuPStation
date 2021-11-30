@@ -302,9 +302,14 @@
 	else
 		return ..()
 /obj/item/storage/briefcase/launchpad/old_guard
+	name = "Ivanov Bluespace Briefcase"
 	w_class = WEIGHT_CLASS_NORMAL
 	force = 15
-	desc = "Old Guard Case, Testing Text Here"
+	desc = "A Briefcase developed by the Ivanov family during their time at Cybersun"
+/obj/machinery/launchpad/briefcase/old_guard
+	range = 255
+	var/obj/item/storage/briefcase/launchpad/briefcase = /obj/item/storage/briefcase/launchpad/briefcase/old_guard
+
 /obj/item/launchpad_remote
 	name = "folder"
 	desc = "A folder."
