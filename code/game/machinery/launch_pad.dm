@@ -308,7 +308,7 @@
 	desc = "A Briefcase developed by the Ivanov family during their time at Cybersun"
 /obj/machinery/launchpad/briefcase/old_guard
 	range = 255
-	var/obj/item/storage/briefcase/launchpad/briefcase = /obj/item/storage/briefcase/launchpad/briefcase/old_guard
+	/obj/item/storage/briefcase/launchpad/briefcase = /obj/item/storage/briefcase/launchpad/briefcase/old_guard
 
 /obj/item/launchpad_remote
 	name = "folder"
