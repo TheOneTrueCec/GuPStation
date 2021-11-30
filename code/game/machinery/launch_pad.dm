@@ -263,7 +263,6 @@
 		to_chat(user, "<span class='notice'>You link [src] to [L].</span>")
 	else
 		return ..()
-
 //Briefcase item that contains the launchpad.
 /obj/item/storage/briefcase/launchpad
 	var/obj/machinery/launchpad/briefcase/pad
@@ -302,7 +301,10 @@
 		to_chat(user, "<span class='notice'>You link [pad] to [L].</span>")
 	else
 		return ..()
-
+/obj/item/storage/briefcase/launchpad/old_guard
+	w_class = WEIGHT_CLASS_NORMAL
+	force = 15
+	desc = "Old Guard Case, Testing Text Here"
 /obj/item/launchpad_remote
 	name = "folder"
 	desc = "A folder."

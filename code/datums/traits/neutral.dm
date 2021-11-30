@@ -186,14 +186,14 @@
 	switch(name_quirk_holder)
 
 		if("Karina Ivanov")
-			old_guard_item_type = /obj/item/storage/briefcase/launchpad
+			old_guard_item_type = /obj/item/storage/briefcase/launchpad/old_guard
 		
 		if("Aphomia Lampshade")
 			old_guard_item_type = /obj/item/grenade/c4
 	
 	if(!old_guard_item_type)
-		old_guard_item_type = /obj/item/trash/	
-	old_guard_item = new old_guard_item_type
+		old_guard_item_type = /obj/item/storage/crayons	
+	old_guard_item = new old_guard_item_type(get_turf(quirk_holder))
 
 	
 	var/list/slots = list(
