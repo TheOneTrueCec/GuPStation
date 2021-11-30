@@ -306,10 +306,6 @@
 	w_class = WEIGHT_CLASS_NORMAL
 	force = 15
 	desc = "A Briefcase developed by the Ivanov family during their time at Cybersun"
-/obj/machinery/launchpad/briefcase/old_guard
-	range = 255
-	/obj/item/storage/briefcase/launchpad/briefcase = /obj/item/storage/briefcase/launchpad/briefcase/old_guard
-
 /obj/item/launchpad_remote
 	name = "folder"
 	desc = "A folder."
