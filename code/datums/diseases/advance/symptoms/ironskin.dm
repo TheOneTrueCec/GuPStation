@@ -26,7 +26,7 @@
 /datum/symptom/ironskin/Activate(datum/disease/advance/A)
 	if(!..())
 		return
-	var/mob/living/M = A.affected_mob
+	var/mob/living/carbon/human/M = A.affected_mob
 	switch(A.stage)
 		if(5)
 			if(armor_check)
