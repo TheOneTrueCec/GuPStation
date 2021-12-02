@@ -31,7 +31,8 @@
 		if(5)
 			if(armor_check)
 				M.physiology.damage_resistance += 10
-			for(var/L in M.bodyparts) //L for Limb
+			for(var/BP in M.bodyparts) //L for Limb
+				var/obj/item/bodypart/L = BP
 				L.brute_reduction += (5+damage_resist_augment)
 				L.burn_reduction += (4+damage_resist_augment)
 			M.visible_message("<span class='warning'>[M]'s skin seems to harden!</span>", "<span class='notice'>You feel your skin harden!</span>")
@@ -41,9 +42,11 @@
 /datum/symptom/ironskin/End(datum/disease/advance/A)
 	if(!..())
 		return
+	var/mob/living/carbon/human/M = A.affected_mob
 	if(A.affected_mob)
 		if(armor_check)
 			M.physiology.damage_resistance -= 10
-		for(var/L in M.bodyparts)
+		for(var/BP in M.bodyparts)
+			var/obj/item/bodypart/L = BP
 			L.brute_reduction -= (5+damage_resist_augment)
 			L.burn_reduction -= (4+damage_resist_augment)
