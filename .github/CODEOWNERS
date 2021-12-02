@@ -83,6 +83,10 @@
 
 /tgui @stylemistake
 
+# ValkoinenSusi
+
+/code/datums/diseases/advance/symptoms/ironskin
+
 # Qustinnus
 /code/datums/components/mood.dm @Qustinnus
 /code/datums/mood_events/ @Qustinnus
