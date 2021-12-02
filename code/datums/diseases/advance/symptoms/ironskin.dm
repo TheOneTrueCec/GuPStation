@@ -10,6 +10,7 @@
 	symptom_delay_max = 1
 	var/armor_check = FALSE
 	var/damage_resist_augment = 0
+	var/run_check = FALSE
 	threshold_descs = list(
 		"Resistance 7" = "Increases damage reduction.",
 		"Resistance 4" = "Increases damage resistance.",
@@ -26,6 +27,8 @@
 /datum/symptom/ironskin/Activate(datum/disease/advance/A)
 	if(!..())
 		return
+	if(run_check)
+		return
 	var/mob/living/carbon/human/M = A.affected_mob
 	switch(A.stage)
 		if(5)
@@ -36,9 +39,11 @@
 				L.brute_reduction += (5+damage_resist_augment)
 				L.burn_reduction += (4+damage_resist_augment)
 			M.visible_message("<span class='warning'>[M]'s skin seems to harden!</span>", "<span class='notice'>You feel your skin harden!</span>")
+			run_check = TRUE
+
 		else
-			if (prob(50)) // spam
-				M.visible_message("<span class='warning'>[M] looks tougher</span>", "<span class='notice'>Your skin feels stiff</span>")
+			if(prob(5))
+				M.visible_message("<span class='warning'>[M] looks hardier</span>", "<span class='notice'>Your skin feels stiff</span>")
 /datum/symptom/ironskin/End(datum/disease/advance/A)
 	if(!..())
 		return

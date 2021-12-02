@@ -21,7 +21,7 @@
 
 /datum/disease/advance/debug/New()
 	name = "Flu"
-	symptoms = list(new/datum/symptom/ironskin)
+	symptoms = list(new/datum/symptom/ironskin,new/datum/symptom/youth,new/datum/symptom/viraladaptation,new/datum/symptom/viraladaptation)
 	..()
 
 //Randomly generated Disease, for virus crates and events
