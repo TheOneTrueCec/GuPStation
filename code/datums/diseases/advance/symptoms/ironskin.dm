@@ -31,7 +31,7 @@
 		if(5)
 			if(armor_check)
 				M.physiology.damage_resistance += 10
-			for(var/L in M.bodyparts)
+			for(var/L in M.bodyparts) //L for Limb
 				L.brute_reduction += (5+damage_resist_augment)
 				L.burn_reduction += (4+damage_resist_augment)
 			M.visible_message("<span class='warning'>[M]'s skin seems to harden!</span>", "<span class='notice'>You feel your skin harden!</span>")
