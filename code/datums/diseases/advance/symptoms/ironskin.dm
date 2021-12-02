@@ -30,7 +30,7 @@
 	switch(A.stage)
 		if(5)
 			if(armor_check)
-				M.physiology.armor += 10
+				M.physiology.damage_resistance += 10
 			for(var/L in M.bodyparts)
 				L.brute_reduction += (5+damage_resist_augment)
 				L.burn_reduction += (4+damage_resist_augment)
@@ -43,7 +43,7 @@
 		return
 	if(A.affected_mob)
 		if(armor_check)
-				M.physiology.armor -= 10
+				M.physiology.damage_resistance -= 10
 			for(var/L in M.bodyparts)
 				L.brute_reduction -= (5+damage_resist_augment)
 				L.burn_reduction -= (4+damage_resist_augment)
