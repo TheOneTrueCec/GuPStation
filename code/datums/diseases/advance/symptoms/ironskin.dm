@@ -11,6 +11,7 @@
 	var/armor_check = FALSE
 	var/damage_resist_augment = 0
 	var/run_check = FALSE
+	var/list/infected_parts = list()
 	threshold_descs = list(
 		"Resistance 7" = "Increases damage reduction.",
 		"Resistance 4" = "Increases damage resistance.",
@@ -36,8 +37,10 @@
 				M.physiology.damage_resistance += 10
 			for(var/BP in M.bodyparts) //L for Limb
 				var/obj/item/bodypart/L = BP
-				L.brute_reduction += (5+damage_resist_augment)
-				L.burn_reduction += (4+damage_resist_augment)
+				if(L.status == BODYPART_ORGANIC)
+					L.brute_reduction += (5+damage_resist_augment)
+					L.burn_reduction += (4+damage_resist_augment)
+					infected_parts += BP
 			M.visible_message("<span class='warning'>[M]'s skin seems to harden!</span>", "<span class='notice'>You feel your skin harden!</span>")
 			run_check = TRUE
 
@@ -51,7 +54,7 @@
 	if(A.affected_mob)
 		if(armor_check)
 			M.physiology.damage_resistance -= 10
-		for(var/BP in M.bodyparts)
+		for(var/BP in infected_parts)
 			var/obj/item/bodypart/L = BP
 			L.brute_reduction -= (5+damage_resist_augment)
 			L.burn_reduction -= (4+damage_resist_augment)
