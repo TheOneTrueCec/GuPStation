@@ -5,6 +5,7 @@ export { Button } from './Button';
 export { ColorBox } from './ColorBox';
 export { Collapsible } from './Collapsible';
 export { Dimmer } from './Dimmer';
+export { Divider } from './Divider';
 export { Dropdown } from './Dropdown';
 export { Flex } from './Flex';
 export { Grid } from './Grid';
