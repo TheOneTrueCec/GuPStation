@@ -44,6 +44,8 @@
 	var/synchronizer_coeff = -1 //makes the mutation hurt the user less
 	var/power_coeff = -1 //boosts mutation strength
 	var/energy_coeff = -1 //lowers mutation cooldown
+	var/list/valid_chrom_list = list() //List of strings of valid chromosomes this mutation can accept.
+
 
 /datum/mutation/human/New(class_ = MUT_OTHER, timer, datum/mutation/human/copymut)
 	. = ..()
