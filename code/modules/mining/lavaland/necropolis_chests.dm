@@ -139,7 +139,7 @@
 	else
 		return FALSE
 
-/obj/item/choice_beacon/proc/generate_loot_options(mob/living/M)
+/obj/item/mining_loot_voucher/proc/generate_loot_options(mob/living/M)
 	var/list/display_names = generate_display_names()
 	var/obj/item/loot_choice
 	if(!display_names.len)
