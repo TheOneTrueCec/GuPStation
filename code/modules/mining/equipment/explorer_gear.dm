@@ -57,29 +57,10 @@
 
 /obj/item/clothing/mask/gas/explorer/mkii
 	name = "explorer gas mask MK.II"
-	desc = "A military-grade gas mask that can be connected to an air supply. This mask has added features, including a MED-HUD, welding grade flash protection, and flash-proofed night vision"
+	desc = "A military-grade gas mask that can be connected to an air supply. This mask has welding grade flash protection"
 	resistance_flags = FIRE_PROOF | LAVA_PROOF
 	flash_protect = FLASH_PROTECTION_WELDER
 	flags_cover = MASKCOVERSEYES | MASKCOVERSEYES | PEPPERPROOF
-	lighting_alpha = LIGHTING_PLANE_ALPHA_INVISIBLE
-	darkness_view = 10
-	var/hud_type = DATA_HUD_MEDICAL_ADVANCED
-
-/obj/clothing/mask/gas/explorer/mkii/equipped(mob/living/carbon/human/user,slot)
-	..()
-	if(slot != ITEM_SLOT_MASK)
-		return
-	if(hud_type)
-		var/datum/atom_hud/H = GLOB.huds[hud_type]
-		H.add_hud_to(user)
-
-/obj/clothing/mask/gas/explorer/mkii/dropped(mob/living/carbon/human/user)
-	..()
-	if(!istype(user) || user.mask != src)
-		return
-	if(hud_type)
-		var/datum/atom_hud/H = GLOB.huds[hud_type]
-		H.remove_hud_from(user)
 
 /obj/item/clothing/suit/space/hostile_environment
 	name = "H.E.C.K. suit"

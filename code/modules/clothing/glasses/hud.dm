@@ -59,6 +59,15 @@
 	lighting_alpha = LIGHTING_PLANE_ALPHA_MOSTLY_VISIBLE
 	glass_colour_type = /datum/client_colour/glass_colour/green
 
+/obj/item/clothing/glasses/hud/health/night/mining
+	name = "night vision health scanner HUD"
+	desc = "An advanced medical head-up display that allows shaft miners to repel hostile fauna in complete darkness."
+	icon_state = "healthhudnight"
+	item_state = "glasses"
+	darkness_view = 20
+	lighting_alpha = LIGHTING_PLANE_ALPHA_INVISIBLE
+	glass_colour_type = /datum/client_colour/glass_colour/green
+
 /obj/item/clothing/glasses/hud/health/sunglasses
 	name = "medical HUDSunglasses"
 	desc = "Sunglasses with a medical HUD."

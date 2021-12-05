@@ -61,7 +61,7 @@
 		new /datum/data/mining_equipment("KA Damage Increase",			/obj/item/borg/upgrade/modkit/damage,								1000),
 		new /datum/data/mining_equipment("KA Cooldown Decrease",		/obj/item/borg/upgrade/modkit/cooldown,								1000),
 		new /datum/data/mining_equipment("KA AoE Damage",				/obj/item/borg/upgrade/modkit/aoe/mobs,								2000),
-		new /datum/data/mining_equipment("Mining Equipment Kit MK.II",		/obj/item/storage/backpack/duffelbag/mining_equipment_kit,				5000)
+		new /datum/data/mining_equipment("Mining Equipment Kit MK.II",	/obj/item/storage/backpack/duffelbag/mining_equipment_kit,			5000)
 		)
 
 /datum/data/mining_equipment
@@ -299,3 +299,4 @@
 /obj/item/storage/backpack/duffelbag/mining_equipment_kit/PopulateContents()
 	new /obj/item/clothing/mask/gas/explorer/mkii(src)
 	new /obj/item/clothing/under/rank/cargo/miner/mkii(src)
+	new /obj/item/clothing/glasses/hud/health/night/mining
