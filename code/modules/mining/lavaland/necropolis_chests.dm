@@ -151,6 +151,8 @@
 	var/temphold = display_names[choice] // This needs to be on a separate var as list member access is not allowed for new
 	loot_choice = new temphold(get_turf(M))
 	if(loot_choice)
+		to_chat(M, "<span class='notice'>You read the scroll, and point to an item's description. The aging scroll crumbles to dust in the process. Whoops.</span>")
+		new /obj/effect/decal/cleanable/ash(get_turf(M))
 		qdel(src)
 	
 
