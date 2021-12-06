@@ -46,6 +46,8 @@
 
 /obj/item/clothing/under/rank/cargo/miner/mkii
 	name = "shaft miner's jumpsuit MK.II"
+	icon_state = "miner"
+	item_state = "miner"
 	desc = "It's a snappy new jumpsuit, with a sturdy set of overalls. New features include total lava-proofing and additional armor"
 	armor = list("melee" = 10, "bullet" = 0, "laser" = 0,"energy" = 0, "bomb" = 0, "bio" = 0, "rad" = 0, "fire" = 85, "acid" = 30)
 	resistance_flags = LAVA_PROOF | FIRE_PROOF

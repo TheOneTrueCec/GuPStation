@@ -299,4 +299,4 @@
 /obj/item/storage/backpack/duffelbag/mining_equipment_kit/PopulateContents()
 	new /obj/item/clothing/mask/gas/explorer/mkii(src)
 	new /obj/item/clothing/under/rank/cargo/miner/mkii(src)
-	new /obj/item/clothing/glasses/hud/health/night/mining
+	new /obj/item/clothing/glasses/hud/health/night/mining(src)
