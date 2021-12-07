@@ -92,8 +92,8 @@
 
 #define CAMERA_STATIC_PLANE 19
 #define CAMERA_STATIC_LAYER 19
-
-#define CHAT_LAYER 12.1
+#define CHAT_LAYER 12.0001 // Do not insert layers between these two values
+#define CHAT_LAYER_MAX 12.9999
 
 //HUD layer defines
 
@@ -112,3 +112,5 @@
 
 #define SPLASHSCREEN_LAYER 23
 #define SPLASHSCREEN_PLANE 23
+
+
