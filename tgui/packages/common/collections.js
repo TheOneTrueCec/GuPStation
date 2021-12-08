@@ -1,10 +1,16 @@
 /**
+ * @file
+ * @copyright 2020 Aleksej Komarov
+ * @license MIT
+ */
+
+/**
  * Converts a given collection to an array.
  *
  * - Arrays are returned unmodified;
  * - If object was provided, keys will be discarded;
  * - Everything else will result in an empty array.
- * 
+ *
  * @returns {any[]}
  */
 export const toArray = collection => {
@@ -49,13 +55,39 @@ export const toArray = collection => {
  * @param {string} keyProp Property, to which key will be assigned
  * @returns {T[]} Array of keyed objects
  */
- export const toKeyedArray = (obj, keyProp = 'key') => {
+export const toKeyedArray = (obj, keyProp = 'key') => {
   return map((item, key) => ({
     [keyProp]: key,
     ...item,
   }))(obj);
 };
 
+/**
+ * Iterates over elements of collection, returning an array of all elements
+ * iteratee returns truthy for. The predicate is invoked with three
+ * arguments: (value, index|key, collection).
+ *
+ * If collection is 'null' or 'undefined', it will be returned "as is"
+ * without emitting any errors (which can be useful in some cases).
+ *
+ * @returns {any[]}
+ */
+export const filter = iterateeFn => collection => {
+  if (collection === null && collection === undefined) {
+    return collection;
+  }
+  if (Array.isArray(collection)) {
+    const result = [];
+    for (let i = 0; i < collection.length; i++) {
+      const item = collection[i];
+      if (iterateeFn(item, i, collection)) {
+        result.push(item);
+      }
+    }
+    return result;
+  }
+  throw new Error(`filter() can't iterate on type ${typeof collection}`);
+};
 
 /**
  * Creates an array of values by running each element in collection
@@ -64,7 +96,7 @@ export const toArray = collection => {
  *
  * If collection is 'null' or 'undefined', it will be returned "as is"
  * without emitting any errors (which can be useful in some cases).
- * 
+ *
  * @returns {any[]}
  */
 export const map = iterateeFn => collection => {
@@ -113,7 +145,7 @@ const COMPARATOR = (objA, objB) => {
  * of running each element in a collection thru each iteratee.
  *
  * Iteratees are called with one argument (value).
- * 
+ *
  * @returns {any[]}
  */
 export const sortBy = (...iterateeFns) => array => {
@@ -171,7 +203,7 @@ export const reduce = (reducerFn, initialValue) => array => {
  * is determined by the order they occur in the array. The iteratee is
  * invoked with one argument: value.
  */
- export const uniqBy = iterateeFn => array => {
+export const uniqBy = iterateeFn => array => {
   const { length } = array;
   const result = [];
   const seen = iterateeFn ? [] : result;
@@ -207,7 +239,7 @@ export const reduce = (reducerFn, initialValue) => array => {
  * Creates an array of grouped elements, the first of which contains
  * the first elements of the given arrays, the second of which contains
  * the second elements of the given arrays, and so on.
- * 
+ *
  * @returns {any[]}
  */
 export const zip = (...arrays) => {
@@ -231,7 +263,7 @@ export const zip = (...arrays) => {
  * This method is like "zip" except that it accepts iteratee to
  * specify how grouped values should be combined. The iteratee is
  * invoked with the elements of each group.
- * 
+ *
  * @returns {any[]}
  */
 export const zipWith = iterateeFn => (...arrays) => {

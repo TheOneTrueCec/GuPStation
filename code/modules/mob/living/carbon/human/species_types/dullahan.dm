@@ -2,11 +2,11 @@
 	name = "Dullahan"
 	id = "dullahan"
 	default_color = "FFFFFF"
-	species_traits = list(EYECOLOR,HAIR,FACEHAIR,LIPS)
+	species_traits = list(EYECOLOR,HAIR,FACEHAIR,LIPS, HAS_FLESH, HAS_BONE)
 	inherent_traits = list(TRAIT_NOHUNGER,TRAIT_NOBREATH)
-	default_features = list("mcolor" = "FFF", "tail_human" = "None", "ears" = "None", "wings" = "None")
+	mutant_bodyparts = list("tail_human" = "None", "ears" = "None", "wings" = "None")
 	use_skintones = TRUE
-	mutant_brain = /obj/item/organ/brain/dullahan
+	mutantbrain = /obj/item/organ/brain/dullahan
 	mutanteyes = /obj/item/organ/eyes/dullahan
 	mutanttongue = /obj/item/organ/tongue/dullahan
 	mutantears = /obj/item/organ/ears/dullahan
@@ -35,6 +35,7 @@
 			var/obj/item/organ/eyes/E = H.getorganslot(ORGAN_SLOT_EYES)
 			var/datum/action/item_action/organ_action/dullahan/D = locate() in E?.actions
 			D?.Trigger()
+	H.set_safe_hunger_level()
 
 /datum/species/dullahan/on_species_loss(mob/living/carbon/human/H)
 	H.flags_1 |= HEAR_1
@@ -142,8 +143,8 @@
 		hearers += owner
 
 //Stops dullahans from gibbing when regenerating limbs
-/obj/item/dullahan_relay/proc/unlist_head(datum/source, noheal = FALSE, list/excluded_limbs)
-	excluded_limbs |= BODY_ZONE_HEAD
+/obj/item/dullahan_relay/proc/unlist_head(datum/source, noheal = FALSE, list/excluded_zones)
+	excluded_zones |= BODY_ZONE_HEAD
 
 //Retrieving the owner's head for better ahealing.
 /obj/item/dullahan_relay/proc/retrieve_head(datum/source, full_heal, admin_revive)

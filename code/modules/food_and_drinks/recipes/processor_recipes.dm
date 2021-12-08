@@ -5,15 +5,13 @@
 	var/required_machine = /obj/machinery/processor
 	var/multiplier = 1 //This multiplies the number of products produced per object processed.
 
-/* honk start -- Contains "faggot"
 /datum/food_processor_process/meat
-	input = /obj/item/reagent_containers/food/snacks/meat/slab
-	output = /obj/item/reagent_containers/food/snacks/faggot
-honk end */
+	input = /obj/item/food/meat/slab
+	output = /obj/item/food/meatball
 
 /datum/food_processor_process/bacon
-	input = /obj/item/reagent_containers/food/snacks/meat/rawcutlet
-	output = /obj/item/reagent_containers/food/snacks/meat/rawbacon
+	input = /obj/item/food/meat/rawcutlet
+	output = /obj/item/food/meat/rawbacon
 
 /datum/food_processor_process/potatowedges
 	input = /obj/item/reagent_containers/food/snacks/grown/potato/wedges
@@ -37,7 +35,7 @@ honk end */
 
 /datum/food_processor_process/spaghetti
 	input = /obj/item/reagent_containers/food/snacks/doughslice
-	output = /obj/item/reagent_containers/food/snacks/spaghetti
+	output = /obj/item/food/spaghetti
 
 /datum/food_processor_process/corn
 	input = /obj/item/reagent_containers/food/snacks/grown/corn

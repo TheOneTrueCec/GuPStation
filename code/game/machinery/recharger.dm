@@ -1,7 +1,7 @@
 /obj/machinery/recharger
 	name = "recharger"
 	icon = 'icons/obj/stationobjs.dmi'
-	icon_state = "recharger0"
+	icon_state = "recharger"
 	desc = "A charging dock for energy based weaponry."
 	use_power = IDLE_POWER_USE
 	idle_power_usage = 4
@@ -57,7 +57,7 @@
 		if(charging)
 			to_chat(user, "<span class='notice'>Remove the charging item first!</span>")
 			return
-		setAnchored(!anchored)
+		set_anchored(!anchored)
 		power_change()
 		to_chat(user, "<span class='notice'>You [anchored ? "attached" : "detached"] [src].</span>")
 		G.play_tool_sound(src)
@@ -91,7 +91,8 @@
 		return 1
 
 	if(anchored && !charging)
-		if(default_deconstruction_screwdriver(user, "rechargeropen", "recharger0", G))
+		if(default_deconstruction_screwdriver(user, "recharger", "recharger", G))
+			update_icon()
 			return
 
 		if(panel_open && G.tool_behaviour == TOOL_CROWBAR)
@@ -112,13 +113,17 @@
 		user.put_in_hands(charging)
 		setCharging(null)
 
-/obj/machinery/recharger/attack_tk(mob/user)
-	if(charging)
-		charging.update_icon()
-		charging.forceMove(drop_location())
-		setCharging(null)
 
-/obj/machinery/recharger/process()
+/obj/machinery/recharger/attack_tk(mob/user)
+	if(!charging)
+		return
+	charging.update_icon()
+	charging.forceMove(drop_location())
+	setCharging(null)
+	return COMPONENT_CANCEL_ATTACK_CHAIN
+
+
+/obj/machinery/recharger/process(delta_time)
 	if(machine_stat & (NOPOWER|BROKEN) || !anchored)
 		return PROCESS_KILL
 
@@ -127,8 +132,8 @@
 		var/obj/item/stock_parts/cell/C = charging.get_cell()
 		if(C)
 			if(C.charge < C.maxcharge)
-				C.give(C.chargerate * recharge_coeff)
-				use_power(250 * recharge_coeff)
+				C.give(C.chargerate * recharge_coeff * delta_time / 2)
+				use_power(125 * recharge_coeff * delta_time)
 				using_power = TRUE
 			update_icon()
 
@@ -136,7 +141,7 @@
 			var/obj/item/ammo_box/magazine/recharge/R = charging
 			if(R.stored_ammo.len < R.max_ammo)
 				R.stored_ammo += new R.ammo_type(R)
-				use_power(200 * recharge_coeff)
+				use_power(100 * recharge_coeff * delta_time)
 				using_power = TRUE
 			update_icon()
 			return
@@ -158,16 +163,24 @@
 			if(B.cell)
 				B.cell.charge = 0
 
-
-/obj/machinery/recharger/update_icon_state()
+/obj/machinery/recharger/update_overlays()
+	. = ..()
+	SSvis_overlays.remove_vis_overlay(src, managed_vis_overlays)
+	luminosity = 0
 	if(machine_stat & (NOPOWER|BROKEN) || !anchored)
-		icon_state = "rechargeroff"
-	else if(panel_open)
-		icon_state = "rechargeropen"
-	else if(charging)
+		return
+	if(panel_open)
+		SSvis_overlays.add_vis_overlay(src, icon, "recharger-open", layer, plane, dir, alpha)
+		return
+
+	luminosity = 1
+	if (charging)
 		if(using_power)
-			icon_state = "recharger1"
+			SSvis_overlays.add_vis_overlay(src, icon, "recharger-charging", layer, plane, dir, alpha)
+			SSvis_overlays.add_vis_overlay(src, icon, "recharger-charging", EMISSIVE_LAYER, EMISSIVE_PLANE, dir, alpha)
 		else
-			icon_state = "recharger2"
+			SSvis_overlays.add_vis_overlay(src, icon, "recharger-full", layer, plane, dir, alpha)
+			SSvis_overlays.add_vis_overlay(src, icon, "recharger-full", EMISSIVE_LAYER, EMISSIVE_PLANE, dir, alpha)
 	else
-		icon_state = "recharger0"
+		SSvis_overlays.add_vis_overlay(src, icon, "recharger-empty", layer, plane, dir, alpha)
+		SSvis_overlays.add_vis_overlay(src, icon, "recharger-empty", EMISSIVE_LAYER, EMISSIVE_PLANE, dir, alpha)

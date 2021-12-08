@@ -12,6 +12,7 @@
 	icon = 'icons/obj/bike.dmi'
 	icon_state = "speedbike_blue"
 	layer = LYING_MOB_LAYER
+	rider_check_flags = REQUIRES_LEGS | REQUIRES_ARMS | UNBUCKLE_DISABLED_RIDER
 	var/overlay_state = "cover_blue"
 	var/mutable_appearance/overlay
 
@@ -30,7 +31,7 @@
 /obj/vehicle/ridden/space/speedbike/Move(newloc,move_dir)
 	if(has_buckled_mobs())
 		new /obj/effect/temp_visual/dir_setting/speedbike_trail(loc,move_dir)
-	. = ..()
+	return ..()
 
 /obj/vehicle/ridden/space/speedbike/red
 	icon_state = "speedbike_red"
@@ -71,7 +72,7 @@
 	if(A.density && has_buckled_mobs())
 		var/atom/throw_target = get_edge_target_turf(A, dir)
 		if(crash_all)
-			if(ismovableatom(A))
+			if(ismovable(A))
 				var/atom/movable/AM = A
 				AM.throw_at(throw_target, 4, 3)
 			visible_message("<span class='danger'>[src] crashes into [A]!</span>")

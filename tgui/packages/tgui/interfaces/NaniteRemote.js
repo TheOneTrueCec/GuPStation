@@ -1,9 +1,23 @@
 import { Fragment } from 'inferno';
 import { useBackend } from '../backend';
 import { Button, LabeledList, NumberInput, Section, NoticeBox, Input, Table } from '../components';
+import { Window } from '../layouts';
 
-export const NaniteRemote = props => {
-  const { act, data } = useBackend(props);
+export const NaniteRemote = (props, context) => {
+  return (
+    <Window
+      width={420}
+      height={500}
+      resizable>
+      <Window.Content scrollable>
+        <NaniteRemoteContent />
+      </Window.Content>
+    </Window>
+  );
+};
+
+export const NaniteRemoteContent = (props, context) => {
+  const { act, data } = useBackend(context);
   const {
     code,
     locked,
@@ -40,7 +54,7 @@ export const NaniteRemote = props => {
             icon="lock"
             content="Lock Interface"
             onClick={() => act('lock')} />
-        )} >
+        )}>
         <LabeledList>
           <LabeledList.Item label="Name">
             <Input
@@ -55,7 +69,7 @@ export const NaniteRemote = props => {
               content="Save"
               onClick={() => act('save')} />
           </LabeledList.Item>
-          <LabeledList.Item label={comms ? "Comm Code" : "Signal Code"} >
+          <LabeledList.Item label={comms ? "Comm Code" : "Signal Code"}>
             <NumberInput
               value={code}
               minValue={0}
@@ -109,22 +123,22 @@ export const NaniteRemote = props => {
           <Table>
             <Table.Row header>
               <Table.Cell width="35%">
-              Name
+                Name
               </Table.Cell>
               <Table.Cell width="20%">
-              Mode
+                Mode
               </Table.Cell>
               <Table.Cell collapsing>
-              Code
+                Code
               </Table.Cell>
               <Table.Cell collapsing>
-              Relay
+                Relay
               </Table.Cell>
             </Table.Row>
             {saved_settings.map(setting => (
               <Table.Row
                 key={setting.id}
-                className="candystripe" >
+                className="candystripe">
                 <Table.Cell bold color="label">
                   {setting.name}:
                 </Table.Cell>
@@ -156,7 +170,7 @@ export const NaniteRemote = props => {
           </Table>
         ) : (
           <NoticeBox>
-          No settings currently saved
+            No settings currently saved
           </NoticeBox>
         )}
       </Section>

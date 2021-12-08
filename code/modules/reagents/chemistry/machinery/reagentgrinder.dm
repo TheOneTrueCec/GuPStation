@@ -18,11 +18,11 @@
 	var/speed = 1
 	var/list/holdingitems
 
-	var/static/radial_examine = image(icon = 'icons/mob/radial.dmi', icon_state = "radial_examine")
-	var/static/radial_eject = image(icon = 'icons/mob/radial.dmi', icon_state = "radial_eject")
-	var/static/radial_grind = image(icon = 'icons/mob/radial.dmi', icon_state = "radial_grind")
-	var/static/radial_juice = image(icon = 'icons/mob/radial.dmi', icon_state = "radial_juice")
-	var/static/radial_mix = image(icon = 'icons/mob/radial.dmi', icon_state = "radial_mix")
+	var/static/radial_examine = image(icon = 'icons/hud/radial.dmi', icon_state = "radial_examine")
+	var/static/radial_eject = image(icon = 'icons/hud/radial.dmi', icon_state = "radial_eject")
+	var/static/radial_grind = image(icon = 'icons/hud/radial.dmi', icon_state = "radial_grind")
+	var/static/radial_juice = image(icon = 'icons/hud/radial.dmi', icon_state = "radial_juice")
+	var/static/radial_mix = image(icon = 'icons/hud/radial.dmi', icon_state = "radial_mix")
 
 /obj/machinery/reagentgrinder/Initialize()
 	. = ..()
@@ -44,7 +44,13 @@
 
 /obj/machinery/reagentgrinder/contents_explosion(severity, target)
 	if(beaker)
-		beaker.ex_act(severity, target)
+		switch(severity)
+			if(EXPLODE_DEVASTATE)
+				SSexplosions.high_mov_atom += beaker
+			if(EXPLODE_HEAVY)
+				SSexplosions.med_mov_atom += beaker
+			if(EXPLODE_LIGHT)
+				SSexplosions.low_mov_atom += beaker
 
 /obj/machinery/reagentgrinder/RefreshParts()
 	speed = 1
@@ -106,7 +112,7 @@
 	if(!user)
 		return FALSE
 	if(beaker)
-		user.put_in_hands(beaker)
+		try_put_in_hand(beaker, user)
 		beaker = null
 	if(new_beaker)
 		beaker = new_beaker

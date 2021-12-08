@@ -1,5 +1,4 @@
 /mob/living/carbon/Life()
-	set invisibility = 0
 
 	if(notransform)
 		return
@@ -22,12 +21,6 @@
 			handle_blood()
 
 		if(stat != DEAD)
-			var/bprv = handle_bodyparts()
-			if(bprv & BODYPART_LIFE_UPDATE_HEALTH)
-				update_stamina() //needs to go before updatehealth to remove stamcrit
-				updatehealth()
-
-		if(stat != DEAD)
 			handle_brain_damage()
 
 	else
@@ -36,6 +29,11 @@
 	if(stat == DEAD)
 		stop_sound_channel(CHANNEL_HEARTBEAT)
 		LoadComponent(/datum/component/rot/corpse)
+	else
+		var/bprv = handle_bodyparts()
+		if(bprv & BODYPART_LIFE_UPDATE_HEALTH)
+			update_stamina() //needs to go before updatehealth to remove stamcrit
+			updatehealth()
 
 	check_cremation()
 
@@ -75,7 +73,7 @@
 //Second link in a breath chain, calls check_breath()
 /mob/living/carbon/proc/breathe()
 	var/obj/item/organ/lungs = getorganslot(ORGAN_SLOT_LUNGS)
-	if(reagents.has_reagent(/datum/reagent/toxin/lexorin, needs_metabolizing = TRUE))
+	if(has_reagent(/datum/reagent/toxin/lexorin, needs_metabolizing = TRUE))
 		return
 	if(istype(loc, /obj/machinery/atmospherics/components/unary/cryo_cell))
 		return
@@ -137,9 +135,11 @@
 //Third link in a breath chain, calls handle_breath_temperature()
 /mob/living/carbon/proc/check_breath(datum/gas_mixture/breath)
 	if(status_flags & GODMODE)
-		return
+		failed_last_breath = FALSE
+		clear_alert("not_enough_oxy")
+		return FALSE
 	if(HAS_TRAIT(src, TRAIT_NOBREATH))
-		return
+		return FALSE
 
 	var/obj/item/organ/lungs = getorganslot(ORGAN_SLOT_LUNGS)
 	if(!lungs)
@@ -147,13 +147,13 @@
 
 	//CRIT
 	if(!breath || (breath.total_moles() == 0) || !lungs)
-		if(reagents.has_reagent(/datum/reagent/medicine/epinephrine, needs_metabolizing = TRUE) && lungs)
-			return
+		if(has_reagent(/datum/reagent/medicine/epinephrine, needs_metabolizing = TRUE) && lungs)
+			return FALSE
 		adjustOxyLoss(1)
 
-		failed_last_breath = 1
+		failed_last_breath = TRUE
 		throw_alert("not_enough_oxy", /obj/screen/alert/not_enough_oxy)
-		return 0
+		return FALSE
 
 	var/safe_oxy_min = 16
 	var/safe_co2_max = 10
@@ -177,15 +177,15 @@
 		if(O2_partialpressure > 0)
 			var/ratio = 1 - O2_partialpressure/safe_oxy_min
 			adjustOxyLoss(min(5*ratio, 3))
-			failed_last_breath = 1
+			failed_last_breath = TRUE
 			oxygen_used = breath_gases[/datum/gas/oxygen][MOLES]*ratio
 		else
 			adjustOxyLoss(3)
-			failed_last_breath = 1
+			failed_last_breath = TRUE
 		throw_alert("not_enough_oxy", /obj/screen/alert/not_enough_oxy)
 
 	else //Enough oxygen
-		failed_last_breath = 0
+		failed_last_breath = FALSE
 		if(health >= crit_threshold)
 			adjustOxyLoss(-5)
 		oxygen_used = breath_gases[/datum/gas/oxygen][MOLES]
@@ -212,7 +212,7 @@
 	//TOXINS/PLASMA
 	if(Toxins_partialpressure > safe_tox_max)
 		var/ratio = (breath_gases[/datum/gas/plasma][MOLES]/safe_tox_max) * 10
-		adjustToxLoss(CLAMP(ratio, MIN_TOXIC_GAS_DAMAGE, MAX_TOXIC_GAS_DAMAGE))
+		adjustToxLoss(clamp(ratio, MIN_TOXIC_GAS_DAMAGE, MAX_TOXIC_GAS_DAMAGE))
 		throw_alert("too_much_tox", /obj/screen/alert/too_much_tox)
 	else
 		clear_alert("too_much_tox")
@@ -228,6 +228,12 @@
 			if(prob(20))
 				emote(pick("giggle","laugh"))
 			SEND_SIGNAL(src, COMSIG_ADD_MOOD_EVENT, "chemical_euphoria", /datum/mood_event/chemical_euphoria)
+		if(SA_partialpressure > safe_tox_max*3)
+			var/ratio = (breath_gases[/datum/gas/nitrous_oxide][MOLES]/safe_tox_max)
+			adjustToxLoss(clamp(ratio, MIN_TOXIC_GAS_DAMAGE, MAX_TOXIC_GAS_DAMAGE))
+			throw_alert("too_much_tox", /obj/screen/alert/too_much_tox)
+		else
+			clear_alert("too_much_tox")
 	else
 		SEND_SIGNAL(src, COMSIG_CLEAR_MOOD_EVENT, "chemical_euphoria")
 
@@ -248,6 +254,11 @@
 	if(breath_gases[/datum/gas/nitryl])
 		var/nitryl_partialpressure = (breath_gases[/datum/gas/nitryl][MOLES]/breath.total_moles())*breath_pressure
 		adjustFireLoss(nitryl_partialpressure/4)
+
+	//FREON
+	if(breath_gases[/datum/gas/freon])
+		var/freon_partialpressure = (breath_gases[/datum/gas/freon][MOLES]/breath.total_moles())*breath_pressure
+		adjustFireLoss(freon_partialpressure * 0.25)
 
 	//MIASMA
 	if(breath_gases[/datum/gas/miasma])
@@ -294,7 +305,7 @@
 	//BREATH TEMPERATURE
 	handle_breath_temperature(breath)
 
-	return 1
+	return TRUE
 
 //Fourth and final link in a breath chain
 /mob/living/carbon/proc/handle_breath_temperature(datum/gas_mixture/breath)
@@ -322,7 +333,7 @@
 	var/stam_regen = FALSE
 	if(stam_regen_start_time <= world.time)
 		stam_regen = TRUE
-		if(stam_paralyzed)
+		if(HAS_TRAIT_FROM(src, TRAIT_INCAPACITATED, STAMINA))
 			. |= BODYPART_LIFE_UPDATE_HEALTH //make sure we remove the stamcrit
 	for(var/I in bodyparts)
 		var/obj/item/bodypart/BP = I
@@ -336,7 +347,7 @@
 			if(O.owner) // This exist mostly because reagent metabolization can cause organ reshuffling
 				O.on_life()
 	else
-		if(reagents.has_reagent(/datum/reagent/toxin/formaldehyde, 1)) // No organ decay if the body contains formaldehyde.
+		if(has_reagent(/datum/reagent/toxin/formaldehyde, 1)) // No organ decay if the body contains formaldehyde.
 			return
 		for(var/V in internal_organs)
 			var/obj/item/organ/O = V
@@ -351,9 +362,15 @@
 		if(stat != DEAD || D.process_dead)
 			D.stage_act()
 
+/mob/living/carbon/handle_wounds()
+	for(var/thing in all_wounds)
+		var/datum/wound/W = thing
+		if(W.processes) // meh
+			W.handle_process()
+
 //todo generalize this and move hud out
 /mob/living/carbon/proc/handle_changeling()
-	if(mind && hud_used && hud_used.lingchemdisplay)
+	if(mind && hud_used?.lingchemdisplay)
 		var/datum/antagonist/changeling/changeling = mind.has_antag_datum(/datum/antagonist/changeling)
 		if(changeling)
 			changeling.regenerate()
@@ -364,7 +381,7 @@
 
 
 /mob/living/carbon/handle_mutations_and_radiation()
-	if(dna && dna.temporary_mutations.len)
+	if(dna?.temporary_mutations.len)
 		for(var/mut in dna.temporary_mutations)
 			if(dna.temporary_mutations[mut] < world.time)
 				if(mut == UI_CHANGED)
@@ -388,7 +405,7 @@
 					dna.temporary_mutations.Remove(mut)
 					continue
 		for(var/datum/mutation/human/HM in dna.mutations)
-			if(HM && HM.timed)
+			if(HM?.timed)
 				dna.remove_mutation(HM.type)
 
 	radiation -= min(radiation, RAD_LOSS_PER_TICK)
@@ -495,8 +512,10 @@ All effects don't start immediately, but rather get worse over time; the rate is
 			if(prob(25))
 				slurring += 2
 			jitteriness = max(jitteriness - 3, 0)
+			throw_alert("drunk", /obj/screen/alert/drunk)
 		else
 			SEND_SIGNAL(src, COMSIG_CLEAR_MOOD_EVENT, "drunk")
+			clear_alert("drunk")
 
 		if(drunkenness >= 11 && slurring < 5)
 			slurring += 1.2
@@ -520,12 +539,12 @@ All effects don't start immediately, but rather get worse over time; the rate is
 
 		if(drunkenness >= 41)
 			if(prob(25))
-				confused += 2
+				add_confusion(2)
 			Dizzy(10)
 
 		if(drunkenness >= 51)
 			if(prob(3))
-				confused += 15
+				add_confusion(15)
 				vomit() // vomiting clears toxloss, consider this a blessing
 			Dizzy(25)
 
@@ -572,7 +591,7 @@ All effects don't start immediately, but rather get worse over time; the rate is
  */
 /mob/living/carbon/proc/natural_bodytemperature_stabilization(datum/gas_mixture/environment)
 	var/areatemp = get_temperature(environment)
-	var/body_temperature_difference = BODYTEMP_NORMAL - bodytemperature
+	var/body_temperature_difference = get_body_temp_normal() - bodytemperature
 	var/natural_change = 0
 
 	// We are very cold, increate body temperature
@@ -581,12 +600,12 @@ All effects don't start immediately, but rather get worse over time; the rate is
 			BODYTEMP_AUTORECOVERY_MINIMUM)
 
 	// we are cold, reduce the minimum increment and do not jump over the difference
-	else if(bodytemperature > BODYTEMP_COLD_DAMAGE_LIMIT && bodytemperature < BODYTEMP_NORMAL)
+	else if(bodytemperature > BODYTEMP_COLD_DAMAGE_LIMIT && bodytemperature < get_body_temp_normal())
 		natural_change = max(body_temperature_difference * metabolism_efficiency / BODYTEMP_AUTORECOVERY_DIVISOR, \
 			min(body_temperature_difference, BODYTEMP_AUTORECOVERY_MINIMUM / 4))
 
 	// We are hot, reduce the minimum increment and do not jump below the difference
-	else if(bodytemperature > BODYTEMP_NORMAL && bodytemperature <= BODYTEMP_HEAT_DAMAGE_LIMIT)
+	else if(bodytemperature > get_body_temp_normal() && bodytemperature <= BODYTEMP_HEAT_DAMAGE_LIMIT)
 		natural_change = min(body_temperature_difference * metabolism_efficiency / BODYTEMP_AUTORECOVERY_DIVISOR, \
 			max(body_temperature_difference, -(BODYTEMP_AUTORECOVERY_MINIMUM / 4)))
 
@@ -596,7 +615,7 @@ All effects don't start immediately, but rather get worse over time; the rate is
 
 	var/thermal_protection = 1 - get_insulation_protection(areatemp) // invert the protection
 	if(areatemp > bodytemperature) // It is hot here
-		if(bodytemperature < BODYTEMP_NORMAL)
+		if(bodytemperature < get_body_temp_normal())
 			// Our bodytemp is below normal we are cold, insulation helps us retain body heat
 			// and will reduce the heat we lose to the environment
 			natural_change = (thermal_protection + 1) * natural_change
@@ -606,7 +625,7 @@ All effects don't start immediately, but rather get worse over time; the rate is
 			natural_change = (1 / (thermal_protection + 1)) * natural_change
 	else // It is cold here
 		if(!on_fire) // If on fire ignore ignore local temperature in cold areas
-			if(bodytemperature < BODYTEMP_NORMAL)
+			if(bodytemperature < get_body_temp_normal())
 				// Our bodytemp is below normal, insulation helps us retain body heat
 				// and will reduce the heat we lose to the environment
 				natural_change = (thermal_protection + 1) * natural_change
@@ -649,12 +668,12 @@ All effects don't start immediately, but rather get worse over time; the rate is
 /mob/living/carbon/proc/share_bodytemperature(mob/living/carbon/M)
 	var/temp_diff = bodytemperature - M.bodytemperature
 	if(temp_diff > 0) // you are warm share the heat of life
-		M.adjust_bodytemperature(temp_diff, use_insulation=TRUE, use_steps=TRUE) // warm up the giver
-		adjust_bodytemperature((temp_diff * -1), use_insulation=TRUE, use_steps=TRUE) // cool down the reciver
+		M.adjust_bodytemperature((temp_diff * 0.5), use_insulation=TRUE, use_steps=TRUE) // warm up the giver
+		adjust_bodytemperature((temp_diff * -0.5), use_insulation=TRUE, use_steps=TRUE) // cool down the reciver
 
 	else // they are warmer leech from them
-		adjust_bodytemperature(temp_diff, use_insulation=TRUE, use_steps=TRUE) // warm up the reciver
-		M.adjust_bodytemperature((temp_diff * -1), use_insulation=TRUE, use_steps=TRUE) // cool down the giver
+		adjust_bodytemperature((temp_diff * -0.5) , use_insulation=TRUE, use_steps=TRUE) // warm up the reciver
+		M.adjust_bodytemperature((temp_diff * 0.5), use_insulation=TRUE, use_steps=TRUE) // cool down the giver
 
 /**
  * Adjust the body temperature of a mob
@@ -681,8 +700,60 @@ All effects don't start immediately, but rather get worse over time; the rate is
 			amount = (amount > 0) ? min(amount, BODYTEMP_HEATING_MAX) : max(amount, BODYTEMP_COOLING_MAX)
 
 	if(bodytemperature >= min_temp && bodytemperature <= max_temp)
-		bodytemperature = CLAMP(bodytemperature + amount,min_temp,max_temp)
+		bodytemperature = clamp(bodytemperature + amount,min_temp,max_temp)
 
+
+///////////
+//Stomach//
+///////////
+
+/mob/living/carbon/get_fullness()
+	var/fullness = nutrition
+
+	var/obj/item/organ/stomach/belly = getorganslot(ORGAN_SLOT_STOMACH)
+	if(!belly) //nothing to see here if we do not have a stomach
+		return fullness
+
+	for(var/bile in belly.reagents.reagent_list)
+		var/datum/reagent/bits = bile
+		if(istype(bits, /datum/reagent/consumable))
+			var/datum/reagent/consumable/goodbit = bile
+			fullness += goodbit.nutriment_factor * goodbit.volume / goodbit.metabolization_rate
+			continue
+		fullness += 0.6 * bits.volume / bits.metabolization_rate //not food takes up space
+
+	return fullness
+
+/mob/living/carbon/has_reagent(reagent, amount = -1, needs_metabolizing = FALSE)
+	. = ..()
+	if(.)
+		return
+	var/obj/item/organ/stomach/belly = getorganslot(ORGAN_SLOT_STOMACH)
+	if(!belly)
+		return FALSE
+	return belly.reagents.has_reagent(reagent, amount, needs_metabolizing)
+
+/mob/living/carbon/remove_reagent(reagent, custom_amount, safety)
+	if(!custom_amount)
+		custom_amount = get_reagent_amount(reagent)
+	var/amount_body = reagents.get_reagent_amount(reagent)
+	if(custom_amount <= amount_body)
+		reagents.remove_reagent(reagent, custom_amount, safety)
+		return	TRUE
+	reagents.remove_reagent(reagent, amount_body, safety)
+	custom_amount -= amount_body
+	var/obj/item/organ/stomach/belly = getorganslot(ORGAN_SLOT_STOMACH)
+	if(!belly)
+		return FALSE
+	belly.reagents.remove_reagent(reagent, custom_amount, safety)
+	return TRUE
+
+/mob/living/carbon/get_reagent_amount(reagent)
+	. = ..()
+	var/obj/item/organ/stomach/belly = getorganslot(ORGAN_SLOT_STOMACH)
+	if(!belly)
+		return
+	. += belly.reagents.get_reagent_amount(reagent)
 
 /////////
 //LIVER//
@@ -702,13 +773,26 @@ All effects don't start immediately, but rather get worse over time; the rate is
 		return TRUE
 
 /mob/living/carbon/proc/liver_failure()
-	reagents.end_metabolization(src, keep_liverless = TRUE) //Stops trait-based effects on reagents, to prevent permanent buffs
+	end_metabolization(keep_liverless = TRUE) //Stops trait-based effects on reagents, to prevent permanent buffs
 	reagents.metabolize(src, can_overdose=FALSE, liverless = TRUE)
 	if(HAS_TRAIT(src, TRAIT_STABLELIVER) || HAS_TRAIT(src, TRAIT_NOMETABOLISM))
 		return
 	adjustToxLoss(4, TRUE,  TRUE)
 	if(prob(30))
 		to_chat(src, "<span class='warning'>You feel a stabbing pain in your abdomen!</span>")
+
+/**
+ * Ends metabolization on the mob
+ *
+ * This stop all reagents in the body and organs from metabolizing
+ * Vars:
+ * * keep_liverless (bool)(optional)(default:TRUE) Will keep working without a liver
+ */
+/mob/living/carbon/proc/end_metabolization(keep_liverless = TRUE)
+	reagents.end_metabolization(src, keep_liverless = keep_liverless)
+	var/obj/item/organ/stomach/belly = getorganslot(ORGAN_SLOT_STOMACH)
+	if(belly)
+		belly.reagents.end_metabolization(src, keep_liverless = keep_liverless)
 
 /////////////
 //CREMATION//

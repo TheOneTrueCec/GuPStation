@@ -302,7 +302,7 @@ Difficulty: Medium
 	src.move_to_delay = 3
 	return 2
 
-/mob/living/simple_animal/hostile/megafauna/sif/do_attack_animation(atom/A, visual_effect_icon)
+/mob/living/simple_animal/hostile/megafauna/sif/do_attack_animation(atom/A, visual_effect_icon, null, no_effect = FALSE)
 	if(charging == FALSE)
 		..()
 
@@ -395,7 +395,7 @@ Difficulty: Medium
 	desc = "A glowing giant heavy blade that grows and slightly shrinks in size depending on the wielder's strength."
 	icon = 'russstation/icons/obj/items_and_weapons.dmi'
 	icon_state = "sword_of_the_forsaken"
-	item_state = "sword_of_the_forsaken"
+	inhand_icon_state = "sword_of_the_forsaken"
 	lefthand_file = 'russstation/icons/mob/inhands/item_lefthand.dmi'
 	righthand_file = 'russstation/icons/mob/inhands/item_righthand.dmi'
 	w_class = WEIGHT_CLASS_HUGE
@@ -404,8 +404,9 @@ Difficulty: Medium
 	block_chance = 10
 	armour_penetration = 80
 	hitsound = 'russstation/sound/effects/sif_slash.ogg'
-	attack_verb = list("attacked", "slashed", "stabbed", "sliced", "torn", "ripped", "diced", "cut", "gutted", "gored")
-	sharpness = IS_SHARP
+	attack_verb_continuous = list("attacks", "slashes", "stabs", "slices", "tears", "rips", "dices", "cuts", "guts", "gores")
+	attack_verb_simple = list("attack", "slash", "stab", "slice", "tear", "rip", "dice", "cut", "gut", "gore")
+	sharpness = SHARP_EDGED
 	resistance_flags = INDESTRUCTIBLE | LAVA_PROOF | FIRE_PROOF | UNACIDABLE | ACID_PROOF
 
 //Enables the sword to butcher bodies

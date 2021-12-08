@@ -1,5 +1,5 @@
 <!-- Most valid html will work in here, excluding images. -->
 
 <h1>Welcome to Space Station 13!</h1>
-<b><i>Join GuPWT's Discord:<a href="discord.gg/kzZv5ttZTu">discord.gg/kzZv5ttZTu</a></b></i><br>
-<i>This server is running GuPStation, which is a balanced fork of RussStation, a /tg/station 13 Git modification.</i>
+<b><i>Join Honk Squad's Discord:<a href="discord.gg/honk">discord.gg/honk</a></b></i><br>
+<i>This server is running RussStation, a /tg/station 13 Git modification.</i>

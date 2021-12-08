@@ -19,14 +19,13 @@
 #define THERMAL_PROTECTION_HAND_RIGHT	0.025
 
 /mob/living/carbon/human/Life()
-	set invisibility = 0
 	if (notransform)
 		return
 
 	. = ..()
 
 	if (QDELETED(src))
-		return 0
+		return FALSE
 
 	if(!IS_IN_STASIS(src))
 		if(.) //not dead
@@ -39,17 +38,17 @@
 			handle_heart()
 			handle_liver()
 
-		if(stat != DEAD)
-			//Stuff jammed in your limbs hurts
-			handle_embedded_objects()
-
 		dna.species.spec_life(src) // for mutantraces
+	else
+		for(var/i in all_wounds)
+			var/datum/wound/iter_wound = i
+			iter_wound.on_stasis()
 
 	//Update our name based on whether our face is obscured/disfigured
 	name = get_visible_name()
 
 	if(stat != DEAD)
-		return 1
+		return TRUE
 
 
 /mob/living/carbon/human/calculate_affecting_pressure(pressure)
@@ -86,7 +85,7 @@
 		else if(!HAS_TRAIT(src, TRAIT_NOCRITDAMAGE))
 			adjustOxyLoss(HUMAN_CRIT_MAX_OXYLOSS)
 
-		failed_last_breath = 1
+		failed_last_breath = TRUE
 
 		var/datum/species/S = dna.species
 
@@ -114,6 +113,20 @@
 	dna.species.handle_environment(environment, src)
 	dna.species.handle_environment_pressure(environment, src)
 	dna.species.handle_body_temperature(src)
+
+/**
+ * get_body_temperature Returns the body temperature with any modifications applied
+ *
+ * This applies the result from proc/get_body_temp_normal_change() against the bodytemp_normal
+ * for the species and returns the result
+ *
+ * arguments:
+ * * apply_change (optional) Default True This applies the changes to body temperature normal
+ */
+/mob/living/carbon/human/get_body_temp_normal(apply_change=TRUE)
+	if(!apply_change)
+		return dna.species.bodytemp_normal
+	return dna.species.bodytemp_normal + get_body_temp_normal_change()
 
 ///FIRE CODE
 /mob/living/carbon/human/handle_fire()
@@ -149,8 +162,8 @@
 		return ..()
 	. = FALSE //No ignition
 
-/mob/living/carbon/human/ExtinguishMob()
-	if(!dna || !dna.species.ExtinguishMob(src))
+/mob/living/carbon/human/extinguish_mob()
+	if(!dna || !dna.species.extinguish_mob(src))
 		last_fire_update = null
 		..()
 //END FIRE CODE
@@ -295,25 +308,6 @@
 		if(CH.clothing_flags & BLOCK_GAS_SMOKE_EFFECT)
 			return TRUE
 	return ..()
-
-
-/mob/living/carbon/human/proc/handle_embedded_objects()
-	for(var/X in bodyparts)
-		var/obj/item/bodypart/BP = X
-		for(var/obj/item/I in BP.embedded_objects)
-			if(prob(I.embedding.embedded_pain_chance))
-				BP.receive_damage(I.w_class*I.embedding.embedded_pain_multiplier)
-				to_chat(src, "<span class='userdanger'>[I] embedded in your [BP.name] hurts!</span>")
-
-			if(prob(I.embedding.embedded_fall_chance))
-				BP.receive_damage(I.w_class*I.embedding.embedded_fall_pain_multiplier)
-				BP.embedded_objects -= I
-				I.forceMove(drop_location())
-				I.unembedded()
-				visible_message("<span class='danger'>[I] falls out of [name]'s [BP.name]!</span>","<span class='userdanger'>[I] falls out of your [BP.name]!</span>")
-				if(!has_embedded_objects())
-					clear_alert("embeddedobject")
-					SEND_SIGNAL(src, COMSIG_CLEAR_MOOD_EVENT, "embedded")
 
 /mob/living/carbon/human/proc/handle_heart()
 	var/we_breath = !HAS_TRAIT_FROM(src, TRAIT_NOBREATH, SPECIES_TRAIT)

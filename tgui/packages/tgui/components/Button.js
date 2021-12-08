@@ -1,14 +1,16 @@
+/**
+ * @file
+ * @copyright 2020 Aleksej Komarov
+ * @license MIT
+ */
+
 import { classes, pureComponentHooks } from 'common/react';
-import { tridentVersion, act } from '../byond';
+import { Component, createRef } from 'inferno';
 import { KEY_ENTER, KEY_ESCAPE, KEY_SPACE } from '../hotkeys';
 import { createLogger } from '../logging';
-import { refocusLayout } from '../refocus';
 import { Box } from './Box';
 import { Icon } from './Icon';
 import { Tooltip } from './Tooltip';
-import { Input } from './Input';
-import { Component, createRef } from 'inferno';
-import { Grid } from './Grid';
 
 const logger = createLogger('Button');
 
@@ -17,15 +19,18 @@ export const Button = props => {
     className,
     fluid,
     icon,
+    iconRotation,
+    iconSpin,
     color,
     disabled,
     selected,
     tooltip,
     tooltipPosition,
+    tooltipOverrideLong,
     ellipsis,
+    compact,
+    circular,
     content,
-    iconRotation,
-    iconSpin,
     children,
     onclick,
     onClick,
@@ -43,7 +48,7 @@ export const Button = props => {
   // IE8: Use a lowercase "onclick" because synthetic events are fucked.
   // IE8: Use an "unselectable" prop because "user-select" doesn't work.
   return (
-    <Box as="span"
+    <Box
       className={classes([
         'Button',
         fluid && 'Button--fluid',
@@ -51,15 +56,16 @@ export const Button = props => {
         selected && 'Button--selected',
         hasContent && 'Button--hasContent',
         ellipsis && 'Button--ellipsis',
+        circular && 'Button--circular',
+        compact && 'Button--compact',
         (color && typeof color === 'string')
           ? 'Button--color--' + color
           : 'Button--color--default',
         className,
       ])}
       tabIndex={!disabled && '0'}
-      unselectable={tridentVersion <= 4}
-      onclick={e => {
-        refocusLayout();
+      unselectable={Byond.IS_LTE_IE8}
+      onClick={e => {
         if (!disabled && onClick) {
           onClick(e);
         }
@@ -77,19 +83,22 @@ export const Button = props => {
         // Refocus layout on pressing escape.
         if (keyCode === KEY_ESCAPE) {
           e.preventDefault();
-          refocusLayout();
           return;
         }
       }}
       {...rest}>
       {icon && (
-        <Icon name={icon} rotation={iconRotation} spin={iconSpin} />
+        <Icon
+          name={icon}
+          rotation={iconRotation}
+          spin={iconSpin} />
       )}
       {content}
       {children}
       {tooltip && (
         <Tooltip
           content={tooltip}
+          overrideLong={tooltipOverrideLong}
           position={tooltipPosition} />
       )}
     </Box>
@@ -214,6 +223,7 @@ export class ButtonInput extends Component {
       iconSpin,
       tooltip,
       tooltipPosition,
+      tooltipOverrideLong,
       color = 'default',
       placeholder,
       maxLength,
@@ -263,6 +273,7 @@ export class ButtonInput extends Component {
         {tooltip && (
           <Tooltip
             content={tooltip}
+            overrideLong={tooltipOverrideLong}
             position={tooltipPosition}
           />
         )}

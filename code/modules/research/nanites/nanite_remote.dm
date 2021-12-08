@@ -80,10 +80,13 @@
 		var/datum/nanite_program/relay/N = X
 		N.relay_signal(code, relay_code, source)
 
-/obj/item/nanite_remote/ui_interact(mob/user, ui_key = "main", datum/tgui/ui = null, force_open = FALSE, datum/tgui/master_ui = null, datum/ui_state/state = GLOB.hands_state)
-	ui = SStgui.try_update_ui(user, src, ui_key, ui, force_open)
+/obj/item/nanite_remote/ui_state(mob/user)
+	return GLOB.hands_state
+
+/obj/item/nanite_remote/ui_interact(mob/user, datum/tgui/ui)
+	ui = SStgui.try_update_ui(user, src, ui)
 	if(!ui)
-		ui = new(user, src, ui_key, "nanite_remote", name, 420, 500, master_ui, state)
+		ui = new(user, src, "NaniteRemote", name)
 		ui.open()
 
 /obj/item/nanite_remote/ui_data()
@@ -94,11 +97,11 @@
 	data["locked"] = locked
 	data["saved_settings"] = saved_settings
 	data["program_name"] = current_program_name
-
 	return data
 
 /obj/item/nanite_remote/ui_act(action, params)
-	if(..())
+	. = ..()
+	if(.)
 		return
 	switch(action)
 		if("set_code")
@@ -106,7 +109,7 @@
 				return
 			var/new_code = text2num(params["code"])
 			if(!isnull(new_code))
-				new_code = CLAMP(round(new_code, 1),0,9999)
+				new_code = clamp(round(new_code, 1),0,9999)
 				code = new_code
 			. = TRUE
 		if("set_relay_code")
@@ -114,7 +117,7 @@
 				return
 			var/new_code = text2num(params["code"])
 			if(!isnull(new_code))
-				new_code = CLAMP(round(new_code, 1),0,9999)
+				new_code = clamp(round(new_code, 1),0,9999)
 				relay_code = new_code
 			. = TRUE
 		if("update_name")
@@ -178,21 +181,21 @@
 			return
 		if(REMOTE_MODE_SELF)
 			to_chat(user, "<span class='notice'>You activate [src], signaling the nanites in your bloodstream.</span>")
-			signal_mob(user, code, comm_message)
+			signal_mob(user, code, key_name(user))
 		if(REMOTE_MODE_TARGET)
 			if(isliving(target) && (get_dist(target, get_turf(src)) <= 7))
 				to_chat(user, "<span class='notice'>You activate [src], signaling the nanites inside [target].</span>")
-				signal_mob(target, code, comm_message, key_name(user))
+				signal_mob(target, code, key_name(user))
 		if(REMOTE_MODE_AOE)
 			to_chat(user, "<span class='notice'>You activate [src], signaling the nanites inside every host around you.</span>")
 			for(var/mob/living/L in view(user, 7))
-				signal_mob(L, code, comm_message, key_name(user))
+				signal_mob(L, code, key_name(user))
 		if(REMOTE_MODE_RELAY)
 			to_chat(user, "<span class='notice'>You activate [src], signaling all connected relay nanites.</span>")
-			signal_relay(code, relay_code, comm_message, key_name(user))
+			signal_relay(code, relay_code, key_name(user))
 
 /obj/item/nanite_remote/comm/signal_mob(mob/living/M, code, source)
-	SEND_SIGNAL(M, COMSIG_NANITE_COMM_SIGNAL, code, comm_message)
+	SEND_SIGNAL(M, COMSIG_NANITE_COMM_SIGNAL, code, comm_message, source)
 
 /obj/item/nanite_remote/comm/signal_relay(code, relay_code, source)
 	for(var/X in SSnanites.nanite_relays)
@@ -213,7 +216,8 @@
 	return data
 
 /obj/item/nanite_remote/comm/ui_act(action, params)
-	if(..())
+	. = ..()
+	if(.)
 		return
 	switch(action)
 		if("set_message")

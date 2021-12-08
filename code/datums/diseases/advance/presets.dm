@@ -16,14 +16,6 @@
 	symptoms = list(new/datum/symptom/cough)
 	..()
 
-/datum/disease/advance/debug
-	copy_type = /datum/disease/advance
-
-/datum/disease/advance/debug/New()
-	name = "Flu"
-	symptoms = list(new/datum/symptom/ironskin,new/datum/symptom/youth,new/datum/symptom/viraladaptation,new/datum/symptom/viralevolution)
-	..()
-
 //Randomly generated Disease, for virus crates and events
 /datum/disease/advance/random
 	name = "Experimental Disease"

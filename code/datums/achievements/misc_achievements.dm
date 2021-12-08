@@ -43,7 +43,7 @@
 	desc = "You janked hard"
 	database_id = MEDAL_HELBITALJANKEN
 	icon = "helbital"
-    
+
 /datum/award/achievement/misc/getting_an_upgrade
 	name = "Getting an upgrade"
 	desc = "Make your first unique material item!"
@@ -95,3 +95,49 @@
 	desc = "Well, that didn't take long."
 	database_id = MEDAL_LONGSHIFT
 	icon = "longshift"
+
+/datum/award/achievement/misc/snail
+	name = "KKKiiilll mmmeee"
+	desc = "You were a little too ambitious, but hey, I guess you're still alive?"
+	database_id = MEDAL_SNAIL
+	icon = "snail"
+
+/datum/award/achievement/misc/lookoutsir
+	name = "Look Out, Sir!"
+	desc = "Either awarded for making the ultimate sacrifice for your comrades, or a really dumb attempt at grenade jumping."
+	database_id = MEDAL_LOOKOUTSIR
+
+/datum/award/achievement/misc/gottem
+	name = "HA, GOTTEM"
+	desc = "Made you look!"
+	database_id = MEDAL_GOTTEM
+
+/datum/award/achievement/misc/ascension
+	name = "Ascension"
+	desc = "Caedite eos. Novit enim Dominus qui sunt eius."
+	database_id = MEDAL_ASCENSION
+	icon = "ascension"
+
+/datum/award/achievement/misc/frenching
+	name = "Frenching"
+	desc = "Just a taste, for science!"
+	database_id = MEDAL_FRENCHING
+	icon = "frenching"
+
+/datum/award/achievement/misc/ash_ascension
+	name = "Nightwatcher's Eyes"
+	desc = "You've risen above the flames, became one with the ashes. You've been reborn as one with the Nightwatcher."
+	database_id = MEDAL_ASH_ASCENSION
+	icon = "ashascend"
+
+/datum/award/achievement/misc/flesh_ascension
+	name = "Vortex of Arms"
+	desc = "You've became something more, something greater. A piece of the emperor resides within you, and you within him."
+	database_id = MEDAL_FLESH_ASCENSION
+	icon = "fleshascend"
+
+/datum/award/achievement/misc/rust_ascension
+	name = "Hills of Rust"
+	desc = "You've summoned a piece of the Hill of rust, and so the Hills welcome you."
+	database_id = MEDAL_RUST_ASCENSION
+	icon = "rustascend"

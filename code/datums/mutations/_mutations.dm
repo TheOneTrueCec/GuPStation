@@ -11,7 +11,7 @@
 	var/lowest_value = 256 * 8
 	var/text_gain_indication = ""
 	var/text_lose_indication = ""
-	var/static/list/mutable_appearance/visual_indicators = list()
+	var/static/list/visual_indicators = list()
 	var/obj/effect/proc_holder/spell/power
 	var/layer_used = MUTATIONS_LAYER //which mutation layer to use
 	var/list/species_allowed //to restrict mutation to only certain species
@@ -23,7 +23,7 @@
 	var/instability = 0 //instability the holder gets when the mutation is not native
 	var/blocks = 4 //Amount of those big blocks with gene sequences
 	var/difficulty = 8 //Amount of missing sequences. Sometimes it removes an entire pair for 2 points
-	var/timed = FALSE   //Boolean to easily check if we're going to self destruct
+	var/timed = FALSE   //Boolean to easily check if we're going to self-destruct
 	var/alias           //'Mutation #49', decided every round to get some form of distinction between undiscovered mutations
 	var/scrambled = FALSE //Wheter we can read it if it's active. To avoid cheesing with mutagen
 	var/class           //Decides player accesibility, sorta
@@ -46,7 +46,6 @@
 	var/energy_coeff = -1 //lowers mutation cooldown
 	var/list/valid_chrom_list = list() //List of strings of valid chromosomes this mutation can accept.
 
-
 /datum/mutation/human/New(class_ = MUT_OTHER, timer, datum/mutation/human/copymut)
 	. = ..()
 	class = class_
@@ -55,6 +54,7 @@
 		timed = TRUE
 	if(copymut && istype(copymut, /datum/mutation/human))
 		copy_mutation(copymut)
+	update_valid_chromosome_list()
 
 /datum/mutation/human/proc/on_acquiring(mob/living/carbon/human/H)
 	if(!H || !istype(H) || H.stat == DEAD || (src in H.dna.mutations))
@@ -95,22 +95,22 @@
 	return
 
 /datum/mutation/human/proc/on_losing(mob/living/carbon/human/owner)
-	if(owner && istype(owner) && (owner.dna.mutations.Remove(src)))
-		if(text_lose_indication && owner.stat != DEAD)
-			to_chat(owner, text_lose_indication)
-		if(visual_indicators.len)
-			var/list/mut_overlay = list()
-			if(owner.overlays_standing[layer_used])
-				mut_overlay = owner.overlays_standing[layer_used]
-			owner.remove_overlay(layer_used)
-			mut_overlay.Remove(get_visual_indicator())
-			owner.overlays_standing[layer_used] = mut_overlay
-			owner.apply_overlay(layer_used)
-		if(power)
-			owner.RemoveSpell(power)
-			qdel(src)
-		return 0
-	return 1
+	if(!istype(owner) || !(owner.dna.mutations.Remove(src)))
+		return TRUE
+	. = FALSE
+	if(text_lose_indication && owner.stat != DEAD)
+		to_chat(owner, text_lose_indication)
+	if(visual_indicators.len)
+		var/list/mut_overlay = list()
+		if(owner.overlays_standing[layer_used])
+			mut_overlay = owner.overlays_standing[layer_used]
+		owner.remove_overlay(layer_used)
+		mut_overlay.Remove(get_visual_indicator())
+		owner.overlays_standing[layer_used] = mut_overlay
+		owner.apply_overlay(layer_used)
+	if(power)
+		owner.RemoveSpell(power)
+		qdel(src)
 
 /mob/living/carbon/proc/update_mutations_overlay()
 	return
@@ -150,6 +150,7 @@
 	energy_coeff = HM.energy_coeff
 	mutadone_proof = HM.mutadone_proof
 	can_chromosome = HM.can_chromosome
+	valid_chrom_list = HM.valid_chrom_list
 
 /datum/mutation/human/proc/remove_chromosome()
 	stabilizer_coeff = initial(stabilizer_coeff)
@@ -176,7 +177,6 @@
 	owner.AddSpell(power)
 	return TRUE
 
-//No fucking clue what this does, it was in the diff so here it is
 // Runs through all the coefficients and uses this to determine which chromosomes the
 // mutation can take. Stores these as text strings in a list.
 /datum/mutation/human/proc/update_valid_chromosome_list()

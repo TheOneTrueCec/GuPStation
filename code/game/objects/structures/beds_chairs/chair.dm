@@ -4,7 +4,7 @@
 	icon = 'icons/obj/chairs.dmi'
 	icon_state = "chair"
 	anchored = TRUE
-	can_buckle = 1
+	can_buckle = TRUE
 	buckle_lying = 0 //you sit in a chair, not lay
 	resistance_flags = NONE
 	max_integrity = 250
@@ -18,8 +18,8 @@
 /obj/structure/chair/examine(mob/user)
 	. = ..()
 	. += "<span class='notice'>It's held together by a couple of <b>bolts</b>.</span>"
-	if(!has_buckled_mobs())
-		. += "<span class='notice'>Drag your sprite to sit in it.</span>"
+	if(!has_buckled_mobs() && can_buckle)
+		. += "<span class='notice'>While standing on [src], drag and drop your sprite onto [src] to buckle to it.</span>"
 
 /obj/structure/chair/Initialize()
 	. = ..()
@@ -89,11 +89,13 @@
 	else
 		return ..()
 
+
 /obj/structure/chair/attack_tk(mob/user)
 	if(!anchored || has_buckled_mobs() || !isturf(user.loc))
-		..()
-	else
-		setDir(turn(dir,-90))
+		return ..()
+	setDir(turn(dir,-90))
+	return COMPONENT_CANCEL_ATTACK_CHAIN
+
 
 /obj/structure/chair/proc/handle_rotation(direction)
 	handle_layer()
@@ -202,6 +204,7 @@
 	name = "shuttle seat"
 	desc = "A comfortable, secure seat. It has a more sturdy looking buckling system, for smoother flights."
 	icon_state = "shuttle_chair"
+	buildstacktype = /obj/item/stack/sheet/mineral/titanium
 
 /obj/structure/chair/comfy/shuttle/GetArmrest()
 	return mutable_appearance('icons/obj/chairs.dmi', "shuttle_chair_armrest")
@@ -227,7 +230,7 @@
 	name = "stool"
 	desc = "Apply butt."
 	icon_state = "stool"
-	can_buckle = 0
+	can_buckle = FALSE
 	buildstackamount = 1
 	item_chair = /obj/item/chair/stool
 
@@ -248,6 +251,9 @@
 		usr.put_in_hands(C)
 		qdel(src)
 
+/obj/structure/chair/user_buckle_mob(mob/living/M, force, check_loc = FALSE)
+	return ..()
+
 /obj/structure/chair/stool/bar
 	name = "bar stool"
 	desc = "It has some unsavory stains on it..."
@@ -259,7 +265,7 @@
 	desc = "Bar brawl essential."
 	icon = 'icons/obj/chairs.dmi'
 	icon_state = "chair_toppled"
-	item_state = "chair"
+	inhand_icon_state = "chair"
 	lefthand_file = 'icons/mob/inhands/misc/chairs_lefthand.dmi'
 	righthand_file = 'icons/mob/inhands/misc/chairs_righthand.dmi'
 	w_class = WEIGHT_CLASS_HUGE
@@ -324,8 +330,8 @@
 /obj/item/chair/hit_reaction(mob/living/carbon/human/owner, atom/movable/hitby, attack_text = "the attack", final_block_chance = 0, damage = 0, attack_type = MELEE_ATTACK)
 	if(attack_type == UNARMED_ATTACK && prob(hit_reaction_chance))
 		owner.visible_message("<span class='danger'>[owner] fends off [attack_text] with [src]!</span>")
-		return 1
-	return 0
+		return TRUE
+	return FALSE
 
 /obj/item/chair/afterattack(atom/target, mob/living/carbon/user, proximity)
 	. = ..()
@@ -346,14 +352,14 @@
 /obj/item/chair/stool
 	name = "stool"
 	icon_state = "stool_toppled"
-	item_state = "stool"
+	inhand_icon_state = "stool"
 	origin_type = /obj/structure/chair/stool
 	break_chance = 0 //It's too sturdy.
 
 /obj/item/chair/stool/bar
 	name = "bar stool"
 	icon_state = "bar_toppled"
-	item_state = "stool_bar"
+	inhand_icon_state = "stool_bar"
 	origin_type = /obj/structure/chair/stool/bar
 
 /obj/item/chair/stool/narsie_act()
@@ -362,7 +368,7 @@
 /obj/item/chair/wood
 	name = "wooden chair"
 	icon_state = "wooden_chair_toppled"
-	item_state = "woodenchair"
+	inhand_icon_state = "woodenchair"
 	resistance_flags = FLAMMABLE
 	max_integrity = 70
 	hitsound = 'sound/weapons/genhit1.ogg'
@@ -462,7 +468,7 @@
 /obj/structure/chair/plastic/proc/snap_check(mob/living/carbon/Mob)
 	if (Mob.nutrition >= NUTRITION_LEVEL_FAT)
 		to_chat(Mob, "<span class='warning'>The chair begins to pop and crack, you're too heavy!</span>")
-		if(do_after(Mob, 60, 1, Mob, 0))
+		if(do_after(Mob, 6 SECONDS, progress = FALSE))
 			Mob.visible_message("<span class='notice'>The plastic chair snaps under [Mob]'s weight!</span>")
 			new /obj/effect/decal/cleanable/plastic(loc)
 			qdel(src)
@@ -472,7 +478,7 @@
 	desc = "Somehow, you can always find one under the wrestling ring."
 	icon = 'icons/obj/chairs.dmi'
 	icon_state = "folded_chair"
-	item_state = "folded_chair"
+	inhand_icon_state = "folded_chair"
 	lefthand_file = 'icons/mob/inhands/misc/chairs_lefthand.dmi'
 	righthand_file = 'icons/mob/inhands/misc/chairs_righthand.dmi'
 	w_class = WEIGHT_CLASS_NORMAL

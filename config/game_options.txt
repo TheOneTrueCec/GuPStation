@@ -8,9 +8,6 @@ DAMAGE_MULTIPLIER 1
 ## whether pod plants work or not
 REVIVAL_POD_PLANTS
 
-## whether cloning tubes work or not
-REVIVAL_CLONING
-
 ## amount of time (in hundredths of seconds) for which a brain retains the "spark of life" after the person's death (set to -1 for infinite)
 REVIVAL_BRAIN_LIFE -1
 
@@ -22,6 +19,10 @@ REVIVAL_BRAIN_LIFE -1
 ## Comment this out if you want to disable emojis
 EMOJIS
 
+## HEART COMMENDATIONS ###
+## Uncomment this if you'd like to enable commendation pollings for this percentage of players near the end of the round (5% default)
+## COMMENDATIONS 0.05
+
 ## MOB MOVEMENT ###
 
 ## We suggest editing these variables ingame to find a good speed for your server.
@@ -32,7 +33,7 @@ EMOJIS
 ## To speed things up make the number negative, to slow things down, make the number positive.
 
 ## These modify the run/walk speed of all mobs before the mob-specific modifiers are applied.
-RUN_DELAY 1
+RUN_DELAY 2
 WALK_DELAY 4
 
 ## The variables below affect the movement of specific mob types. THIS AFFECTS ALL SUBTYPES OF THE TYPE YOU CHOOSE!
@@ -101,8 +102,6 @@ PROBABILITY MONKEY 0
 PROBABILITY METEOR 0
 PROBABILITY EXTENDED 0
 PROBABILITY SECRET_EXTENDED 0
-PROBABILITY DEVIL 0
-PROBABILITY DEVIL_AGENTS 0
 PROBABILITY CLOWNOPS 4
 
 ## You probably want to keep sandbox off by default for secret and random.
@@ -156,11 +155,14 @@ MIDROUND_ANTAG WIZARD
 MIN_POP TRAITOR 0
 MAX_POP TRAITOR -1
 
-MIN_POP TRAITORBRO 4
+MIN_POP TRAITORBRO 0
 MAX_POP TRAITORBRO -1
 
 MIN_POP TRAITORCHAN 15
 MAX_POP TRAITORCHAN -1
+
+#MIN_POP DOUBLE_AGENTS 25
+#MAX_POP DOUBLE_AGENTS -1
 
 MIN_POP NUCLEAR 0
 MAX_POP NUCLEAR -1
@@ -182,12 +184,6 @@ MAX_POP MONKEY -1
 
 MIN_POP METEOR 0
 MAX_POP METEOR -1
-
-MIN_POP DEVIL 0
-MAX_POP DEVIL -1
-
-MIN_POP DEVIL_AGENTS 20
-MAX_POP DEVIL_AGENTS -1
 
 ## Setting at least one mode to be playable at 0/1 players is required.
 #MIN_POP EXTENDED 0
@@ -223,7 +219,7 @@ PROTECT_ROLES_FROM_ANTAGONIST
 PROTECT_ASSISTANT_FROM_ANTAGONIST
 
 ## If non-human species are barred from joining as a head of staff
-#ENFORCE_HUMAN_AUTHORITY
+ENFORCE_HUMAN_AUTHORITY
 
 ## If late-joining players have a chance to become a traitor/changeling
 ALLOW_LATEJOIN_ANTAGONISTS
@@ -246,6 +242,9 @@ MAX_TICKETS_PER_ROLL 100
 ## Uncomment to allow players to see the set odds of different rounds in secret/random in the get server revision screen. This will NOT tell the current roundtype.
 SHOW_GAME_TYPE_ODDS
 
+## Uncomment to prevent the nuclear operative leader from getting the war declaration item
+#DISABLE_WAROPS
+
 ## Uncomment to enable dynamic ruleset config file.
 DYNAMIC_CONFIG_ENABLED
 
@@ -255,7 +254,7 @@ ALLOW_RANDOM_EVENTS
 
 ## Multiplier for earliest start time of dangerous events.
 ## Set to 0 to make dangerous events avaliable from round start.
-EVENTS_MIN_TIME_MUL 4
+EVENTS_MIN_TIME_MUL 2
 
 ## Multiplier for minimal player count (players = alive non-AFK humans) for dangerous events to start.
 ## Set to 0 to make dangerous events avaliable for all populations.
@@ -265,7 +264,7 @@ EVENTS_MIN_PLAYERS_MUL 0
 ## AI ###
 
 ## Allow the AI job to be picked.
-ALLOW_AI
+#ALLOW_AI
 
 ## Allow the AI Multicamera feature to be used by AI players
 ALLOW_AI_MULTICAM
@@ -288,7 +287,7 @@ ROUNDSTART_AWAY
 
 ## How long the delay is before the Away Mission gate opens. Default is half an hour.
 ## 600 is one minute.
-GATEWAY_DELAY 9000
+GATEWAY_DELAY 18000
 
 
 ## ACCESS ###
@@ -343,7 +342,7 @@ NEAR_DEATH_EXPERIENCE
 ## Set to 1 for "custom", silicons will start with the custom laws defined in silicon_laws.txt. (If silicon_laws.txt is empty, the AI will spawn with asimov and Custom boards will auto-delete.)
 ## Set to 2 for "random", silicons will start with a random lawset picked from random laws specified below.
 ## Set to 3 for "weighted random", using values in "silicon_weights.txt", a law will be selected, with weights specifed in that file.
-DEFAULT_LAWS 1
+DEFAULT_LAWS 0
 
 ## RANDOM LAWS ##
 ## ------------------------------------------------------------------------------------------
@@ -410,7 +409,7 @@ LAW_WEIGHT buildawall,0
 ## SILICON LAW MAX AMOUNT ###
 ## The maximum number of laws a silicon can have
 ## Attempting to upload laws past this point will fail unless the AI is reset
-SILICON_MAX_LAW_AMOUNT 20
+SILICON_MAX_LAW_AMOUNT 12
 
 ##------------------------------------------------
 
@@ -430,9 +429,10 @@ ROUNDSTART_RACES human
 
 ## Races that are strictly worse than humans that could probably be turned on without balance concerns
 ROUNDSTART_RACES lizard
-#ROUNDSTART_RACES fly
+ROUNDSTART_RACES fly
 ROUNDSTART_RACES moth
 ROUNDSTART_RACES plasmaman
+ROUNDSTART_RACES felinid
 #ROUNDSTART_RACES shadow
 
 ## Races that are better than humans in some ways, but worse in others
@@ -445,11 +445,11 @@ ROUNDSTART_RACES plasmaman
 #ROUNDSTART_RACES gold
 #ROUNDSTART_RACES silver
 #ROUNDSTART_RACES uranium
-#ROUNDSTART_RACES abductor
+ROUNDSTART_RACES abductor
 #ROUNDSTART_RACES synth
 
 ## Races that are straight upgrades. If these are on expect powergamers to always pick them
-#ROUNDSTART_RACES diona
+ROUNDSTART_RACES diona
 #ROUNDSTART_RACES skeleton
 #ROUNDSTART_RACES zombie
 #ROUNDSTART_RACES slime
@@ -462,7 +462,6 @@ ROUNDSTART_RACES plasmaman
 ## Roundstart no-reset races
 ## Races defined here will not cause existing characters to be reset to human if they currently have a non-roundstart species defined.
 #ROUNDSTART_NO_HARD_CHECK felinid
-ROUNDSTART_NO_HARD_CHECK slime
 
 ## Uncomment to give players the choice of joining as a human with mutant bodyparts before they join the game
 JOIN_WITH_MUTANT_HUMANS
@@ -518,10 +517,13 @@ BOMBCAP 20
 ## a less lootfilled or smaller or less round effecting ruin costs less to
 ## spawn, while the converse is true. Alter this number to affect the amount
 ## of ruins.
-LAVALAND_BUDGET 200
+LAVALAND_BUDGET 60
 
-## Space Ruin Budged
-Space_Budget 100
+## Ice Moon Budget
+ICEMOON_BUDGET 90
+
+## Space Ruin Budget
+Space_Budget 16
 
 ## Time in ds from when a player latejoins till the arrival shuttle docks at the station
 ## Must be at least 30. At least 55 recommended to be visually/aurally appropriate
@@ -538,10 +540,7 @@ ARRIVALS_SHUTTLE_REQUIRE_SAFE_LATEJOIN
 MICE_ROUNDSTART 8
 
 ## If the percentage of players alive (doesn't count conversions) drops below this threshold the emergency shuttle will be forcefully called (provided it can be)
-EMERGENCY_SHUTTLE_AUTOCALL_THRESHOLD 0.01
-
-## Determines if players are allowed to print integrated circuits, uncomment to allow.
-IC_PRINTING
+#EMERGENCY_SHUTTLE_AUTOCALL_THRESHOLD 0.2
 
 ## Uncomment to allow roundstart quirk selection in the character setup menu.
 ## This used to be named traits, hence the config name, but it handles quirks, not the other kind of trait!
@@ -560,10 +559,10 @@ ROUNDSTART_TRAITS
 #SHIFT_TIME_REALTIME
 
 ## A cap on how many monkeys may be created via monkey cubes
-MONKEYCAP 128
+MONKEYCAP 64
 
 ## A cap on how many mice can be bred via cheese wedges
 RATCAP 64
 
-## Enable the capitalist agenda on your server.
-ECONOMY
+## Maximum fine for a citation
+MAXFINE 2000

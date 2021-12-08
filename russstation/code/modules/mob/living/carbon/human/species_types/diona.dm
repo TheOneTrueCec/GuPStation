@@ -5,13 +5,12 @@
 	sexes = 0
 	species_traits = list(NOBLOOD,NOEYESPRITES, NO_UNDERWEAR)
 	inherent_traits = list(TRAIT_NOBREATH,TRAIT_RESISTCOLD,TRAIT_RESISTLOWPRESSURE)
-	mutant_bodyparts = list("diona_hair")
-	default_features = list("diona_hair" = "diona_bracket")
+	mutant_bodyparts = list("diona_hair" = "diona_bracket")
 	damage_overlay_type = "" //diona don't have blood
 	burnmod = 1.5     //take more damage from lasers
 	heatmod = 2       //take more damage from fire
 	speedmod = 5      //very slow
-	meat = /obj/item/reagent_containers/food/snacks/meat/slab/human/mutant/plant
+	meat = /obj/item/food/meat/slab/human/mutant/plant
 	disliked_food = MEAT | DAIRY
 	liked_food = VEGETABLES | FRUIT | GRAIN
 	changesource_flags = MIRROR_BADMIN | WABBAJACK | MIRROR_MAGIC | MIRROR_PRIDE | RACE_SWAP | ERT_SPAWN
@@ -52,7 +51,7 @@
 		if(light_amount > 0.2) //if there's enough light, heal
 			H.heal_overall_damage(2,1, 0, BODYPART_ORGANIC)
 		if(H.radiation > 0)
-			var/rads = CLAMP(H.radiation, 0, 1000)
+			var/rads = clamp(H.radiation, 0, 1000)
 			rads = rads/250
 			H.heal_overall_damage(rads, 0, 0, BODYPART_ORGANIC)
 			H.adjustToxLoss(-rads)

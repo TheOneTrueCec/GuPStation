@@ -102,7 +102,7 @@
 		if(2000 to MAXIMUM_BURN_TIMER)
 			set_light(6)
 
-/obj/structure/fireplace/process()
+/obj/structure/fireplace/process(delta_time)
 	if(!lit)
 		return
 	if(world.time > flame_expiry_timer)
@@ -111,7 +111,7 @@
 
 	playsound(src, 'sound/effects/comfyfire.ogg',50,FALSE, FALSE, TRUE)
 	var/turf/T = get_turf(src)
-	T.hotspot_expose(700, 5)
+	T.hotspot_expose(700, 2.5 * delta_time)
 	update_icon()
 	adjust_light()
 
@@ -129,7 +129,7 @@
 		if(burn_time_remaining() < MAXIMUM_BURN_TIMER)
 			flame_expiry_timer = world.time + MAXIMUM_BURN_TIMER
 	else
-		fuel_added = CLAMP(fuel_added + amount, 0, MAXIMUM_BURN_TIMER)
+		fuel_added = clamp(fuel_added + amount, 0, MAXIMUM_BURN_TIMER)
 
 /obj/structure/fireplace/proc/burn_time_remaining()
 	if(lit)

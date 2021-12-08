@@ -13,6 +13,9 @@
 	px_y = -8
 	stam_damage_coeff = 1
 	max_stamina_damage = 100
+	wound_resistance = 5
+	disabled_wound_penalty = 25
+	scars_covered_by_clothes = FALSE
 
 	var/mob/living/brain/brainmob = null //The current occupant.
 	var/obj/item/organ/brain/brain = null //The brain organ
@@ -91,7 +94,7 @@
 
 
 /obj/item/bodypart/head/can_dismember(obj/item/I)
-	if(!((owner.stat == DEAD) || owner.InFullCritical()))
+	if(owner.stat < HARD_CRIT)
 		return FALSE
 	return ..()
 
@@ -147,6 +150,8 @@
 			if(S.hair_color)
 				if(S.hair_color == "mutcolor")
 					facial_hair_color = H.dna.features["mcolor"]
+				else if(hair_color == "fixedmutcolor")
+					facial_hair_color = "#[S.fixed_mut_color]"
 				else
 					facial_hair_color = S.hair_color
 			else
@@ -162,6 +167,8 @@
 			if(S.hair_color)
 				if(S.hair_color == "mutcolor")
 					hair_color = H.dna.features["mcolor"]
+				else if(hair_color == "fixedmutcolor")
+					hair_color = "#[S.fixed_mut_color]"
 				else
 					hair_color = S.hair_color
 			else
@@ -255,11 +262,6 @@
 	dismemberable = 0
 	max_damage = 500
 	animal_origin = ALIEN_BODYPART
-
-/obj/item/bodypart/head/devil
-	dismemberable = 0
-	max_damage = 5000
-	animal_origin = DEVIL_BODYPART
 
 /obj/item/bodypart/head/larva
 	icon = 'icons/mob/animal_parts.dmi'

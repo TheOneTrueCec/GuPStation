@@ -48,7 +48,7 @@
 
 	//Extra settings
 	///Don't ever override this or I will come to your house and stand menacingly behind a bush
-	var/list/extra_settings = list()
+	VAR_FINAL/list/extra_settings = list()
 
 	//Rules
 	//Rules that automatically manage if the program's active without requiring separate sensor programs
@@ -96,8 +96,9 @@
 	if(istype(target,src))
 		copy_extra_settings_to(target)
 
-///Register extra settings by overriding this.
-///extra_settings[name] = new typepath() for each extra setting
+/// Register extra settings by overriding this.
+///
+/// `extra_settings[name] = new typepath()` for each extra setting.
 /datum/nanite_program/proc/register_extra_settings()
 	return
 

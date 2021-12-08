@@ -104,13 +104,13 @@
 	..()
 	for(var/X in paralysis_traits)
 		ADD_TRAIT(owner, X, "trauma_paralysis")
-	owner.update_disabled_bodyparts()
+
 
 /datum/brain_trauma/severe/paralysis/on_lose()
 	..()
 	for(var/X in paralysis_traits)
 		REMOVE_TRAIT(owner, X, "trauma_paralysis")
-	owner.update_disabled_bodyparts()
+
 
 /datum/brain_trauma/severe/paralysis/paraplegic
 	random_gain = FALSE
@@ -165,7 +165,7 @@
 		stress = max(stress - 4, 0)
 
 /datum/brain_trauma/severe/monophobia/proc/check_alone()
-	if(HAS_TRAIT(owner, TRAIT_BLIND))
+	if(owner.is_blind())
 		return TRUE
 	for(var/mob/M in oview(owner, 7))
 		if(!isliving(M)) //ghosts ain't people
@@ -190,12 +190,12 @@
 			if(!high_stress)
 				to_chat(owner, "<span class='warning'>You can't stop shaking...</span>")
 				owner.dizziness += 20
-				owner.confused += 20
+				owner.add_confusion(20)
 				owner.Jitter(20)
 			else
 				to_chat(owner, "<span class='warning'>You feel weak and scared! If only you weren't alone...</span>")
 				owner.dizziness += 20
-				owner.confused += 20
+				owner.add_confusion(20)
 				owner.Jitter(20)
 				owner.adjustStaminaLoss(50)
 
