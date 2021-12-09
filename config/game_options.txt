@@ -33,7 +33,7 @@ EMOJIS
 ## To speed things up make the number negative, to slow things down, make the number positive.
 
 ## These modify the run/walk speed of all mobs before the mob-specific modifiers are applied.
-RUN_DELAY 2
+RUN_DELAY 1
 WALK_DELAY 4
 
 ## The variables below affect the movement of specific mob types. THIS AFFECTS ALL SUBTYPES OF THE TYPE YOU CHOOSE!
@@ -155,7 +155,7 @@ MIDROUND_ANTAG WIZARD
 MIN_POP TRAITOR 0
 MAX_POP TRAITOR -1
 
-MIN_POP TRAITORBRO 0
+MIN_POP TRAITORBRO 4
 MAX_POP TRAITORBRO -1
 
 MIN_POP TRAITORCHAN 15
@@ -192,7 +192,7 @@ MAX_POP METEOR -1
 
 
 ## The amount of time it takes for the emergency shuttle to be called, from round start.
-SHUTTLE_REFUEL_DELAY 12000
+SHUTTLE_REFUEL_DELAY 6000
 
 ## Variables calculate how number of antagonists will scale to population.
 ## Used as (Antagonists = Population / Coeff)
@@ -219,7 +219,7 @@ PROTECT_ROLES_FROM_ANTAGONIST
 PROTECT_ASSISTANT_FROM_ANTAGONIST
 
 ## If non-human species are barred from joining as a head of staff
-ENFORCE_HUMAN_AUTHORITY
+#ENFORCE_HUMAN_AUTHORITY
 
 ## If late-joining players have a chance to become a traitor/changeling
 ALLOW_LATEJOIN_ANTAGONISTS
@@ -254,7 +254,7 @@ ALLOW_RANDOM_EVENTS
 
 ## Multiplier for earliest start time of dangerous events.
 ## Set to 0 to make dangerous events avaliable from round start.
-EVENTS_MIN_TIME_MUL 2
+EVENTS_MIN_TIME_MUL 4
 
 ## Multiplier for minimal player count (players = alive non-AFK humans) for dangerous events to start.
 ## Set to 0 to make dangerous events avaliable for all populations.
@@ -264,7 +264,7 @@ EVENTS_MIN_PLAYERS_MUL 0
 ## AI ###
 
 ## Allow the AI job to be picked.
-#ALLOW_AI
+ALLOW_AI
 
 ## Allow the AI Multicamera feature to be used by AI players
 ALLOW_AI_MULTICAM
@@ -287,7 +287,7 @@ ROUNDSTART_AWAY
 
 ## How long the delay is before the Away Mission gate opens. Default is half an hour.
 ## 600 is one minute.
-GATEWAY_DELAY 18000
+GATEWAY_DELAY 9000
 
 
 ## ACCESS ###
@@ -342,7 +342,7 @@ NEAR_DEATH_EXPERIENCE
 ## Set to 1 for "custom", silicons will start with the custom laws defined in silicon_laws.txt. (If silicon_laws.txt is empty, the AI will spawn with asimov and Custom boards will auto-delete.)
 ## Set to 2 for "random", silicons will start with a random lawset picked from random laws specified below.
 ## Set to 3 for "weighted random", using values in "silicon_weights.txt", a law will be selected, with weights specifed in that file.
-DEFAULT_LAWS 0
+DEFAULT_LAWS 1
 
 ## RANDOM LAWS ##
 ## ------------------------------------------------------------------------------------------
@@ -445,14 +445,14 @@ ROUNDSTART_RACES felinid
 #ROUNDSTART_RACES gold
 #ROUNDSTART_RACES silver
 #ROUNDSTART_RACES uranium
-ROUNDSTART_RACES abductor
+#ROUNDSTART_RACES abductor
 #ROUNDSTART_RACES synth
 
 ## Races that are straight upgrades. If these are on expect powergamers to always pick them
-ROUNDSTART_RACES diona
+#ROUNDSTART_RACES diona
 #ROUNDSTART_RACES skeleton
 #ROUNDSTART_RACES zombie
-#ROUNDSTART_RACES slime
+ROUNDSTART_RACES slime
 #ROUNDSTART_RACES pod
 #ROUNDSTART_RACES military_synth
 #ROUNDSTART_RACES agent
@@ -462,6 +462,7 @@ ROUNDSTART_RACES diona
 ## Roundstart no-reset races
 ## Races defined here will not cause existing characters to be reset to human if they currently have a non-roundstart species defined.
 #ROUNDSTART_NO_HARD_CHECK felinid
+ROUNDSTART_NO_HARD_CHECK slime
 
 ## Uncomment to give players the choice of joining as a human with mutant bodyparts before they join the game
 JOIN_WITH_MUTANT_HUMANS
@@ -517,13 +518,13 @@ BOMBCAP 20
 ## a less lootfilled or smaller or less round effecting ruin costs less to
 ## spawn, while the converse is true. Alter this number to affect the amount
 ## of ruins.
-LAVALAND_BUDGET 60
+LAVALAND_BUDGET 120
 
 ## Ice Moon Budget
 ICEMOON_BUDGET 90
 
 ## Space Ruin Budget
-Space_Budget 16
+Space_Budget 32
 
 ## Time in ds from when a player latejoins till the arrival shuttle docks at the station
 ## Must be at least 30. At least 55 recommended to be visually/aurally appropriate
