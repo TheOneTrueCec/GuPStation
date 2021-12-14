@@ -98,6 +98,7 @@
 		/obj/machinery/dna_scannernew,
 		/obj/machinery/telecomms,
 		/obj/machinery/nuclearbomb,
+		/obj/machinery/particle_accelerator,
 		/obj/machinery/recharge_station,
 		/obj/machinery/smartfridge,
 		/obj/machinery/computer,
