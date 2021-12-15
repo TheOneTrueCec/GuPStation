@@ -73,6 +73,8 @@
 	Doing so saves some power, slightly increasing their replication speed."
 	id = "red_diag_nanites"
 	program_type = /datum/nanite_program/reduced_diagnostics
+	category = list("Utility Nanites")
+
 /datum/design/nanites/access
 	name = "Subdermal ID"
 	desc = "The nanites store the host's ID access rights in a subdermal magnetic strip. Updates when triggered, copying the host's current access."
