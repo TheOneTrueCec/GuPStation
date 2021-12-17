@@ -675,7 +675,7 @@ GLOBAL_LIST_INIT(uplink_items, subtypesof(/datum/uplink_item))
 	item = /obj/item/ammo_box/magazine/m9mm
 	cost = 1
 	exclude_modes = list(/datum/game_mode/nuclear/clown_ops)
-	illegal_tech = FALSE
+	illegal_tech = TRUE
 
 /datum/uplink_item/ammo/pistolap
 	name = "9mm Armour Piercing Magazine"
@@ -1275,7 +1275,7 @@ GLOBAL_LIST_INIT(uplink_items, subtypesof(/datum/uplink_item))
 	item = /obj/item/storage/backpack/satchel/flat/with_tools
 	cost = 1
 	surplus = 30
-	illegal_tech = FALSE
+	illegal_tech = TRUE
 
 //Space Suits and Hardsuits
 /datum/uplink_item/suits
@@ -1420,7 +1420,7 @@ GLOBAL_LIST_INIT(uplink_items, subtypesof(/datum/uplink_item))
 	item = /obj/item/disk/nuclear/fake
 	cost = 1
 	surplus = 1
-	illegal_tech = FALSE
+	illegal_tech = TRUE
 
 /datum/uplink_item/device_tools/frame
 	name = "F.R.A.M.E. PDA Cartridge"
@@ -1596,7 +1596,7 @@ GLOBAL_LIST_INIT(uplink_items, subtypesof(/datum/uplink_item))
 	item = /obj/item/clothing/gloves/tackler/combat/insulated
 	include_modes = list(/datum/game_mode/nuclear, /datum/game_mode/nuclear/clown_ops)
 	cost = 2
-	illegal_tech = FALSE
+	illegal_tech = TRUE
 
 // Implants
 /datum/uplink_item/implants
@@ -2024,7 +2024,7 @@ GLOBAL_LIST_INIT(uplink_items, subtypesof(/datum/uplink_item))
 	item = /obj/item/toy/cards/deck/syndicate
 	cost = 1
 	surplus = 40
-	illegal_tech = FALSE
+	illegal_tech = TRUE
 
 /datum/uplink_item/badass/syndiecigs
 	name = "Syndicate Smokes"
