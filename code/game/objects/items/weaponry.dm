@@ -254,17 +254,6 @@ for further reading, please see: https://github.com/tgstation/tgstation/pull/301
 
 /obj/item/katana/cursed
 	slot_flags = null
-	item_flags = DROPDEL
-
-/obj/item/katana/cursed/equipped(mob/living/carbon/human/user)
-	. = ..()
-	if(!istype(user))
-		return
-	user.gain_trauma(/datum/brain_trauma/magic/stalker, TRAUMA_RESILIENCE_MAGIC)
-
-/obj/item/katana/cursed/Initialize()
-	. = ..()
-	ADD_TRAIT(src, TRAIT_NODROP, CURSED_ITEM_TRAIT)
 
 /obj/item/wirerod
 	name = "wired rod"
