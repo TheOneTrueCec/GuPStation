@@ -99,10 +99,11 @@
 /obj/item/reagent_containers/hypospray/combat/survival
 	name = "survival hypospray"
 	desc = "A modified air-needle autoinjector, used by shaft miners to quickly heal injuries in combat."
-	amount_per_transfer_from_this = 10
+	amount_per_transfer_from_this = 60
+	possible_transfer_amounts = list(5,10,20,50,60,100)
 	volume = 100
-	resistance_flags = INDESTRUCTIBLE | LAVA_PROOF | FIRE_PROOF | ACID_PROOF
-	list_reagents = list(/datum/reagent/medicine/omnizine = 5)
+	resistance_flags = LAVA_PROOF | FIRE_PROOF | ACID_PROOF
+	list_reagents = list(/datum/reagent/medicine/salbutamol = 10, /datum/reagent/medicine/leporazine = 15, /datum/reagent/medicine/epinephrine = 10, /datum/reagent/medicine/lavaland_extract = 2, /datum/reagent/medicine/omnizine = 5, /datum/reagent/medicine/oxandrolone = 8, /datum/reagent/medicine/sal_acid = 8, /datum/reagent/medicine/morphine = 2)
 
 //MediPens
 
