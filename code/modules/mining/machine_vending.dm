@@ -34,7 +34,6 @@
 		new /datum/data/mining_equipment("Kinetic Accelerator",			/obj/item/gun/energy/kinetic_accelerator,							750),
 		new /datum/data/mining_equipment("Advanced Scanner",			/obj/item/t_scanner/adv_mining_scanner,								800),
 		new /datum/data/mining_equipment("Resonator",					/obj/item/resonator,												800),
-		new /datum/data/mining_equipment("Luxury Medipen",				/obj/item/reagent_containers/hypospray/medipen/survival/luxury,		1000),
 		new /datum/data/mining_equipment("Fulton Pack",					/obj/item/extraction_pack,											1000),
 		new /datum/data/mining_equipment("Lazarus Injector",			/obj/item/lazarus_injector,											1000),
 		new /datum/data/mining_equipment("Silver Pickaxe",				/obj/item/pickaxe/silver,											1000),
@@ -45,6 +44,7 @@
 		new /datum/data/mining_equipment("Diamond Pickaxe",				/obj/item/pickaxe/diamond,											2000),
 		new /datum/data/mining_equipment("Super Resonator",				/obj/item/resonator/upgraded,										2500),
 		new /datum/data/mining_equipment("Jump Boots",					/obj/item/clothing/shoes/bhop,										2500),
+		new /datum/data/mining_equipment("Survival Hypospray",			/obj/item/reagent_containers/hypospray/combat/survival,				3000),
 		new /datum/data/mining_equipment("Luxury Shelter Capsule",		/obj/item/survivalcapsule/luxury,									3000),
 		new /datum/data/mining_equipment("Luxury Bar Capsule",			/obj/item/survivalcapsule/luxuryelite,								10000),
 		new /datum/data/mining_equipment("Nanotrasen Minebot",			/mob/living/simple_animal/hostile/mining_drone,						800),
@@ -60,7 +60,7 @@
 		new /datum/data/mining_equipment("KA Range Increase",			/obj/item/borg/upgrade/modkit/range,								1000),
 		new /datum/data/mining_equipment("KA Damage Increase",			/obj/item/borg/upgrade/modkit/damage,								1000),
 		new /datum/data/mining_equipment("KA Cooldown Decrease",		/obj/item/borg/upgrade/modkit/cooldown,								1000),
-		new /datum/data/mining_equipment("KA AoE Damage",				/obj/item/borg/upgrade/modkit/aoe/mobs,								2000)
+		new /datum/data/mining_equipment("KA AoE Damage",				/obj/item/borg/upgrade/modkit/aoe/mobs,								2000),
 	)
 
 /datum/data/mining_equipment
