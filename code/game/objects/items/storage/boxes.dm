@@ -202,6 +202,7 @@
 	new /obj/item/reagent_containers/syringe/lethal(src)
 	new /obj/item/reagent_containers/syringe/piercing(src)
 	new /obj/item/reagent_containers/syringe/bluespace(src)
+	new /obj/item/reagent_containers/syringe/noreact(src)
 
 /obj/item/storage/box/medipens
 	name = "box of medipens"
