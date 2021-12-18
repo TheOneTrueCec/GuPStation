@@ -646,16 +646,16 @@
 		M.changeNext_move(CLICK_CD_RAPID)
 		if(iscarbon(M))
 			var/mob/living/carbon/broh = M
-			broh.adjustOxyLoss(2)
+			broh.adjustOxyLoss(0.1)
 			broh.losebreath++
 			switch(broh.losebreath)
 				if(-INFINITY to 0)
 				if(1 to 2)
 					if(prob(30))
-						user.visible_message("<b>[broh]</b>'s eyes water as [broh.p_they()] chug the can of [src]!")
+						user.visible_message("<b>[broh]</b>'s eyes water as [broh.p_they()] chugs the can of [src]!")
 				if(3 to 6)
 					if(prob(20))
-						user.visible_message("<b>[broh]</b> makes \an [pick(list("uncomfortable", "gross", "troubling"))] gurgling noise as [broh.p_they()] chug the can of [src]!")
+						user.visible_message("<b>[broh]</b> makes \an [pick(list("uncomfortable", "gross", "troubling"))] gurgling noise as [broh.p_they()] chugs the can of [src]!")
 				if(9 to INFINITY)
 					broh.vomit(2, stun=FALSE)
 

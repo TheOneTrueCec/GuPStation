@@ -860,11 +860,11 @@
 	category = CAT_CLOTHING
 
 /datum/crafting_recipe/boh
-	name = "Bag of Holding"
+	name = "Bag of Holding Type II"
 	reqs = list(
             /obj/item/bag_of_holding_inert = 1,
             /obj/item/assembly/signaler/anomaly/bluespace = 1)
-	result = /obj/item/storage/backpack/holding
+	result = /obj/item/storage/backpack/holding/typeii
 	category = CAT_CLOTHING
 
 /datum/crafting_recipe/ipickaxe
