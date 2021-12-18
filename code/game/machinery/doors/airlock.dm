@@ -1231,10 +1231,8 @@
 //Airlock is passable if it is open (!density), bot has access, and is not bolted shut or powered off)
 	return !density || (check_access(ID) && !locked && hasPower())
 
-/obj/machinery/door/airlock/emag_act(mob/user, obj/item/card/emag/doorjack/D)
+/obj/machinery/door/airlock/emag_act(mob/user)
 	if(!operating && density && hasPower() && !(obj_flags & EMAGGED))
-		if(istype(D, /obj/item/card/emag/doorjack))
-			D.use_charge(user)
 		operating = TRUE
 		update_icon(AIRLOCK_EMAG, 1)
 		sleep(6)
