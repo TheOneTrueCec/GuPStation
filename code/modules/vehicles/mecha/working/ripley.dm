@@ -80,6 +80,25 @@
 	initialize_passenger_action_type(/datum/action/vehicle/sealed/mecha/mech_view_stats)
 	initialize_passenger_action_type(/datum/action/vehicle/sealed/mecha/strafe)
 
+/obj/vehicle/sealed/mecha/working/ripley/firefighter
+	desc = "Autonomous Power Loader Unit MK-III. This model is refitted with a pressurized cabin and additional thermal protection."
+	name = "\improper APLU MK-III \"Firefighter\""
+	icon_state = "firefighter"
+	max_temperature = 65000
+	max_integrity = 250
+	fast_pressure_step_in = 2 //step_in while in low pressure conditions
+	slow_pressure_step_in = 4 //step_in while in normal pressure conditions
+	movedelay = 4
+	resistance_flags = LAVA_PROOF | FIRE_PROOF | ACID_PROOF
+	lights_power = 7
+	armor = list("melee" = 40, "bullet" = 30, "laser" = 30, "energy" = 30, "bomb" = 60, "bio" = 0, "rad" = 70, "fire" = 100, "acid" = 100)
+	max_equip = 5 // More armor, less tools
+	wreckage = /obj/structure/mecha_wreckage/ripley/firefighter
+	enclosed = TRUE
+	enter_delay = 40
+	silicon_icon_state = null
+	opacity = TRUE
+
 /obj/vehicle/sealed/mecha/working/ripley/deathripley
 	desc = "OH SHIT IT'S THE DEATHSQUAD WE'RE ALL GONNA DIE"
 	name = "\improper DEATH-RIPLEY"

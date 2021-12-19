@@ -158,6 +158,17 @@
 	name = "\improper Ripley MK-II wreckage"
 	icon_state = "ripleymkii-broken"
 
+/obj/structure/mecha_wreckage/ripley/firefighter
+	name = "\improper Firefighter wreckage"
+	icon_state = "firefighter-broken"
+	parts = list(
+				/obj/item/mecha_parts/part/ripley_torso,
+				/obj/item/mecha_parts/part/ripley_left_arm,
+				/obj/item/mecha_parts/part/ripley_right_arm,
+				/obj/item/mecha_parts/part/ripley_left_leg,
+				/obj/item/mecha_parts/part/ripley_right_leg,
+				/obj/item/clothing/suit/fire)
+
 /obj/structure/mecha_wreckage/clarke
 	name = "\improper Clarke wreckage"
 	icon_state = "clarke-broken"

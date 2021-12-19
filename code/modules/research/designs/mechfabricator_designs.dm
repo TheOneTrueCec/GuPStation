@@ -117,6 +117,16 @@
 	construction_time = 150
 	category = list("Ripley")
 
+//firefighter subtype
+/datum/design/firefighter_chassis
+	name = "Exosuit Chassis (APLU \"Firefighter\")"
+	id = "firefighter_chassis"
+	build_type = MECHFAB
+	build_path = /obj/item/mecha_parts/chassis/fire_fighter
+	materials = list(/datum/material/iron=20000)
+	construction_time = 100
+	category = list("Firefighter")
+
 //Odysseus
 /datum/design/odysseus_chassis
 	name = "Exosuit Chassis (\"Odysseus\")"

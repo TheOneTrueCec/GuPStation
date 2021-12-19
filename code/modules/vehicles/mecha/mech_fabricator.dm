@@ -48,6 +48,7 @@
 								"Cyborg",
 								"Ripley",
 								"Odysseus",
+								"Firefighter",
 								"Clarke",
 								"Gygax",
 								"Durand",
