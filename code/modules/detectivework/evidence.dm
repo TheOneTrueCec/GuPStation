@@ -28,10 +28,6 @@
 	if(!istype(I) || I.anchored)
 		return
 
-	if(SEND_SIGNAL(loc, COMSIG_CONTAINS_STORAGE) && SEND_SIGNAL(I, COMSIG_CONTAINS_STORAGE))
-		to_chat(user, "<span class='warning'>No matter what way you try, you can't get [I] to fit inside [src].</span>")
-		return TRUE	//begone infinite storage ghosts, begone from me
-
 	if(istype(I, /obj/item/evidencebag))
 		to_chat(user, "<span class='warning'>You find putting an evidence bag in another evidence bag to be slightly absurd.</span>")
 		return TRUE //now this is podracing
