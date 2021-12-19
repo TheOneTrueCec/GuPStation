@@ -696,6 +696,34 @@
 	surgery = /datum/surgery/advanced/viral_bonding
 	research_icon_state = "surgery_chest"
 
+/datum/design/surgery/experimental_dissection
+	name = "Dissection"
+	desc = "A surgical procedure which analyzes the biology of a corpse, and automatically adds new findings to the research database."
+	id = "surgery_dissection"
+	surgery = /datum/surgery/advanced/experimental_dissection
+	research_icon_state = "surgery_chest"
+
+/datum/design/surgery/experimental_dissection_adv
+	name = "Thorough Dissection"
+	desc = "A surgical procedure which analyzes the biology of a corpse, and automatically adds new findings to the research database."
+	id = "surgery_dissection_adv"
+	surgery = /datum/surgery/advanced/experimental_dissection/adv
+	research_icon_state = "surgery_chest"
+
+/datum/design/surgery/experimental_dissection_exp
+	name = "Experimental Dissection"
+	desc = "A surgical procedure which analyzes the biology of a corpse, and automatically adds new findings to the research database."
+	id = "surgery_dissection_exp"
+	surgery = /datum/surgery/advanced/experimental_dissection/exp
+	research_icon_state = "surgery_chest"
+
+/datum/design/surgery/experimental_dissection_alien
+	name = "Extraterrestrial Dissection"
+	desc = "A surgical procedure which analyzes the biology of a corpse, and automatically adds new findings to the research database."
+	id = "surgery_dissection_alien"
+	surgery = /datum/surgery/advanced/experimental_dissection/alien
+	research_icon_state = "surgery_chest"
+
 /datum/design/surgery/healing //PLEASE ACCOUNT FOR UNIQUE HEALING BRANCHES IN THE hptech HREF (currently 2 for Brute/Burn; Combo is bonus)
 	name = "Tend Wounds"
 	desc = "An upgraded version of the original surgery."
