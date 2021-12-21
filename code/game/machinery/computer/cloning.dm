@@ -313,6 +313,10 @@
 			dat += "<b><a href='byond://?src=[REF(src)];del_rec=1'>Please confirm.</a></b><br>"
 			dat += "<b><a href='byond://?src=[REF(src)];menu=3'>Cancel</a></b>"
 
+	var/datum/browser/popup = new(user, "cloning", "Cloning System Control")
+	popup.set_content(dat)
+	popup.set_title_image(user.browse_rsc_icon(icon, icon_state))
+	popup.open()
 
 /obj/machinery/computer/cloning/Topic(href, href_list)
 	if(..())
@@ -471,6 +475,9 @@
 				playsound(src, 'sound/machines/terminal_prompt_deny.ogg', 50, FALSE)
 			else if(!pod)
 				temp = "<font class='bad'>No Clonepods available.</font>"
+				playsound(src, 'sound/machines/terminal_prompt_deny.ogg', 50, FALSE)
+			else if(!CONFIG_GET(flag/revival_pod_plants) && !empty)
+				temp = "<font class='bad'>Unable to initiate cloning cycle.</font>"
 				playsound(src, 'sound/machines/terminal_prompt_deny.ogg', 50, FALSE)
 			else if(pod.occupant)
 				temp = "<font class='bad'>Cloning cycle already in progress.</font>"

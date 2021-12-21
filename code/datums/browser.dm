@@ -34,6 +34,9 @@
 /datum/browser/proc/set_window_options(nwindow_options)
 	window_options = nwindow_options
 
+/datum/browser/proc/set_title_image(ntitle_image)
+	//title_image = ntitle_image
+
 /datum/browser/proc/add_stylesheet(name, file)
 	if (istype(name, /datum/asset/spritesheet))
 		var/datum/asset/spritesheet/sheet = name
@@ -400,6 +403,12 @@
 				continue
 	opentime = 0
 	close()
+
+// This will allow you to show an icon in the browse window
+// This is added to mob so that it can be used without a reference to the browser object
+// There is probably a better place for this...
+/mob/proc/browse_rsc_icon(icon, icon_state, dir = -1)
+
 
 /proc/presentpreflikepicker(mob/User,Message, Title, Button1="Ok", Button2, Button3, StealFocus = 1,Timeout = 6000,list/settings, width, height, slidecolor)
 	if (!istype(User))

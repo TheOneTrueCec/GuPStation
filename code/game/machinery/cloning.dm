@@ -94,7 +94,6 @@
 		if(efficiency > 5)
 			. += "<span class='notice'>Pod has been upgraded to support autoprocessing and apply beneficial mutations.</span>"
 
-
 //Clonepod
 
 /obj/machinery/clonepod/examine(mob/user)
@@ -442,7 +441,7 @@
 /obj/machinery/clonepod/relaymove(mob/user)
 	container_resist(user)
 
-/obj/machinery/clonepod/proc/container_resist(mob/living/user)
+/obj/machinery/clonepod/container_resist(mob/living/user)
 	if(user.stat == CONSCIOUS)
 		go_out()
 
