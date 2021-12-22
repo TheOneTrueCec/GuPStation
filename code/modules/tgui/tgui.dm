@@ -33,7 +33,8 @@
 	var/status = UI_INTERACTIVE
 	/// Topic state used to determine status/interactability.
 	var/datum/ui_state/state = null
-
+	/// If the window should update
+	var/needs_update = FALSE
 /**
  * public
  *

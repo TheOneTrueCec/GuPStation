@@ -30,6 +30,11 @@
 /datum/proc/ui_data(mob/user)
 	return list() // Not implemented.
 
+/datum/proc/ui_update()
+	for(var/datum/tgui/ui as() in SStgui.get_all_open_uis(src))
+		ui.needs_update = TRUE
+
+
 /**
  * public
  *
