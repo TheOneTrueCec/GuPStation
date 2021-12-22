@@ -216,6 +216,7 @@
 				H.gain_trauma(cloned_trauma, BT.resilience)
 
 		H.set_cloned_appearance()
+		H.update_blindness()
 
 		H.set_suicide(FALSE)
 	attempting = FALSE
