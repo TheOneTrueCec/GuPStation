@@ -333,7 +333,7 @@
 	return dna
 
 
-/mob/living/carbon/human/proc/hardset_dna(ui, list/mutation_index, newreal_name, newblood_type, datum/species/mrace, newfeatures, list/mutations, force_transfer_mutations, list/default_mutation_genes)
+/mob/living/carbon/human/proc/hardset_dna(ui, list/mutation_index, list/default_mutation_genes, newreal_name, newblood_type, datum/species/mrace, newfeatures, list/mutations, force_transfer_mutations)
 //Do not use force_transfer_mutations for stuff like cloners without some precautions, otherwise some conditional mutations could break (timers, drill hat etc)
 	if(newfeatures)
 		dna.features = newfeatures
@@ -343,16 +343,8 @@
 		newrace.copy_properties_from(mrace)
 		set_species(newrace, icon_update=0)
 
-	if(LAZYLEN(mutation_index))
-		dna.mutation_index = mutation_index.Copy()
-		if(LAZYLEN(default_mutation_genes))
-			dna.default_mutation_genes = default_mutation_genes.Copy()
-		else
-			dna.default_mutation_genes = mutation_index.Copy()
-		domutcheck()
-
 	if(newreal_name)
-		real_name = newreal_name
+		dna.real_name = newreal_name
 		dna.generate_unique_enzymes()
 
 	if(newblood_type)
@@ -361,6 +353,14 @@
 	if(ui)
 		dna.uni_identity = ui
 		updateappearance(icon_update=0)
+
+	if(LAZYLEN(mutation_index))
+		dna.mutation_index = mutation_index.Copy()
+		if(LAZYLEN(default_mutation_genes))
+			dna.default_mutation_genes = default_mutation_genes.Copy()
+		else
+			dna.default_mutation_genes = mutation_index.Copy()
+		domutcheck()
 
 	if(mrace || newfeatures || ui)
 		update_body()
@@ -372,7 +372,7 @@
 		for(var/M in mutations)
 			var/datum/mutation/human/HM = M
 			if(HM.allow_transfer || force_transfer_mutations)
-				dna.force_give(new HM.type(HM.class, copymut=HM)) //using force_give since it may include exotic mutations that otherwise wont be handled properly
+				dna.force_give(new HM.type(HM.class, copymut=HM)) //using force_give since it may include exotic mutations that otherwise won't be handled properly
 
 /mob/living/carbon/proc/create_dna()
 	dna = new /datum/dna(src)
@@ -384,7 +384,14 @@
 /mob/living/carbon/proc/updateappearance(icon_update=1, mutcolor_update=0, mutations_overlay_update=0)
 	if(!has_dna())
 		return
-	gender = (deconstruct_block(getblock(dna.uni_identity, DNA_GENDER_BLOCK), 2)-1) ? FEMALE : MALE
+
+	switch(deconstruct_block(getblock(dna.uni_identity, DNA_GENDER_BLOCK), 3))
+		if(G_MALE)
+			gender = MALE
+		if(G_FEMALE)
+			gender = FEMALE
+		else
+			gender = PLURAL
 
 /mob/living/carbon/human/updateappearance(icon_update=1, mutcolor_update=0, mutations_overlay_update=0)
 	..()
