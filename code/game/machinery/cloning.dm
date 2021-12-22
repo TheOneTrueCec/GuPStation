@@ -163,7 +163,8 @@
 	if(!clonename)	//to prevent null names
 		clonename = "clone ([rand(1,999)])"
 	H.real_name = clonename
-	H.hardset_dna(ui, mutation_index, H.real_name, blood_type, new mrace, features)
+
+	H.hardset_dna(ui, mutation_index, H.real_name, blood_type, mrace, features)
 
 	if(!HAS_TRAIT(H, TRAIT_RADIMMUNE))//dont apply mutations if the species is Mutation proof.
 		if(efficiency > 2)
