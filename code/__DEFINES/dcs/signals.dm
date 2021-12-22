@@ -844,8 +844,3 @@
 #define COMSIG_HUMAN_EARLY_UNARMED_ATTACK "human_early_unarmed_attack"
 ///from mob/living/carbon/human/UnarmedAttack(): (atom/target, proximity)
 #define COMSIG_HUMAN_MELEE_UNARMED_ATTACK "human_melee_unarmed_attack"
-
-/// Sent from /obj/machinery/open_machine(): (drop)
-#define COMSIG_MACHINE_OPEN "machine_open"
-/// Sent from /obj/machinery/close_machine(): (atom/movable/target)
-#define COMSIG_MACHINE_CLOSE "machine_close"

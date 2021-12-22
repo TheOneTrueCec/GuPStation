@@ -217,7 +217,6 @@ Class Procs:
   * * drop - Boolean. Whether to drop any stored items in the machine. Does not include components.
   */
 /obj/machinery/proc/open_machine(drop = TRUE)
-	SEND_SIGNAL(src, COMSIG_MACHINE_OPEN, drop)
 	state_open = TRUE
 	density = FALSE
 	if(drop)
@@ -285,7 +284,6 @@ Class Procs:
 	return occupant_typecache ? is_type_in_typecache(am, occupant_typecache) : isliving(am)
 
 /obj/machinery/proc/close_machine(atom/movable/target = null)
-	SEND_SIGNAL(src, COMSIG_MACHINE_CLOSE, target)
 	state_open = FALSE
 	density = TRUE
 	if(!target)
