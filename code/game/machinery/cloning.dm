@@ -216,7 +216,6 @@
 				H.gain_trauma(cloned_trauma, BT.resilience)
 
 		H.set_cloned_appearance()
-		H.update_blindness()
 
 		H.set_suicide(FALSE)
 	attempting = FALSE
@@ -300,6 +299,7 @@
 					BP.attach_limb(mob_occupant)
 
 			go_out()
+			mob_occupant.update_blindness()
 			log_cloning("[key_name(mob_occupant)] completed cloning cycle in [src] at [AREACOORD(src)].")
 
 	else if (!mob_occupant || mob_occupant.loc != src)
