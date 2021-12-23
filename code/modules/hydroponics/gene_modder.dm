@@ -15,15 +15,13 @@
 	var/list/trait_genes = list()
 
 	var/datum/plant_gene/target
-	var/operation = null
+	var/operation = ""
 	var/max_potency = 50 // See RefreshParts() for how these work
 	var/max_yield = 2
 	var/min_production = 12
 	var/max_endurance = 10 // IMPT: ALSO AFFECTS LIFESPAN
 	var/min_wchance = 67
 	var/min_wrate = 10
-
-	var/skip_confirmation = FALSE
 
 /obj/machinery/plantgenes/RefreshParts() // Comments represent the max you can set per tier, respectively. seeds.dm [219] clamps these for us but we don't want to mislead the viewer.
 	for(var/obj/item/stock_parts/manipulator/M in component_parts)
@@ -54,19 +52,19 @@
 			max_endurance = 100
 			min_wchance = 0
 			min_wrate = 0
-	ui_update()
 
-/obj/machinery/plantgenes/update_icon()
-	..()
-	cut_overlays()
+/obj/machinery/plantgenes/update_icon_state()
 	if((machine_stat & (BROKEN|NOPOWER)))
 		icon_state = "dnamod-off"
 	else
 		icon_state = "dnamod"
+
+/obj/machinery/plantgenes/update_overlays()
+	. = ..()
 	if(seed)
-		add_overlay("dnamod-dna")
+		. += "dnamod-dna"
 	if(panel_open)
-		add_overlay("dnamod-open")
+		. += "dnamod-open"
 
 /obj/machinery/plantgenes/attackby(obj/item/I, mob/user, params)
 	if(default_deconstruction_screwdriver(user, "dnamod", "dnamod", I))
@@ -100,148 +98,163 @@
 	else
 		..()
 
-/obj/machinery/plantgenes/ui_interact(mob/user, datum/tgui/ui)
-	ui = SStgui.try_update_ui(user, src, ui)
-	if(!ui)
-		ui = new(user, src, "PlantDNAManipulator")
-		ui.open()
-
-/obj/machinery/plantgenes/ui_data(mob/user)
-	var/list/data = list()
-	. = data
-
-	data["seed"] = seed?.name
-	data["disk"] = null
-	data["disk_gene"] = null
-	data["disk_readonly"] = FALSE
-	data["disk_canadd"] = TRUE
-
-	data["operation"] = operation
-	data["operation_target"] = build_gene(target)
-
-	if(disk)
-		data["disk_readonly"] = disk.read_only
-		if(disk.gene)
-			data["disk_gene"] = build_gene(disk.gene)
-			data["disk"] = disk.gene.get_name()
-			if(seed)
-				data["disk_canadd"] = disk.gene.can_add(seed)
-		else
-			data["disk"] = "Empty disk"
-		if(disk.read_only)
-			data["disk"] += " (RO)"
-
-	data["core_genes"] = build_gene_list(core_genes, /datum/plant_gene/core)
-	data["reagent_genes"] = build_gene_list(reagent_genes, /datum/plant_gene/reagent)
-	data["trait_genes"] = build_gene_list(trait_genes, /datum/plant_gene/trait)
-
-	data["machine_stats"] = build_machine_stats()
-	data["skip_confirmation"] = skip_confirmation
-
-/obj/machinery/plantgenes/proc/build_machine_stats()
-	var/list/L = list()
-	. = L
-
-	L["potency"] = list("max", max_potency)
-	L["yield"] = list("max", max_yield)
-	L["production speed"] = list("min", min_production)
-	L["endurance"] = list("max", max_endurance)
-	L["lifespan"] = list("max", max_endurance)
-	L["weed growth rate"] = list("min", min_wrate)
-	L["weed vulnerability"] = list("min", min_wchance)
-
-/obj/machinery/plantgenes/proc/build_gene_list(list/genes, filter_type)
-	var/list/L = list()
-	. = L
-
-	for(var/datum/plant_gene/gene in genes)
-		L += list(build_gene(gene, filter_type))
-
-/obj/machinery/plantgenes/proc/get_gene_id(datum/plant_gene/gene)
-	if(istype(gene, /datum/plant_gene/core))
-		var/datum/plant_gene/core/core_gene = gene
-		return "core[core_gene.type]"
-	if(istype(gene, /datum/plant_gene/reagent))
-		var/datum/plant_gene/reagent/reagent_gene = gene
-		return "reagent[reagent_gene.reagent_id]"
-	if(istype(gene, /datum/plant_gene/trait))
-		var/datum/plant_gene/trait/trait_gene = gene
-		return "trait[trait_gene.type]"
-
-	return "unknown/[gene.name]"
-
-/obj/machinery/plantgenes/proc/build_gene(datum/plant_gene/gene, filter_type)
-	if(!gene)
+/obj/machinery/plantgenes/ui_interact(mob/user)
+	. = ..()
+	if(!user)
 		return
 
-	if(filter_type && !istype(gene, filter_type))
+	var/datum/browser/popup = new(user, "plantdna", "Plant DNA Manipulator", 450, 600)
+	if(!(in_range(src, user) || issilicon(user)))
+		popup.close()
 		return
 
-	var/list/L = list()
-	. = L
+	var/dat = ""
 
-	L["name"] = gene.get_name()
+	if(operation)
+		if(!seed || (!target && operation != "insert"))
+			operation = ""
+			target = null
+			interact(user)
+			return
+		if((operation == "replace" || operation == "insert") && (!disk || !disk.gene))
+			operation = ""
+			target = null
+			interact(user)
+			return
 
-	L["extractable"] = gene.mutability_flags & PLANT_GENE_EXTRACTABLE
-	L["removable"] = gene.mutability_flags & PLANT_GENE_REMOVABLE
+		dat += "<div class='line'><h3>Confirm Operation</h3></div>"
+		dat += "<div class='statusDisplay'>Are you sure you want to [operation] "
+		switch(operation)
+			if("remove")
+				dat += "<span class='highlight'>[target.get_name()]</span> gene from \the <span class='highlight'>[seed]</span>?<br>"
+			if("extract")
+				dat += "<span class='highlight'>[target.get_name()]</span> gene from \the <span class='highlight'>[seed]</span>?<br>"
+				dat += "<span class='bad'>The sample will be destroyed in process!</span>"
+				if(istype(target, /datum/plant_gene/core))
+					var/datum/plant_gene/core/gene = target
+					if(istype(target, /datum/plant_gene/core/potency))
+						if(gene.value > max_potency)
+							dat += "<br><br>This device's extraction capabilities are currently limited to <span class='highlight'>[max_potency]</span> potency. "
+							dat += "Target gene will be degraded to <span class='highlight'>[max_potency]</span> potency on extraction."
+					else if(istype(target, /datum/plant_gene/core/lifespan))
+						if(gene.value > max_endurance)
+							dat += "<br><br>This device's extraction capabilities are currently limited to <span class='highlight'>[max_endurance]</span> lifespan. "
+							dat += "Target gene will be degraded to <span class='highlight'>[max_endurance]</span> Lifespan on extraction."
+					else if(istype(target, /datum/plant_gene/core/endurance))
+						if(gene.value > max_endurance)
+							dat += "<br><br>This device's extraction capabilities are currently limited to <span class='highlight'>[max_endurance]</span> endurance. "
+							dat += "Target gene will be degraded to <span class='highlight'>[max_endurance]</span> endurance on extraction."
+					else if(istype(target, /datum/plant_gene/core/yield))
+						if(gene.value > max_yield)
+							dat += "<br><br>This device's extraction capabilities are currently limited to <span class='highlight'>[max_yield]</span> yield. "
+							dat += "Target gene will be degraded to <span class='highlight'>[max_yield]</span> yield on extraction."
+					else if(istype(target, /datum/plant_gene/core/production))
+						if(gene.value < min_production)
+							dat += "<br><br>This device's extraction capabilities are currently limited to <span class='highlight'>[min_production]</span> production. "
+							dat += "Target gene will be degraded to <span class='highlight'>[min_production]</span> production on extraction."
+					else if(istype(target, /datum/plant_gene/core/weed_rate))
+						if(gene.value < min_wrate)
+							dat += "<br><br>This device's extraction capabilities are currently limited to <span class='highlight'>[min_wrate]</span> weed rate. "
+							dat += "Target gene will be degraded to <span class='highlight'>[min_wrate]</span> weed rate on extraction."
+					else if(istype(target, /datum/plant_gene/core/weed_chance))
+						if(gene.value < min_wchance)
+							dat += "<br><br>This device's extraction capabilities are currently limited to <span class='highlight'>[min_wchance]</span> weed chance. "
+							dat += "Target gene will be degraded to <span class='highlight'>[min_wchance]</span> weed chance on extraction."
 
-	if(istype(gene, /datum/plant_gene/core))
-		var/datum/plant_gene/core/core_gene = gene
+			if("replace")
+				dat += "<span class='highlight'>[target.get_name()]</span> gene with <span class='highlight'>[disk.gene.get_name()]</span>?<br>"
+			if("insert")
+				dat += "<span class='highlight'>[disk.gene.get_name()]</span> gene into \the <span class='highlight'>[seed]</span>?<br>"
+		dat += "</div><div class='line'><a href='?src=[REF(src)];gene=[REF(target)];op=[operation]'>Confirm</a> "
+		dat += "<a href='?src=[REF(src)];abort=1'>Abort</a></div>"
+		popup.set_content(dat)
+		popup.open()
+		return
 
-		L["type"] = "core"
-		L["stat"] = core_gene.name
-		L["id"] = get_gene_id(gene)
-		L["value"] = core_gene.value
+	dat+= "<div class='statusDisplay'>"
 
-	if(istype(gene, /datum/plant_gene/reagent))
-		var/datum/plant_gene/reagent/reagent_gene = gene
+	dat += "<div class='line'><div class='statusLabel'>Plant Sample:</div><div class='statusValue'><a href='?src=[REF(src)];eject_seed=1'>"
+	dat += seed ? seed.name : "None"
+	dat += "</a></div></div>"
 
-		L["type"] = "reagent"
-		L["id"] = get_gene_id(gene)
-		L["rate"] = reagent_gene.rate
+	dat += "<div class='line'><div class='statusLabel'>Data Disk:</div><div class='statusValue'><a href='?src=[REF(src)];eject_disk=1'>"
+	if(!disk)
+		dat += "None"
+	else if(!disk.gene)
+		dat += "Empty Disk"
+	else
+		dat += disk.gene.get_name()
+	if(disk && disk.read_only)
+		dat += " (RO)"
+	dat += "</a></div></div>"
 
-	if(istype(gene, /datum/plant_gene/trait))
-		var/datum/plant_gene/trait/trait_gene = gene
+	dat += "<br></div>"
 
-		L["type"] = "trait"
-		L["id"] = get_gene_id(gene)
-		L["trait_id"] = trait_gene.trait_id
+	if(seed)
+		var/can_insert = disk && disk.gene && disk.gene.can_add(seed)
+		var/can_extract = disk && !disk.read_only
 
-/obj/machinery/plantgenes/ui_static_data(mob/user)
-	var/list/data = list()
+		dat += "<div class='line'><h3>Core Genes</h3></div><div class='statusDisplay'><table>"
+		for(var/a in core_genes)
+			var/datum/plant_gene/G = a
+			if(!G)
+				continue
+			dat += "<tr><td width='260px'>[G.get_name()]</td><td>"
+			if(can_extract && G.mutability_flags & PLANT_GENE_EXTRACTABLE)
+				dat += "<a href='?src=[REF(src)];gene=[REF(G)];op=extract'>Extract</a>"
+			if(can_insert && istype(disk.gene, G.type) && G.mutability_flags & PLANT_GENE_REMOVABLE)
+				dat += "<a href='?src=[REF(src)];gene=[REF(G)];op=replace'>Replace</a>"
+			dat += "</td></tr>"
+		dat += "</table></div>"
 
-	data["stat_tooltips"] = list(
-		potency = "The 'power' of a plant. Generally effects the amount of reagent in a plant.",
-		yield = "The amount of crop yielded from a harvest",
-		"production speed" = "The speed at which a plant grows. Lower is better.",
-		endurance = "The amount of health the plant has",
-		lifespan = "The time it takes before the plant starts dying of old age",
-		"weed vulnerability" = "The vulnerability of the plant to weeds growing",
-		"weed growth rate" = "The speed at which weeds can grow around the plant. The higher the faster they grow.",
-		)
+		if(seed.yield != -1)
+			dat += "<div class='line'><h3>Content Genes</h3></div><div class='statusDisplay'>"
+			if(reagent_genes.len)
+				dat += "<table>"
+				for(var/a in reagent_genes)
+					var/datum/plant_gene/G = a
+					dat += "<tr><td width='260px'>[G.get_name()]</td><td>"
+					if(can_extract && G.mutability_flags & PLANT_GENE_EXTRACTABLE)
+						dat += "<a href='?src=[REF(src)];gene=[REF(G)];op=extract'>Extract</a>"
+					if(G.mutability_flags & PLANT_GENE_REMOVABLE)
+						dat += "<a href='?src=[REF(src)];gene=[REF(G)];op=remove'>Remove</a>"
+					dat += "</td></tr>"
+				dat += "</table>"
+			else
+				dat += "No content-related genes detected in sample.<br>"
+			dat += "</div>"
+			if(can_insert && istype(disk.gene, /datum/plant_gene/reagent))
+				dat += "<a href='?src=[REF(src)];op=insert'>Insert: [disk.gene.get_name()]</a>"
 
-	return data
+			dat += "<div class='line'><h3>Trait Genes</h3></div><div class='statusDisplay'>"
+			if(trait_genes.len)
+				dat += "<table>"
+				for(var/a in trait_genes)
+					var/datum/plant_gene/G = a
+					dat += "<tr><td width='260px'>[G.get_name()]</td><td>"
+					if(can_extract && G.mutability_flags & PLANT_GENE_EXTRACTABLE)
+						dat += "<a href='?src=[REF(src)];gene=[REF(G)];op=extract'>Extract</a>"
+					if(G.mutability_flags & PLANT_GENE_REMOVABLE)
+						dat += "<a href='?src=[REF(src)];gene=[REF(G)];op=remove'>Remove</a>"
+					dat += "</td></tr>"
+				dat += "</table>"
+			else
+				dat += "No trait-related genes detected in sample.<br>"
+			if(can_insert && istype(disk.gene, /datum/plant_gene/trait))
+				dat += "<a href='?src=[REF(src)];op=insert'>Insert: [disk.gene.get_name()]</a>"
+			dat += "</div>"
+	else
+		dat += "<br>No sample found.<br><span class='highlight'>Please, insert a plant sample to use this device.</span>"
+	popup.set_content(dat)
+	popup.open()
 
-/obj/machinery/plantgenes/proc/find_gene_by_id(var/gene_id)
-	for(var/datum/plant_gene/gene in core_genes)
-		if(get_gene_id(gene) == gene_id)
-			return gene
-	for(var/datum/plant_gene/gene in reagent_genes)
-		if(get_gene_id(gene) == gene_id)
-			return gene
-	for(var/datum/plant_gene/gene in trait_genes)
-		if(get_gene_id(gene) == gene_id)
-			return gene
 
-/obj/machinery/plantgenes/ui_act(action, params)
+/obj/machinery/plantgenes/Topic(href, list/href_list)
 	if(..())
 		return
+	usr.set_machine(src)
 
-	if(action == "toggle_skip_confirmation")
-		skip_confirmation = !skip_confirmation
-		. = TRUE
-
-	if(action == "eject_insert_seed")
+	if(href_list["eject_seed"] && !operation)
 		var/obj/item/I = usr.get_active_held_item()
 		if(istype(I, /obj/item/seeds))
 			if(!usr.transferItemToLoc(I, src))
@@ -249,11 +262,9 @@
 			eject_seed()
 			insert_seed(I)
 			to_chat(usr, "<span class='notice'>You add [I] to the machine.</span>")
-			. = TRUE
 		else
-			. = eject_seed()
-
-	if(action == "eject_insert_disk")
+			eject_seed()
+	else if(href_list["eject_disk"] && !operation)
 		var/obj/item/I = usr.get_active_held_item()
 		if(istype(I, /obj/item/disk/plantgene))
 			if(!usr.transferItemToLoc(I, src))
@@ -261,104 +272,86 @@
 			eject_disk()
 			disk = I
 			to_chat(usr, "<span class='notice'>You add [I] to the machine.</span>")
-			. = TRUE
 		else
-			. = eject_disk()
-
-	if(seed)
-		if(action == "remove")
-			var/datum/plant_gene/G = find_gene_by_id(params["gene_id"])
-			if(!G)
-				return FALSE
-			operation = action
-			target = G
-			. = TRUE
-
-		if(action == "extract")
-			var/datum/plant_gene/G = find_gene_by_id(params["gene_id"])
-			if(!G)
-				return FALSE
-			if(disk && !disk.read_only)
-				operation = action
-				target = G
-				. = TRUE
-
-		if(action == "replace")
-			var/datum/plant_gene/G = find_gene_by_id(params["gene_id"])
-			if(!G)
-				return FALSE
-			if(disk && disk.gene && istype(disk.gene, G.type) && istype(G, /datum/plant_gene/core))
-				operation = action
-				target = G
-				. = TRUE
-
-		if(action == "insert" && !istype(disk.gene, /datum/plant_gene/core) && disk.gene.can_add(seed))
-			operation = action
-			target = null
-			. = TRUE
-
-	if((action == "confirm" || (. && skip_confirmation)) && operation)
-		if(operation == "remove")
-			var/datum/plant_gene/G = target
-			if(G)
-				if(!istype(G, /datum/plant_gene/core))
-					seed.genes -= G
-					if(istype(G, /datum/plant_gene/reagent))
-						seed.reagents_from_genes()
-				repaint_seed()
-
-		if(operation == "extract")
-			var/datum/plant_gene/G = target
-			if(G && disk && !disk.read_only)
-				disk.gene = G
-				if(istype(G, /datum/plant_gene/core))
-					var/datum/plant_gene/core/gene = G
-					if(istype(G, /datum/plant_gene/core/potency))
-						gene.value = min(gene.value, max_potency)
-					else if(istype(G, /datum/plant_gene/core/lifespan))
-						gene.value = min(gene.value, max_endurance) //INTENDED
-					else if(istype(G, /datum/plant_gene/core/endurance))
-						gene.value = min(gene.value, max_endurance)
-					else if(istype(G, /datum/plant_gene/core/production))
-						gene.value = max(gene.value, min_production)
-					else if(istype(G, /datum/plant_gene/core/yield))
-						gene.value = min(gene.value, max_yield)
-					else if(istype(G, /datum/plant_gene/core/weed_rate))
-						gene.value = max(gene.value, min_wrate)
-					else if(istype(G, /datum/plant_gene/core/weed_chance))
-						gene.value = max(gene.value, min_wchance)
-				disk.update_name()
-				qdel(seed)
-				seed = null
-
-		if(operation == "replace")
-			var/datum/plant_gene/G = target
-			if(G && disk && disk.gene && istype(disk.gene, G.type) && istype(G, /datum/plant_gene/core))
-				seed.genes -= G
-				var/datum/plant_gene/core/C = disk.gene.Copy()
-				seed.genes += C
-				C.apply_stat(seed)
-				repaint_seed()
-
-		if(operation == "insert" && !istype(disk.gene, /datum/plant_gene/core) && disk.gene.can_add(seed))
-			seed.genes += disk.gene.Copy()
-			if(istype(disk.gene, /datum/plant_gene/reagent))
-				seed.reagents_from_genes()
+			eject_disk()
+	else if(href_list["op"] == "insert" && disk && disk.gene && seed)
+		if(!operation) // Wait for confirmation
+			operation = "insert"
+		else
+			if(!istype(disk.gene, /datum/plant_gene/core) && disk.gene.can_add(seed))
+				seed.genes += disk.gene.Copy()
+				if(istype(disk.gene, /datum/plant_gene/reagent))
+					seed.reagents_from_genes()
+			update_genes()
 			repaint_seed()
+			operation = ""
+			target = null
 
-		operation = null
+	else if(href_list["gene"] && seed)
+		var/datum/plant_gene/G = seed.get_gene(href_list["gene"])
+		if(!G || !href_list["op"] || !(href_list["op"] in list("remove", "extract", "replace")))
+			interact(usr)
+			return
+
+		if(!operation || target != G) // Wait for confirmation
+			target = G
+			operation = href_list["op"]
+
+		else if(operation == href_list["op"] && target == G)
+			switch(href_list["op"])
+				if("remove")
+					if(!istype(G, /datum/plant_gene/core))
+						seed.genes -= G
+						if(istype(G, /datum/plant_gene/reagent))
+							seed.reagents_from_genes()
+					repaint_seed()
+				if("extract")
+					if(disk && !disk.read_only)
+						disk.gene = G
+						if(istype(G, /datum/plant_gene/core))
+							var/datum/plant_gene/core/gene = G
+							if(istype(G, /datum/plant_gene/core/potency))
+								gene.value = min(gene.value, max_potency)
+							else if(istype(G, /datum/plant_gene/core/lifespan))
+								gene.value = min(gene.value, max_endurance) //INTENDED
+							else if(istype(G, /datum/plant_gene/core/endurance))
+								gene.value = min(gene.value, max_endurance)
+							else if(istype(G, /datum/plant_gene/core/production))
+								gene.value = max(gene.value, min_production)
+							else if(istype(G, /datum/plant_gene/core/yield))
+								gene.value = min(gene.value, max_yield)
+							else if(istype(G, /datum/plant_gene/core/weed_rate))
+								gene.value = max(gene.value, min_wrate)
+							else if(istype(G, /datum/plant_gene/core/weed_chance))
+								gene.value = max(gene.value, min_wchance)
+						disk.update_name()
+						qdel(seed)
+						seed = null
+						update_icon()
+				if("replace")
+					if(disk && disk.gene && istype(disk.gene, G.type) && istype(G, /datum/plant_gene/core))
+						seed.genes -= G
+						var/datum/plant_gene/core/C = disk.gene.Copy()
+						seed.genes += C
+						C.apply_stat(seed)
+						repaint_seed()
+				if("insert")
+					if(disk && disk.gene && !istype(disk.gene, /datum/plant_gene/core) && disk.gene.can_add(seed))
+						seed.genes += disk.gene.Copy()
+						if(istype(disk.gene, /datum/plant_gene/reagent))
+							seed.reagents_from_genes()
+						disk.gene.apply_vars(seed)
+						repaint_seed()
+
+
+			update_genes()
+			operation = ""
+			target = null
+	else if(href_list["abort"])
+		operation = ""
 		target = null
-		. = TRUE
 
-	if(action == "abort" && operation)
-		operation = null
-		target = null
-		. = TRUE
-
-
-	if(.)
-		update_genes()
-		update_icon()
+	interact(usr)
 
 /obj/machinery/plantgenes/proc/insert_seed(obj/item/seeds/S)
 	if(!istype(S) || seed)
@@ -367,7 +360,6 @@
 	seed = S
 	update_genes()
 	update_icon()
-	ui_update()
 
 /obj/machinery/plantgenes/proc/eject_disk()
 	if (disk && !operation)
@@ -378,8 +370,6 @@
 			disk.forceMove(drop_location())
 		disk = null
 		update_genes()
-		ui_update()
-		. = TRUE
 
 /obj/machinery/plantgenes/proc/eject_seed()
 	if (seed && !operation)
@@ -390,8 +380,6 @@
 			seed.forceMove(drop_location())
 		seed = null
 		update_genes()
-		ui_update()
-		. = TRUE
 
 /obj/machinery/plantgenes/proc/update_genes()
 	core_genes = list()
@@ -424,7 +412,6 @@
 		return // Already modded name and icon
 	seed.name = "experimental " + seed.name
 	seed.icon_state = "seed-x"
-	ui_update()
 
 // Gene modder for seed vault ship, built with high tech alien parts.
 /obj/machinery/plantgenes/seedvault
@@ -438,6 +425,7 @@
 	name = "plant data disk"
 	desc = "A disk for storing plant genetic data."
 	icon_state = "datadisk_hydro"
+	custom_materials = list(/datum/material/iron=30, /datum/material/glass=10)
 	var/datum/plant_gene/gene
 	var/read_only = 0 //Well, it's still a floppy disk
 	obj_flags = UNIQUE_RENAME
