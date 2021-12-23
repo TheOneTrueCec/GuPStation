@@ -299,7 +299,9 @@
 					BP.attach_limb(mob_occupant)
 
 			go_out()
-			mob_occupant.update_blindness()
+			if(HAS_TRAIT(mob_occupant, TRAIT_BLIND))
+				mob_occupant.remove_client_colour(/datum/client_colour/monochrome/blind)
+			
 			log_cloning("[key_name(mob_occupant)] completed cloning cycle in [src] at [AREACOORD(src)].")
 
 	else if (!mob_occupant || mob_occupant.loc != src)
