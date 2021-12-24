@@ -5,13 +5,12 @@
 	resistance = 1
 	stage_speed = -1
 	transmittable = -2
-	level = 8 
+	level = 9 
 	symptom_delay_min = 1
 	symptom_delay_max = 1
 	var/armor_check = FALSE
 	var/first_pass = TRUE
 	var/damage_resist_augment = 0
-	var/list/infected_parts = list()
 	threshold_descs = list(
 		"Resistance 7" = "Increases damage reduction.",
 		"Resistance 4" = "Increases damage resistance.",
@@ -38,7 +37,6 @@
 					if(L.status == BODYPART_ORGANIC && !L.ironskin_infected) //Can't infect Robolimbs, and can't iterate over the same limb multiple times
 						L.brute_reduction += (5+damage_resist_augment)
 						L.burn_reduction += (4+damage_resist_augment)
-						infected_parts += L
 						L.ironskin_infected = TRUE
 						M.visible_message("<span class='warning'>[M]'s [L] seems to harden!</span>", "<span class='notice'>You feel the skin of your [L] harden!</span>")
 			first_pass = FALSE
@@ -53,6 +51,8 @@
 	if(A.affected_mob)
 		if(armor_check)
 			M.physiology.damage_resistance -= 10
-		for(var/obj/item/bodypart/L  in infected_parts) // Quantum immune systems can cure the virus in limbs that aren't even still attached.
-			L.brute_reduction -= (5+damage_resist_augment)
-			L.burn_reduction -= (4+damage_resist_augment)
+		for(var/obj/item/bodypart/L  in M.bodyparts) //Can't remove the armor value of limbs that aren't there anymore
+			if(L.ironskin_infected)
+				L.brute_reduction -= (5+damage_resist_augment)
+				L.burn_reduction -= (4+damage_resist_augment)
+				L.ironskin_infected = FALSE

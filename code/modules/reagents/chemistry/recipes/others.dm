@@ -169,6 +169,10 @@
 	results = list(/datum/reagent/uranium/uraniumvirusfood/stable = 1)
 	required_reagents = list(/datum/reagent/uranium = 10, /datum/reagent/silver = 10, /datum/reagent/toxin/plasma = 1)
 
+/datum/chemical_reaction/virus_food_uranium_gel_advanced
+	results = list(/datum/reagent/uranium/uraniumvirusfood/stable/advanced = 1)
+	required_reagents = list(/datum/reagent/uranium/uraniumvirusfood/stable = 10, /datum/reagent/medicine/strange_reagent = 1, /datum/reagent/toxin/slimejelly = 10)
+
 /datum/chemical_reaction/mix_virus
 	results = list(/datum/reagent/blood = 1)
 	required_reagents = list(/datum/reagent/consumable/virus_food = 1)
@@ -238,6 +242,11 @@
 	required_reagents = list(/datum/reagent/uranium/uraniumvirusfood/stable = 1)
 	level_min = 8
 	level_max = 8
+
+/datum/chemical_reaction/mix_virus/mix_virus_13
+	required_reagents = list(/datum/reagent/uranium/uraniumvirusfood/stable/advanced = 1)
+	level_min = 9
+	level_max = 9
 
 /datum/chemical_reaction/mix_virus/rem_virus
 	required_reagents = list(/datum/reagent/medicine/synaptizine = 1)

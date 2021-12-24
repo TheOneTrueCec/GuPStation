@@ -1995,6 +1995,11 @@
 	color = "#04506C" // rgb: 4,80,108
 	taste_description = "the inside of a reactor"
 
+/datum/reagent/uranium/uraniumvirusfood/stable/advanced
+	name = "Xeno-stablized uranium gel"
+	color = "#20b932" // rgb: 32,185,50
+	taste_description = "the inside of a reactor, filled with Green Jello"
+
 // Bee chemicals
 
 /datum/reagent/royal_bee_jelly
