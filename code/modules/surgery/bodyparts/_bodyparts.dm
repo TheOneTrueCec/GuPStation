@@ -39,6 +39,7 @@
 	var/max_damage = 0
 
 	var/cremation_progress = 0 //Gradually increases while burning when at full damage, destroys the limb when at 100
+	var/ironskin_infected = FALSE // For Ironskin Symptom
 
 	var/brute_reduction = 0 //Subtracted to brute damage taken
 	var/burn_reduction = 0	//Subtracted to burn damage taken
