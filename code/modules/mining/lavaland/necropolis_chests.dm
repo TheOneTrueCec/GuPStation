@@ -12,8 +12,7 @@
 	desc = "It's watching you suspiciously."
 
 /obj/structure/closet/crate/necropolis/tendril/PopulateContents()
-	new /obj/item/mining_loot_voucher(src)
-/* 	var/loot = rand(1,21)
+	var/loot = rand(1,21)
 	switch(loot)
 		if(1)
 			new /obj/item/shared_storage/red(src)
@@ -66,82 +65,7 @@
 			new /obj/item/borg/upgrade/modkit/lifesteal(src)
 			new /obj/item/bedsheet/cult(src)
 		if(21)
-			new /obj/item/clothing/neck/necklace/memento_mori(src) */
-
-/obj/item/mining_loot_voucher
-	name = "Enchanted Blood"
-	desc = "A bottle of blood. Holding it floods your mind with memories of long-dead adventurers"
-	icon = 'icons/obj/wizard.dmi'
-	icon_state = "vial"
-
-/obj/item/mining_loot_voucher/attack_self(mob/user)
-	if(canUseLootSelector(user))
-		generate_loot_options(user)
-
-/obj/item/mining_loot_voucher/proc/generate_display_names()
-	var/static/list/lavaland_loot_list
-	if(!lavaland_loot_list)
-		lavaland_loot_list = list()
-		var/list/templist = list(
-		/obj/item/shared_storage/red,
-		/obj/item/clothing/suit/space/hardsuit/cult,
-		/obj/item/soulstone/anybody,
-		/obj/item/katana/cursed,
-		/obj/item/clothing/glasses/godeye,
-		/obj/item/reagent_containers/glass/bottle/potion/flight,
-		/obj/item/pickaxe/diamond,
-		/obj/item/disk/design_disk/modkit_disc/resonator_blast,
-		/obj/item/disk/design_disk/modkit_disc/rapid_repeater,
-		/obj/item/clothing/gloves/gauntlets,
-		/obj/item/rod_of_asclepius,
-		/obj/item/organ/heart/cursed/wizard,
-		/obj/item/ship_in_a_bottle,
-		/obj/item/clothing/suit/space/hardsuit/ert/paranormal/berserker,
-		/obj/item/jacobs_ladder,
-		/obj/item/nullrod/scythe/talking,
-		/obj/item/nullrod/armblade,
-		/obj/item/guardiancreator,
-		/obj/item/disk/design_disk/modkit_disc/mob_and_turf_aoe,
-		/obj/item/disk/design_disk/modkit_disc/bounty,
-		/obj/item/warp_cube/red,
-		/obj/item/wisp_lantern,
-		/obj/item/immortality_talisman,
-		/obj/item/gun/magic/hook,
-		/obj/item/voodoo,
-		/obj/item/grenade/clusterbuster/inferno,
-		/obj/item/clothing/suit/space/hardsuit/ert/paranormal/inquisitor,
-		/obj/item/book/granter/spell/summonitem,
-		/obj/item/book_of_babel,
-		/obj/item/borg/upgrade/modkit/lifesteal,
-		/obj/item/clothing/neck/necklace/memento_mori,
-		/obj/item/bedsheet/cult,
-		/obj/item/reagent_containers/food/drinks/bottle/holywater/hell) 
-		for(var/V in templist)
-			var/atom/A = V
-			lavaland_loot_list[initial(A.name)] = A
-	return lavaland_loot_list
-
-/obj/item/mining_loot_voucher/proc/canUseLootSelector(mob/living/user)
-	if(user.canUseTopic(src, BE_CLOSE, FALSE, NO_TK))
-		return TRUE
-	else
-		return FALSE
-
-/obj/item/mining_loot_voucher/proc/generate_loot_options(mob/living/M)
-	var/list/display_names = generate_display_names()
-	var/obj/item/loot_choice
-	if(!display_names.len)
-		return
-	var/choice = input(M,"Which item would you like?","Select an Item") as null|anything in sortList(display_names)
-	if(!choice || !M.canUseTopic(src, BE_CLOSE, FALSE, NO_TK))
-		return
-	
-	var/temphold = display_names[choice] // This needs to be on a separate var as list member access is not allowed for new
-	loot_choice = new temphold(get_turf(M))
-	if(loot_choice)
-		to_chat(M, "<span class='notice'>You focus on one of the memories and the blood expands rapidly, shattering the bottle as it takes on a new form from the memory</span>")
-		new /obj/item/shard(get_turf(M))
-		qdel(src)
+			new /obj/item/clothing/neck/necklace/memento_mori(src)
 
 //KA modkit design discs
 /obj/item/disk/design_disk/modkit_disc

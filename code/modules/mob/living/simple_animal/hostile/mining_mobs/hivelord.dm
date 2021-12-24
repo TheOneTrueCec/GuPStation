@@ -157,7 +157,7 @@
 	..(gibbed)
 
 /mob/living/simple_animal/hostile/asteroid/hivelord/legion/tendril
-	fromtendril = FALSE
+	fromtendril = TRUE
 
 //Legion skull
 /mob/living/simple_animal/hostile/asteroid/hivelordbrood/legion
