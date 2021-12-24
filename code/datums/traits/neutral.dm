@@ -298,3 +298,42 @@
 	)
 	H.equip_in_one_of_slots(camera, camera_slots , qdel_on_fail = TRUE)
 	H.regenerate_icons()
+
+/datum/quirk/old_guard
+	name = "Signature Item"
+	desc = "Long-term employees can start their shifts with an item from their past"
+	value = 0
+	medical_record_text = "REDACTED"
+
+	var/obj/item/old_guard_item_type
+	var/obj/item/old_guard_item
+	var/where
+
+/datum/quirk/old_guard/on_spawn()
+	var/mob/living/carbon/human/H = quirk_holder
+	var/name_quirk_holder = H.real_name
+	old_guard_item_type = /obj/item/storage/crayons
+	switch(name_quirk_holder)
+
+		if("Karina Ivanov")
+			old_guard_item_type = /obj/item/storage/briefcase/launchpad
+		
+		if("Aphomia Lampshade")
+			old_guard_item_type = /obj/item/grenade/c4
+	
+	old_guard_item = new old_guard_item_type(get_turf(quirk_holder))
+
+	
+	var/list/slots = list(
+		"in your left pocket" = ITEM_SLOT_LPOCKET,
+		"in your right pocket" = ITEM_SLOT_RPOCKET,
+		"in your backpack" = ITEM_SLOT_BACKPACK
+	)
+	where = H.equip_in_one_of_slots(old_guard_item, slots, FALSE) || "at your feet"
+
+/datum/quirk/old_guard/post_add()
+	if(where == "in your backpack")
+		var/mob/living/carbon/human/H = quirk_holder
+		SEND_SIGNAL(H.back, COMSIG_TRY_STORAGE_SHOW, H)
+
+	to_chat(quirk_holder, "<span class='boldnotice'>Your Signature Item is [where]</span>")
