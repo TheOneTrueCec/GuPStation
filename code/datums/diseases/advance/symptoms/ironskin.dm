@@ -33,18 +33,18 @@
 		if(5)
 			if(armor_check && first_pass)
 				M.physiology.damage_resistance += 10
-			if(prob(1) || first_pass)
+			if(prob(0.1) || first_pass)
 				for(var/obj/item/bodypart/L in M.bodyparts) //L for Limb
-					if(L.status == BODYPART_ORGANIC || !L.ironskin_infected) //Can't infect Robolimbs, and can't iterate over the same limb multiple times
+					if(L.status == BODYPART_ORGANIC && !L.ironskin_infected) //Can't infect Robolimbs, and can't iterate over the same limb multiple times
 						L.brute_reduction += (5+damage_resist_augment)
 						L.burn_reduction += (4+damage_resist_augment)
 						infected_parts += L
 						L.ironskin_infected = TRUE
-						M.visible_message("<span class='warning'>[M]'s skin seems to harden!</span>", "<span class='notice'>You feel the skin of your [L] harden!</span>")
+						M.visible_message("<span class='warning'>[M]'s [L] seems to harden!</span>", "<span class='notice'>You feel the skin of your [L] harden!</span>")
 			first_pass = FALSE
 
 		else
-			if(prob(5))
+			if(prob(1))
 				M.visible_message("<span class='warning'>[M] looks hardier</span>", "<span class='notice'>Your skin feels stiff</span>")
 /datum/symptom/ironskin/End(datum/disease/advance/A)
 	if(!..())
@@ -53,6 +53,6 @@
 	if(A.affected_mob)
 		if(armor_check)
 			M.physiology.damage_resistance -= 10
-		for(var/obj/item/bodypart/L  in infected_parts) // Quantum Immune Systems
+		for(var/obj/item/bodypart/L  in infected_parts) // Quantum immune systems can cure the virus in limbs that aren't even still attached.
 			L.brute_reduction -= (5+damage_resist_augment)
 			L.burn_reduction -= (4+damage_resist_augment)
