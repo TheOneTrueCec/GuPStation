@@ -56,3 +56,22 @@ BONUS
 				if(H.age > 21)
 					H.age = 21
 					to_chat(H, "<span class='notice'>You feel like you can take on the world!</span>")
+
+
+/datum/symptom/hostbonding
+
+	name = "Host Bonding"
+	desc = "The virus becomes symbiotically connected to the cells in the host's body. \
+	The virus, in turn, becomes far more resistant, spreads faster, and is harder to spot, although it is almost impossible for it to survive without its host"
+	stealth = 9
+	resistance = 10
+	stage_speed = 9
+	transmittable = -20
+	level = 9
+	base_message_chance = 100
+	symptom_delay_min = 25
+	symptom_delay_max = 50
+
+/datum/symptom/youth/Activate(datum/disease/advance/A)
+	if(!..())
+		return
