@@ -139,8 +139,9 @@
 	var/temphold = display_names[choice] // This needs to be on a separate var as list member access is not allowed for new
 	loot_choice = new temphold(get_turf(M))
 	if(loot_choice)
-		to_chat(M, "<span class='notice'>You focus on one of the memories and the blood expands rapidly, shattering the bottle as it takes on a new form from the memory</span>")
+		to_chat(M, "<span class='notice'>You focus on one of the memories and the blood contorts into the form of [loot_choice]</span>")
 		new /obj/item/shard(get_turf(M))
+		playsound(src, "shatter", 70, TRUE)
 		qdel(src)
 
 //KA modkit design discs
@@ -683,7 +684,7 @@
 	. = ..()
 	if(iscarbon(exposed_mob) && exposed_mob.stat != DEAD)
 		var/mob/living/carbon/exposed_carbon = exposed_mob
-		var/holycheck = ishumanbasic(exposed_carbon)
+		var/holycheck = ishuman(exposed_carbon)
 		if(reac_volume < 5 || !(holycheck || islizard(exposed_carbon) || (ismoth(exposed_carbon) && exposed_carbon.dna.features["moth_wings"] != "Burnt Off"))) // implying xenohumans are holy //as with all things,
 			if((methods & INGEST) && show_message)
 				to_chat(exposed_carbon, "<span class='notice'><i>You feel nothing but a terrible aftertaste.</i></span>")
