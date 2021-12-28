@@ -88,6 +88,29 @@
 	. = ..()
 	. += " It's set to [tool_behaviour == TOOL_CAUTERY ? "mending" : "drilling"] mode."
 
+/obj/item/cautery/advanced/abductor
+	name = "alien searing tool"
+	desc = "It projects a high power ultrasonic plume used for medical applications."
+	icon = 'icons/obj/abductor.dmi'
+	icon_state = "cautery_a_alien"
+	hitsound = 'sound/items/welder.ogg'
+	toolspeed = 0.175
+	light_system = MOVABLE_LIGHT
+	light_range = 1
+	light_color = LIGHT_COLOR_PURPLE
+
+
+/obj/item/cautery/advanced/abductor/attack_self(mob/user)
+	playsound(get_turf(user), 'sound/weapons/tap.ogg', 50, TRUE)
+	if(tool_behaviour == TOOL_CAUTERY)
+		tool_behaviour = TOOL_DRILL
+		to_chat(user, "<span class='notice'>You dilate the plume of [src], it is now in drilling mode.</span>")
+		icon_state = "drill_a_alien"
+	else
+		tool_behaviour = TOOL_CAUTERY
+		to_chat(user, "<span class='notice'>You focus the plume of [src], it is now in mending mode.</span>")
+		icon_state = "cautery_a_alien"
+
 /obj/item/surgicaldrill
 	name = "surgical drill"
 	desc = "You can drill using this item. You dig?"
@@ -320,6 +343,34 @@
 	. = ..()
 	. += " It's set to [tool_behaviour == TOOL_SCALPEL ? "scalpel" : "saw"] mode."
 
+/obj/item/scalpel/advanced/abductor
+	name = "alien energy scalpel"
+	desc = "An advanced scalpel which uses hard-light technology to cut."
+	icon = 'icons/obj/abductor.dmi'
+	icon_state = "scalpel_a_alien"
+	hitsound = 'sound/weapons/blade1.ogg'
+	force = 20
+	toolspeed = 0.175
+	light_system = MOVABLE_LIGHT
+	light_range = 1
+	light_color = LIGHT_COLOR_PURPLE
+	sharpness = SHARP_EDGED
+
+/obj/item/scalpel/advanced/abductor/attack_self(mob/user)
+	playsound(get_turf(user), 'sound/machines/click.ogg', 50, TRUE)
+	if(tool_behaviour == TOOL_SCALPEL)
+		tool_behaviour = TOOL_SAW
+		to_chat(user, "<span class='notice'>You increase the power of [src], now it can cut bones.</span>")
+		set_light_range(2)
+		force += 1 //we don't want to ruin sharpened stuff
+		icon_state = "saw_a_alien"
+	else
+		tool_behaviour = TOOL_SCALPEL
+		to_chat(user, "<span class='notice'>You lower the power of [src], it can no longer cut bones.</span>")
+		set_light_range(1)
+		force -= 1
+		icon_state = "scalpel_a_alien"
+
 /obj/item/retractor/advanced
 	name = "mechanical pinches"
 	desc = "An agglomerate of rods and gears."
@@ -341,6 +392,24 @@
 /obj/item/retractor/advanced/examine()
 	. = ..()
 	. += " It resembles a [tool_behaviour == TOOL_RETRACTOR ? "retractor" : "hemostat"]."
+
+/obj/item/retractor/advanced/abductor
+	name = "alien mechanical pinches"
+	desc = "An agglomerate of rods and gears."
+	icon = 'icons/obj/abductor.dmi'
+	icon_state = "retractor"
+	toolspeed = 0.175
+
+/obj/item/retractor/advanced/abductor/attack_self(mob/user)
+	playsound(get_turf(user), 'sound/items/change_drill.ogg', 50, TRUE)
+	if(tool_behaviour == TOOL_RETRACTOR)
+		tool_behaviour = TOOL_HEMOSTAT
+		to_chat(user, "<span class='notice'>You configure the gears of [src], they are now in hemostat mode.</span>")
+		icon_state = "hemostat"
+	else
+		tool_behaviour = TOOL_RETRACTOR
+		to_chat(user, "<span class='notice'>You configure the gears of [src], they are now in retractor mode.</span>")
+		icon_state = "retractor"
 
 /obj/item/shears
 	name = "amputation shears"

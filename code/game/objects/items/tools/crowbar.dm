@@ -127,6 +127,35 @@
 	else
 		..()
 
+/obj/item/crowbar/power/abductor
+	name = "alien jaws of life"
+	desc = "a set of hard-light jaws of life"
+	icon = 'icons/obj/abductor.dmi'
+	usesound = "sound/weapons/sonic_jackhammer.ogg"
+	icon_state = "jaws_pry_alien"
+	toolspeed = 0.05
+	force_opens = TRUE
+
+/obj/item/crowbar/power/abductor/attack_self(mob/user)
+	playsound(get_turf(user), 'sound/effects/sparks4.ogg', 50, TRUE)
+	if(tool_behaviour == TOOL_CROWBAR)
+		tool_behaviour = TOOL_WIRECUTTER
+		to_chat(user, "<span class='notice'>You flip the mode setting of the [src] to cutting.</span>")
+		usesound = 'sound/items/jaws_cut.ogg'
+		update_icon()
+
+	else
+		tool_behaviour = TOOL_CROWBAR
+		to_chat(user, "<span class='notice'>You flip the mode setting of the [src] to prying.</span>")
+		usesound = 'sound/weapons/sonic_jackhammer.ogg'
+		update_icon()
+
+/obj/item/crowbar/power/abductor/update_icon()
+	if(tool_behaviour == TOOL_WIRECUTTER)
+		icon_state = "jaws_cutter_alien"
+	else
+		icon_state = "jaws_pry_alien"
+
 /obj/item/crowbar/cyborg
 	name = "hydraulic crowbar"
 	desc = "A hydraulic prying tool, simple but powerful."

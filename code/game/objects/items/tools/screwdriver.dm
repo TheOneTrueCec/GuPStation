@@ -142,3 +142,29 @@
 	usesound = 'sound/items/drill_use.ogg'
 	toolspeed = 0.5
 	random_color = FALSE
+
+/obj/item/screwdriver/power/abductor
+	name = "alien power drill"
+	desc = "An ultrasonic drill. It uses polarized hard-light to spin screws and bolts"
+	icon = 'icons/obj/abductor.dmi'
+	icon_state = "drill_screw_alien"
+	inhand_icon_state = "welder"
+	usesound = 'sound/effects/empulse.ogg'
+	hitsound = 'sound/effects/empulse.ogg'
+	toolspeed = 0.1
+	random_color = FALSE
+
+/obj/item/screwdriver/power/abductor/examine()
+	. = ..()
+	. += " It's projecting a [tool_behaviour == TOOL_SCREWDRIVER ? "screw" : "bolt"] bit."
+
+/obj/item/screwdriver/power/attack_self(mob/user)
+	playsound(get_turf(user), 'sound/items/change_drill.ogg', 50, TRUE)
+	if(tool_behaviour == TOOL_SCREWDRIVER)
+		tool_behaviour = TOOL_WRENCH
+		to_chat(user, "<span class='notice'>You attach the bolt bit to [src] wrench.</span>")
+		icon_state = "drill_bolt_alien"
+	else
+		tool_behaviour = TOOL_SCREWDRIVER
+		to_chat(user, "<span class='notice'>You flip the mode setting of the [src] to screwdriver.</span>")
+		icon_state = "drill_screw_alien"
