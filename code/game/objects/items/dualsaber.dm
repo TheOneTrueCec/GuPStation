@@ -32,6 +32,7 @@
 	var/saber_color = "green"
 	var/two_hand_force = 34
 	var/hacked = FALSE
+	var/no_hack = FALSE //For DEswords that can't be hacked, like the abductor one. 
 	var/list/possible_colors = list("red", "blue", "green", "purple")
 	var/wielded = FALSE // track wielded status on item
 
@@ -115,7 +116,8 @@
 				set_light_color(LIGHT_COLOR_LIGHT_CYAN)
 			if("purple")
 				set_light_color(LIGHT_COLOR_LAVENDER)
-
+			if("abductor")
+				set_light_color(LIGHT_COLOR_PINK)
 /obj/item/dualsaber/Destroy()
 	STOP_PROCESSING(SSobj, src)
 	. = ..()
@@ -190,7 +192,7 @@
 
 /obj/item/dualsaber/attackby(obj/item/W, mob/user, params)
 	if(W.tool_behaviour == TOOL_MULTITOOL)
-		if(!hacked)
+		if(!hacked && !no_hack)
 			hacked = TRUE
 			to_chat(user, "<span class='warning'>2XRNBW_ENGAGE</span>")
 			saber_color = "rainbow"
@@ -199,3 +201,13 @@
 			to_chat(user, "<span class='warning'>It's starting to look like a triple rainbow - no, nevermind.</span>")
 	else
 		return ..()
+
+/obj/item/dualsaber/abductor
+	name = "hard-light double-bladed energy sword"
+	desc = "An alien weapon which resembles a Syndicate Double Energy Sword."
+	possible_colors = list("abductor")
+	no_hack = TRUE
+	two_hand_force = 40
+	armour_penetration = 80
+	wound_bonus = 20
+	bare_wound_bonus = 30

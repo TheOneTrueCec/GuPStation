@@ -97,11 +97,11 @@
 	toolspeed = 0.175
 	light_system = MOVABLE_LIGHT
 	light_range = 1
-	light_color = LIGHT_COLOR_PURPLE
+	light_color = LIGHT_COLOR_PINK
 
 
 /obj/item/cautery/advanced/abductor/attack_self(mob/user)
-	playsound(get_turf(user), 'sound/weapons/tap.ogg', 50, TRUE)
+	playsound(get_turf(user), 'sound/effects/sparks4.ogg', 50, TRUE)
 	if(tool_behaviour == TOOL_CAUTERY)
 		tool_behaviour = TOOL_DRILL
 		to_chat(user, "<span class='notice'>You dilate the plume of [src], it is now in drilling mode.</span>")
@@ -353,11 +353,11 @@
 	toolspeed = 0.175
 	light_system = MOVABLE_LIGHT
 	light_range = 1
-	light_color = LIGHT_COLOR_PURPLE
+	light_color = LIGHT_COLOR_PINK
 	sharpness = SHARP_EDGED
 
 /obj/item/scalpel/advanced/abductor/attack_self(mob/user)
-	playsound(get_turf(user), 'sound/machines/click.ogg', 50, TRUE)
+	playsound(get_turf(user), 'sound/effects/sparks4.ogg', 50, TRUE)
 	if(tool_behaviour == TOOL_SCALPEL)
 		tool_behaviour = TOOL_SAW
 		to_chat(user, "<span class='notice'>You increase the power of [src], now it can cut bones.</span>")

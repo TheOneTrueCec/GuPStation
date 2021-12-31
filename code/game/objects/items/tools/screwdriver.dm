@@ -154,15 +154,11 @@
 	toolspeed = 0.1
 	random_color = FALSE
 
-/obj/item/screwdriver/power/abductor/examine()
-	. = ..()
-	. += " It's projecting a [tool_behaviour == TOOL_SCREWDRIVER ? "screw" : "bolt"] bit."
-
 /obj/item/screwdriver/power/attack_self(mob/user)
-	playsound(get_turf(user), 'sound/items/change_drill.ogg', 50, TRUE)
+	playsound(get_turf(user), 'sound/effects/sparks4.ogg', 50, TRUE)
 	if(tool_behaviour == TOOL_SCREWDRIVER)
 		tool_behaviour = TOOL_WRENCH
-		to_chat(user, "<span class='notice'>You attach the bolt bit to [src] wrench.</span>")
+		to_chat(user, "<span class='notice'>>You flip the mode setting of the [src] to wrench.</span>")
 		icon_state = "drill_bolt_alien"
 	else
 		tool_behaviour = TOOL_SCREWDRIVER
