@@ -431,9 +431,9 @@
 	icon_state = "godeye"
 	inhand_icon_state = "godeye"
 	vision_flags = SEE_TURFS|SEE_MOBS|SEE_OBJS
-	darkness_view = 8
-	lighting_alpha = LIGHTING_PLANE_ALPHA_MOSTLY_INVISIBLE
-	resistance_flags = LAVA_PROOF | FIRE_PROOF
+	darkness_view = 16
+	lighting_alpha = LIGHTING_PLANE_ALPHA_INVISIBLE
+	resistance_flags = LAVA_PROOF | FIRE_PROOF |ACID_PROOF | INDESTRUCTIBLE
 	clothing_flags = SCAN_REAGENTS
 
 /obj/item/clothing/glasses/godeye/Initialize()

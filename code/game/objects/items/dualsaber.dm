@@ -205,9 +205,11 @@
 /obj/item/dualsaber/abductor
 	name = "hard-light double-bladed energy sword"
 	desc = "An alien weapon which resembles a Syndicate Double Energy Sword."
+	icon = "icons/obj/abductor.dmi"
 	possible_colors = list("abductor")
 	no_hack = TRUE
 	two_hand_force = 40
 	armour_penetration = 80
 	wound_bonus = 20
 	bare_wound_bonus = 30
+	resistance_flags = FIRE_PROOF | LAVA_PROOF | INDESTRUCTIBLE

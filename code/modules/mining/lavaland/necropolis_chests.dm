@@ -69,8 +69,8 @@
 			new /obj/item/clothing/neck/necklace/memento_mori(src) */
 
 /obj/item/mining_loot_voucher
-	name = "Enchanted Blood"
-	desc = "A bottle of blood. Holding it floods your mind with memories of long-dead adventurers"
+	name = "Cursed Blood"
+	desc = "A bottle of blood. Holding it floods your mind with memories of long-dead adventurers. You swear you felt it move"
 	icon = 'icons/obj/wizard.dmi'
 	icon_state = "vial"
 
@@ -139,9 +139,11 @@
 	var/temphold = display_names[choice] // This needs to be on a separate var as list member access is not allowed for new
 	loot_choice = new temphold(get_turf(M))
 	if(loot_choice)
-		to_chat(M, "<span class='notice'>You focus on one of the memories and the blood contorts into the form of [loot_choice]</span>")
-		new /obj/item/shard(get_turf(M))
+		to_chat(M, "<span class='notice'>You focus on one of the memories and the bottle shatters. You momentarily see a menacing creature covered in armored black scales. It drops the [loot_choice] before sinking into the pool of blood</span>")
 		playsound(src, "shatter", 70, TRUE)
+		new /obj/item/shard(get_turf(M))
+		new /obj/effect/decal/cleanable/blood/(get_turf(M))
+		playsound(get_turf(src), 'sound/magic/enter_blood.ogg', 50, TRUE, -1)
 		qdel(src)
 
 //KA modkit design discs
