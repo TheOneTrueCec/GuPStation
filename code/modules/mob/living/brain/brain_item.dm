@@ -303,6 +303,33 @@
 	desc = "We barely understand the brains of terrestial animals. Who knows what we may find in the brain of such an advanced species?"
 	icon_state = "brain-x"
 
+/obj/item/organ/brain/theophilus
+	name = "theophilus module"
+	slot = ORGAN_SLOT_BRAIN
+	zone = BODY_ZONE_CHEST
+	status = ORGAN_ROBOTIC
+	desc = "A cube of shining metal, four inches to a side and covered in shallow grooves. The Theophilus System takes an impression of a mind for use in programming an IPC.  In order for this module to be used as a newly built Positronic Brain, it must be coupled with an MMI."
+	icon = 'icons/obj/assemblies.dmi'
+	icon_state = "posibrain"
+	organ_flags = ORGAN_SYNTHETIC
+
+/obj/item/organ/brain/theophilus/Insert(mob/living/carbon/C, special = 0, drop_if_replaced = 0)
+	..()
+	if(ishuman(C))
+		var/mob/living/carbon/human/H = C
+		if(H.dna?.species)
+			if(REVIVESBYHEALING in H.dna.species.species_traits)
+				if(H.health > 0)
+					H.revive(0)
+
+/obj/item/organ/brain/theophilus/emp_act(severity)
+	switch(severity)
+		if(1)
+			owner.adjustOrganLoss(ORGAN_SLOT_BRAIN, 75)
+			to_chat(owner, "<span class='warning'>Alert: Posibrain heavily damaged.</span>")
+		if(2)
+			owner.adjustOrganLoss(ORGAN_SLOT_BRAIN, 25)
+			to_chat(owner, "<span class='warning'>Alert: Posibrain damaged.</span>")
 
 ////////////////////////////////////TRAUMAS////////////////////////////////////////
 

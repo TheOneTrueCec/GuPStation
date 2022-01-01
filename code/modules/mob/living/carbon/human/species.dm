@@ -92,6 +92,9 @@ GLOBAL_LIST_EMPTY(roundstart_races)
 	var/punchstunthreshold = 10 //yes it should be to the attacked race but it's not useful that way even if it's logical
 	///Base electrocution coefficient.  Basically a multiplier for damage from electrocutions.
 	var/siemens_coeff = 1
+	var/reagent_tag = PROCESS_ORGANIC //Used for metabolizing reagents. We're going to assume you're a meatbag unless you say otherwise.
+	var/species_gibs = GIB_TYPE_HUMAN //by default human gibs are used
+	var/allow_numbers_in_name // Can this species use numbers in its name?
 	///What kind of damage overlays (if any) appear on our species when wounded? If this is "", does not add an overlay.
 	var/damage_overlay_type = "human"
 	///To use MUTCOLOR with a fixed color that's independent of the mcolor feature in DNA.
@@ -369,6 +372,15 @@ GLOBAL_LIST_EMPTY(roundstart_races)
 				C.dropItemToGround(I)
 			else	//Entries in the list should only ever be items or null, so if it's not an item, we can assume it's an empty hand
 				C.put_in_hands(new mutanthands())
+
+	if(ROBOTIC_LIMBS in species_traits)
+		for(var/obj/item/bodypart/B in C.bodyparts)
+			B.change_bodypart_status(BODYPART_ROBOTIC) // Makes all Bodyparts robotic.
+			B.render_like_organic = TRUE
+
+	if(NOMOUTH in species_traits)
+		for(var/obj/item/bodypart/head/head in C.bodyparts)
+			head.mouth = FALSE
 
 	for(var/X in inherent_traits)
 		ADD_TRAIT(C, X, SPECIES_TRAIT)
@@ -1857,6 +1869,8 @@ GLOBAL_LIST_EMPTY(roundstart_races)
 /datum/species/proc/extinguish_mob(mob/living/carbon/human/H)
 	return
 
+/datum/species/proc/spec_revival(mob/living/carbon/human/H)
+	return
 
 ////////////
 //  Stun  //
