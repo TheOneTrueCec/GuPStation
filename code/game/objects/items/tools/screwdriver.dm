@@ -154,7 +154,7 @@
 	toolspeed = 0.1
 	random_color = FALSE
 
-/obj/item/screwdriver/power/attack_self(mob/user)
+/obj/item/screwdriver/power/abductor/attack_self(mob/user)
 	playsound(get_turf(user), 'sound/effects/sparks4.ogg', 50, TRUE)
 	if(tool_behaviour == TOOL_SCREWDRIVER)
 		tool_behaviour = TOOL_WRENCH

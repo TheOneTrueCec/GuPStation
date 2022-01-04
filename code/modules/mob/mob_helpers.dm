@@ -495,6 +495,10 @@
 /mob/proc/can_hear()
 	. = TRUE
 
+///Can the mob scream?? (Of course it can, you don't need a mouth to speak)
+/mob/proc/has_mouth()
+	return FALSE
+
 /**
   * Examine text for traits shared by multiple types.
   *

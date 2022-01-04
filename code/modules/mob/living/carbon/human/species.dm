@@ -799,6 +799,14 @@ GLOBAL_LIST_EMPTY(roundstart_races)
 		if((H.wear_mask && (H.wear_mask.flags_inv & HIDEFACE)) || (H.head && (H.head.flags_inv & HIDEFACE)) || !HD || HD.status == BODYPART_ROBOTIC)
 			bodyparts_to_add -= "diona_hair" // honk end
 
+	if("ipc_screen" in mutant_bodyparts)
+		if(!H.dna.features["ipc_screen"] || H.dna.features["ipc_screen"] == "None" || H.head && (H.head.flags_inv & HIDEFACE) || (H.wear_mask && (H.wear_mask.flags_inv & HIDEEYES)) || !HD)
+			bodyparts_to_add -= "ipc_screen"
+
+	if("ipc_antenna" in mutant_bodyparts)
+		if(!H.dna.features["ipc_antenna"] || H.dna.features["ipc_antenna"] == "None" || H.head && (H.head.flags_inv & HIDEHAIR) || (H.wear_mask && (H.wear_mask.flags_inv & HIDEHAIR)) || !HD)
+			bodyparts_to_add -= "ipc_antenna"
+
 	if(mutant_bodyparts["moth_antennae"])
 		if(!H.dna.features["moth_antennae"] || H.dna.features["moth_antennae"] == "None" || !HD)
 			bodyparts_to_add -= "moth_antennae"
@@ -874,6 +882,12 @@ GLOBAL_LIST_EMPTY(roundstart_races)
 					S = GLOB.caps_list[H.dna.features["caps"]]
 				if("diona_hair") // honk start -- add diona_hair to their DNA
 					S = GLOB.diona_hair_list[H.dna.features["diona_hair"]] // honk end
+				if("ipc_screen")
+					S = GLOB.ipc_screens_list[H.dna.features["ipc_screen"]]
+				if("ipc_antenna")
+					S = GLOB.ipc_antennas_list[H.dna.features["ipc_antenna"]]
+				if("ipc_chassis")
+					S = GLOB.ipc_chassis_list[H.dna.features["ipc_chassis"]]
 			if(!S || S.icon_state == "none")
 				continue
 

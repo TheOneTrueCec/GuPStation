@@ -62,6 +62,13 @@
 		to_chat(user, "<span class='warning'>You have to remove [who] [covered] first!</span>")
 		return FALSE
 	return TRUE
+	if(!eater.has_mouth())
+		if(eater == user)
+			to_chat(eater, "<span class='warning'>You have no mouth, and cannot eat.</span>")
+		else
+			to_chat(user, "<span class='warning'>You can't feed [eater], because they have no mouth!</span>")
+		return FALSE
+	return TRUE
 
 /*
  * On accidental consumption, transfer a portion of the reagents to the eater and the item it's in, then continue to the base proc (to deal with shattering glass containers)

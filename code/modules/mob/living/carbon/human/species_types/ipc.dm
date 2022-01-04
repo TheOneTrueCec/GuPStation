@@ -3,7 +3,7 @@
 	id = "ipc"
 	say_mod = "states"
 	sexes = FALSE
-	species_traits = list(NOTRANSSTING,NOEYESPRITES,NO_DNA_COPY,ROBOTIC_LIMBS,NOZOMBIE,MUTCOLORS,REVIVESBYHEALING,NOHUSK,NOMOUTH,NOBLOOD)
+	species_traits = list(NOTRANSSTING,NOEYESPRITES,NO_DNA_COPY,ROBOTIC_LIMBS,NOZOMBIE,MUTCOLORS,REVIVESBYHEALING,NOHUSK,NOMOUTH,NOBLOOD,NOSTOMACH)
 	inherent_traits = list(TRAIT_RESISTCOLD,TRAIT_NOBREATH,TRAIT_RADIMMUNE,TRAIT_LIMBATTACHMENT,TRAIT_NOCRITDAMAGE,TRAIT_EASYDISMEMBER,TRAIT_NOHUNGER,TRAIT_XENO_IMMUNE, TRAIT_TOXIMMUNE)
 	inherent_biotypes = list(MOB_ROBOTIC, MOB_HUMANOID)
 	mutantbrain = /obj/item/organ/brain/theophilus
@@ -53,6 +53,10 @@
 	if(S)
 		S.Remove(C)
 		QDEL_NULL(S)
+	var/obj/item/organ/heart/D = C.getorganslot("heart") // D for duplicate definition, H was taken
+	if(D)
+		D.Remove(C)
+		QDEL_NULL(D)
 
 	if(ishuman(C) && !change_screen)
 		change_screen = new
