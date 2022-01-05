@@ -1366,3 +1366,6 @@
 /mob/living/carbon/human/species/dwarf
 	race = /datum/species/dwarf
 // honk end
+
+/mob/living/carbon/human/species/ipc
+	race = /datum/species/ipc
