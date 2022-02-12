@@ -69,24 +69,31 @@
 
 /area/shuttle/abandoned/bridge
 	name = "Abandoned Ship Bridge"
+	icon_state = "bridge"
 
 /area/shuttle/abandoned/engine
 	name = "Abandoned Ship Engine"
+	icon_state = "engine"
 
 /area/shuttle/abandoned/bar
 	name = "Abandoned Ship Bar"
+	icon_state = "bar"
 
 /area/shuttle/abandoned/crew
 	name = "Abandoned Ship Crew Quarters"
+	icon_state = "crew_quarters"
 
 /area/shuttle/abandoned/cargo
 	name = "Abandoned Ship Cargo Bay"
+	icon_state = "cargo_bay"
 
 /area/shuttle/abandoned/medbay
 	name = "Abandoned Ship Medbay"
+	icon_state = "med_lobby"
 
 /area/shuttle/abandoned/pod
 	name = "Abandoned Ship Pod"
+	icon_state = ""
 
 ////////////////////////////Single-area shuttles////////////////////////////
 
