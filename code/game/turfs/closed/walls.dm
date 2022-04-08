@@ -201,7 +201,11 @@
 	else if(istype(W, /obj/item/poster))
 		place_poster(W,user)
 		return TRUE
-
+	
+	else if(istype(W, /obj/item/electronic_assembly/wallmount)) // circuit wallmount
+		var/obj/item/electronic_assembly/wallmount/A = W
+		A.mount_assembly(src, user)
+		return TRUE
 	return FALSE
 
 /turf/closed/wall/proc/try_decon(obj/item/I, mob/user, turf/T)

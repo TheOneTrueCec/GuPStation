@@ -945,3 +945,5 @@ GLOBAL_LIST_INIT(binary, list("0","1"))
 			continue
 		out += prob(replaceprob)? pick(replacementchars) : char
 	return out.Join("")
+
+#define string2charlist(string) (splittext(string, regex("(.)")) - splittext(string, ""))

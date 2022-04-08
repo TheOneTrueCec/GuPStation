@@ -1483,3 +1483,45 @@ GLOBAL_DATUM_INIT(dview_mob, /mob/dview, new)
 	return call(source, proctype)(arglist(arguments))
 
 #define TURF_FROM_COORDS_LIST(List) (locate(List[1], List[2], List[3]))
+
+/proc/get_step_towards2(atom/ref , atom/trg)
+	var/base_dir = get_dir(ref, get_step_towards(ref,trg))
+	var/turf/temp = get_step_towards(ref,trg)
+
+	if(is_blocked_turf(temp))
+		var/dir_alt1 = turn(base_dir, 90)
+		var/dir_alt2 = turn(base_dir, -90)
+		var/turf/turf_last1 = temp
+		var/turf/turf_last2 = temp
+		var/free_tile = null
+		var/breakpoint = 0
+
+		while(!free_tile && breakpoint < 10)
+			if(!is_blocked_turf(turf_last1))
+				free_tile = turf_last1
+				break
+			if(!is_blocked_turf(turf_last2))
+				free_tile = turf_last2
+				break
+			turf_last1 = get_step(turf_last1,dir_alt1)
+			turf_last2 = get_step(turf_last2,dir_alt2)
+			breakpoint++
+
+		if(!free_tile)
+			return get_step(ref, base_dir)
+		else
+			return get_step_towards(ref,free_tile)
+
+	else
+		return get_step(ref, base_dir)
+
+/// Returns TRUE if the turf cannot be moved onto
+/proc/is_blocked_turf(turf/T, exclude_mobs)
+	if(T.density)
+		return 1
+	for(var/i in T)
+		var/atom/A = i
+		if(A.density && (!exclude_mobs || !ismob(A)))
+			return 1
+	return 0
+

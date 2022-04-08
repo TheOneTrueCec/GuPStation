@@ -567,3 +567,6 @@ RATCAP 64
 
 ## Maximum fine for a citation
 MAXFINE 2000
+
+## Determines if players are allowed to print integrated circuits, uncomment to allow.
+IC_PRINTING 0
