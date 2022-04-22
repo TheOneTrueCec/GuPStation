@@ -66,6 +66,8 @@
 	/// Tick time the mob can next move
 	var/next_move = null
 
+	///prevents area creation spam
+	var/create_area_cooldown
 	/**
 	  * Magic var that stops you moving and interacting with anything
 	  *

@@ -526,3 +526,7 @@ DEFAULT_VIEW_SQUARE 15x15
 
 ## Add the ID of the role you want assigning here
 #DISCORD_ROLEID 000000000000000000
+
+## Custom shuttle spam prevention. Changine these numbers allows you to change the maxsize and amount of custom shuttles.
+MAX_SHUTTLE_COUNT 6
+MAX_SHUTTLE_SIZE 300

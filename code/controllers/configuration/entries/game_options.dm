@@ -404,3 +404,10 @@
 /datum/config_entry/flag/dynamic_config_enabled
 
 /datum/config_entry/flag/ic_printing
+
+//Shuttle size limiter
+/datum/config_entry/number/max_shuttle_count
+	config_entry_value = 6
+
+/datum/config_entry/number/max_shuttle_size
+	config_entry_value = 250
