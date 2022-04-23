@@ -295,3 +295,17 @@
 		hook.afterattack(target, user, flag, params)
 	else
 		return ..()
+
+// Shotgun Pistol //
+
+/obj/item/gun/ballistic/shotgun/automatic/pistol
+	name = "\improper Solir 4 revolver hybrid"
+	desc = "A retro high-powered shotgun revolver typically used by high ranking officials. Uses shells."
+	icon_state = "shotgunpistol"
+	weapon_weight = WEIGHT_CLASS_NORMAL
+	rack_sound = 'sound/weapons/revolverdry.ogg'
+	bolt_type = BOLT_TYPE_NO_BOLT
+	semi_auto = TRUE
+	fire_delay = 1.5
+	mag_type = /obj/item/ammo_box/magazine/internal/shot/com
+	pin = /obj/item/firing_pin/implant/pindicate

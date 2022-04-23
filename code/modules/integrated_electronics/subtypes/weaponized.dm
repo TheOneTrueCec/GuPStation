@@ -126,7 +126,7 @@
 	if(!shot)
 		return
 	update_icon()
-	var/obj/item/projectile/A
+	var/obj/projectile/A
 	if(!mode)
 		A = new stun_projectile(T)
 		playsound(loc, stun_projectile_sound, 75, 1)

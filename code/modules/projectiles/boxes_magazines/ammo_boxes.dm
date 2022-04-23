@@ -102,3 +102,11 @@
 	icon_state = "foambox_riot"
 	ammo_type = /obj/item/ammo_casing/caseless/foam_dart/riot
 	custom_materials = list(/datum/material/iron = 50000)
+
+/obj/item/ammo_box/shotgun_lethal
+	name = "speed loader (buckshot)"
+	desc = "Designed to quickly reload shell-based revolvers."
+	icon_state = "shotlethal"
+	ammo_type = /obj/item/ammo_casing/shotgun/buckshot
+	max_ammo = 6
+	multiple_sprites = 1
