@@ -144,6 +144,7 @@ SUBSYSTEM_DEF(bluespace_exploration)
 	extra_data.shuttle_id = shuttle_id
 	ship_traffic_queue[shuttle_id] = extra_data
 	BLUESPACE_EXPLORATION_DEBUG_MESSAGE("Ship transit requested, [shuttle_id] added to warp queue.")
+	BLUESPACE_EXPLORATION_DEBUG_MESSAGE("Ship transit requested, [ship_traffic_queue[1]] is first in line.")
 
 //Starts the next ship in the queue for warping
 /datum/controller/subsystem/bluespace_exploration/proc/initiate_queued_warp()

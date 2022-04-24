@@ -60,9 +60,9 @@
 		user.client.images -= eyeobj.user_image
 
 /obj/machinery/computer/camera_advanced/shuttle_creator/attack_hand(mob/user)
-	if(!is_operational) //you cant use broken machine you chumbis
+/* 	if(!is_operational) //you cant use broken machine you chumbis
 		to_chat(user, "DEBUG BREAK 1. Var state [is_operational]")
-		return
+		return */
 	if(current_user)
 		to_chat(user, "The console is already in use!")
 		return

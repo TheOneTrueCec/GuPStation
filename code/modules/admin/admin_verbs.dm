@@ -251,7 +251,11 @@ GLOBAL_LIST_INIT(admin_verbs_hideable, list(
 	/client/proc/cmd_debug_mob_lists,
 	/client/proc/cmd_debug_del_all,
 	/client/proc/enable_debug_verbs,
-	/client/proc/enable_exploration_verbs,
+	/client/proc/spawn_ship,
+	/client/proc/check_bluespace_levels,
+	/client/proc/check_level_free,
+	/client/proc/make_all_weapons_accurate,
+	/client/proc/reset_all_weapons_accurate,
 	/proc/possess,
 	/proc/release,
 	/client/proc/reload_admins,
@@ -317,7 +321,6 @@ GLOBAL_PROTECT(admin_verbs_hideable)
 		/*Debug verbs added by "show debug verbs"*/
 		GLOB.admin_verbs_debug_mapping,
 		/client/proc/disable_debug_verbs,
-		/client/proc/disable_exploration_verbs,
 		/client/proc/readmin
 		))
 
