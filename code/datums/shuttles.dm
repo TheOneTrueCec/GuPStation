@@ -131,15 +131,6 @@
 	port_id = "mining_common"
 	can_be_bought = FALSE
 
-/datum/map_template/shuttle/exploration
-	name = "Base Shuttle Template (Exploration)"
-	port_id = "exploration"
-	can_be_bought = FALSE
-
-/datum/map_template/shuttle/exploration/box
-	suffix = "box"
-	name = "exploration shuttle (Box)"
-
 /datum/map_template/shuttle/arrival
 	port_id = "arrival"
 	can_be_bought = FALSE

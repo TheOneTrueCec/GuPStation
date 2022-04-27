@@ -2,7 +2,7 @@
 #define CUSTOM_ENGINES_START_TIME 65
 #define CALCULATE_STATS_COOLDOWN 2
 
-/obj/machinery/computer/system_map/custom_shuttle
+/obj/machinery/computer/custom_shuttle
 	name = "nanotrasen shuttle flight controller"
 	desc = "A terminal used to fly shuttles defined by the Shuttle Zoning Designator"
 	circuit = /obj/item/circuitboard/computer/shuttle/flight_control
@@ -10,6 +10,7 @@
 	icon_keyboard = "tech_key"
 	light_color = LIGHT_COLOR_CYAN
 	req_access = list( )
+	var/shuttleId
 	var/possible_destinations = "whiteship_home"
 	var/admin_controlled
 	var/no_destination_swap = 0
@@ -22,59 +23,97 @@
 	var/calculated_non_operational_thrusters = 0
 	var/calculated_fuel_less_thrusters = 0
 	var/target_fuel_cost = 0
+	var/targetLocation
+	var/datum/browser/popup
 
 	var/stat_calc_cooldown = 0
 
-	var/distance_multiplier
+	//Upgrades
+	var/distance_multiplier = 1
 
-/obj/machinery/computer/system_map/custom_shuttle/examine(mob/user)
+/obj/machinery/computer/custom_shuttle/examine(mob/user)
 	. = ..()
 	. += distance_multiplier < 1 ? "Bluespace shortcut module installed. Route is [distance_multiplier]x the original length." : ""
 
-/obj/machinery/computer/system_map/custom_shuttle/ui_data(mob/user)
-	var/list/data = ..()
-	data["extra_data"] = list()
-	data["extra_data"] += list(list("Shuttle Mass", "[calculated_mass/10] tons"))
-	data["extra_data"] += list(list("Engine Force", "[calculated_dforce]kN ([calculated_engine_count] engines)"))
-	data["extra_data"] += list(list("Sublight Speed", "[calculated_speed] m/s"))
-	data["extra_data"] += list(list("Fuel Consumption", "[calculated_consumption] units per distance"))
-	data["extra_data"] += list(list("Engine Cooldown", "[calculated_cooldown] s"))
-	if(calculated_non_operational_thrusters > 0)
-		data["extra_data"] += list(list("Offline Thrusters", "[calculated_non_operational_thrusters]"))
-	if(calculated_speed < 1)
-		data["extra_data"] += list(list("Notices", "ENGINE POWER INSUFFICIENT."))
-	return data
+/obj/machinery/computer/custom_shuttle/ui_interact(mob/user)
+	var/list/options = params2list(possible_destinations)
+	var/obj/docking_port/mobile/M = SSshuttle.getShuttle(shuttleId)
+	var/dat = "[M ? "Current Location : [M.getStatusText()]" : "Shuttle link required."]<br><br>"
+	if(M)
+		dat += "<A href='?src=[REF(src)];calculate=1'>Run Flight Calculations</A><br>"
+		dat += "<b>Shuttle Data</b><hr>"
+		dat += "Shuttle Mass: [calculated_mass/10]tons<br>"
+		dat += "Engine Force: [calculated_dforce]kN ([calculated_engine_count] engines)<br>"
+		dat += "Sublight Speed: [calculated_speed]ms<sup>-1</sup><br>"
+		dat += calculated_speed < 1 ? "<b>INSUFFICIENT ENGINE POWER</b><br>" : ""
+		dat += calculated_non_operational_thrusters > 0 ? "<b>Warning: [calculated_non_operational_thrusters] thrusters offline.</b><br>" : ""
+		dat += "Fuel Consumption: [calculated_consumption]units per distance<br>"
+		dat += "Engine Cooldown: [calculated_cooldown]s<hr>"
+		var/destination_found
+		for(var/obj/docking_port/stationary/S in SSshuttle.stationary)
+			if(!options.Find(S.id))
+				continue
+			if(!M.check_dock(S, silent=TRUE))
+				continue
+			if(calculated_speed == 0)
+				break
+			destination_found = TRUE
+			var/dist = round(calculateDistance(S))
+			dat += "<A href='?src=[REF(src)];setloc=[S.id]'>Target [S.name] (Dist: [dist] | Fuel Cost: [round(dist * calculated_consumption)] | Time: [round(dist / calculated_speed)])</A><br>"
+		if(!destination_found)
+			dat += "<B>No valid destinations</B><br>"
+		dat += "<hr>[targetLocation ? "Target Location : [targetLocation]" : "No Target Location"]"
+		dat += "<hr><A href='?src=[REF(src)];fly=1'>Initate Flight</A><br>"
+	dat += "<A href='?src=[REF(user)];mach_close=computer'>Close</a>"
 
-/obj/machinery/computer/system_map/custom_shuttle/ui_static_data(mob/user)
-	var/list/data = ..()
-	data["custom_shuttle"] = TRUE
-	return data
+	popup = new(user, "computer", M ? M.name : "shuttle", 350, 450)
+	popup.set_content("<center>[dat]</center>")
+	popup.set_title_image(usr.browse_rsc_icon(src.icon, src.icon_state))
+	popup.open()
 
-/obj/machinery/computer/system_map/custom_shuttle/ui_act(action, params)
-	if(action == "calculate_custom_shuttle")
-		calculateStats()
+/obj/machinery/computer/custom_shuttle/Topic(href, href_list)
+	if(..())
 		return
-	return ..()
+	usr.set_machine(src)
+	src.add_fingerprint(usr)
+	if(!allowed(usr))
+		to_chat(usr, "<span class='danger'>Access denied.</span>")
+		return
 
-/obj/machinery/computer/system_map/custom_shuttle/calculate_distance_to_stationary_port(obj/docking_port/stationary/port)
-	var/obj/docking_port/mobile/linkedShuttle = SSshuttle.getShuttle(shuttle_id)
-	var/deltaX = port.x - linkedShuttle.x
-	var/deltaY = port.y - linkedShuttle.y
-	var/deltaZ = (port.z - linkedShuttle.z) * Z_DIST
+	if(href_list["calculate"])
+		calculateStats()
+		ui_interact(usr)
+		return
+	var/obj/docking_port/mobile/M = SSshuttle.getShuttle(shuttleId)
+	if(!M)
+		return
+	if(M.launch_status == ENDGAME_LAUNCHED)
+		return
+	if(href_list["setloc"])
+		SetTargetLocation(href_list["setloc"])
+		ui_interact(usr)
+		return
+	else if(href_list["fly"])
+		Fly()
+		ui_interact(usr)
+		return
+
+/obj/machinery/computer/custom_shuttle/proc/calculateDistance(var/obj/docking_port/stationary/port)
+	var/deltaX = port.x - x
+	var/deltaY = port.y - y
+	var/deltaZ = (port.z - z) * Z_DIST
 	return sqrt(deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ) * distance_multiplier
 
-/obj/machinery/computer/system_map/custom_shuttle/proc/linkShuttle(var/new_id)
-	shuttle_id = new_id
+/obj/machinery/computer/custom_shuttle/proc/linkShuttle(var/new_id)
+	shuttleId = new_id
 	possible_destinations = "whiteship_home;shuttle[new_id]_custom"
-	//Split the possible destination ports
-	standard_port_locations = splittext(possible_destinations, ";")
 
-/obj/machinery/computer/system_map/custom_shuttle/proc/calculateStats(var/useFuel = FALSE, var/dist = 0, var/ignore_cooldown = FALSE)
+/obj/machinery/computer/custom_shuttle/proc/calculateStats(var/useFuel = FALSE, var/dist = 0, var/ignore_cooldown = FALSE)
 	if(!ignore_cooldown && stat_calc_cooldown >= world.time)
-		to_chat(usr, "<span>You are using this too fast, please slow down.</span>")
+		to_chat(usr, "<span>You are using this too fast, please slow down</span>")
 		return
 	stat_calc_cooldown = world.time + CALCULATE_STATS_COOLDOWN
-	var/obj/docking_port/mobile/M = SSshuttle.getShuttle(shuttle_id)
+	var/obj/docking_port/mobile/M = SSshuttle.getShuttle(shuttleId)
 	if(!M)
 		return FALSE
 	//Reset data
@@ -110,8 +149,8 @@
 	calculated_speed = (calculated_dforce*1000) / (calculated_mass*100)
 	return TRUE
 
-/obj/machinery/computer/system_map/custom_shuttle/consumeFuel(dist)
-	var/obj/docking_port/mobile/M = SSshuttle.getShuttle(shuttle_id)
+/obj/machinery/computer/custom_shuttle/proc/consumeFuel(var/dist)
+	var/obj/docking_port/mobile/M = SSshuttle.getShuttle(shuttleId)
 	if(!M)
 		return FALSE
 	//Calculate all the data
@@ -128,70 +167,62 @@
 			resolvedHeater?.consumeFuel(dist * shuttle_machine.fuel_use)
 		shuttle_machine.fireEngine()
 
-//=======
-//Handles jumping to a random star system (bluespace!)
-//=======
-/obj/machinery/computer/system_map/custom_shuttle/handle_space_jump(star)
-	var/datum/star_system/SS = star
-	var/distance = clamp(SS.distance_from_center * 500, 0, 2000)
-	if(!can_jump(distance))
+/obj/machinery/computer/custom_shuttle/proc/SetTargetLocation(var/newTarget)
+	if(!(newTarget in params2list(possible_destinations)))
+		log_admin("[usr] attempted to href dock exploit on [src] with target location \"[newTarget]\"")
+		message_admins("[usr] just attempted to href dock exploit on [src] with target location \"[newTarget]\"")
 		return
-	var/time = min(max(round(distance / calculated_speed), 10), 90)
-	var/obj/docking_port/mobile/linkedShuttle = SSshuttle.getShuttle(shuttle_id)
+	targetLocation = newTarget
+	say("Shuttle route calculated.")
+	return
+
+/obj/machinery/computer/custom_shuttle/proc/Fly()
+	if(!targetLocation)
+		return
+	var/obj/docking_port/mobile/linkedShuttle = SSshuttle.getShuttle(shuttleId)
+	if(!linkedShuttle)
+		return
+	if(linkedShuttle.mode != SHUTTLE_IDLE)
+		return
+	if(!calculateStats(TRUE, 0, TRUE))
+		return
+	if(calculated_fuel_less_thrusters > 0)
+		say("Warning, [calculated_fuel_less_thrusters] do not have enough fuel for this journey, engine output may be limitted.")
+	if(calculated_speed < 1)
+		say("Insufficient engine power, shuttle requires [calculated_mass / 10]kN of thrust.")
+		return
+	var/obj/docking_port/stationary/targetPort = SSshuttle.getDock(targetLocation)
+	if(!targetPort)
+		return
+	var/dist = calculateDistance(targetPort)
+	var/time = min(max(round(dist / calculated_speed), 10), 90)
 	linkedShuttle.callTime = time * 10
 	linkedShuttle.rechargeTime = calculated_cooldown
 	//We need to find the direction of this console to the port
 	linkedShuttle.port_direction = angle2dir(dir2angle(dir) - (dir2angle(linkedShuttle.dir)) + 180)
 	linkedShuttle.preferred_direction = NORTH
 	linkedShuttle.ignitionTime = CUSTOM_ENGINES_START_TIME
+	linkedShuttle.count_engines()
+	linkedShuttle.hyperspace_sound(HYPERSPACE_WARMUP)
 	var/throwForce = clamp((calculated_speed / 2) - 5, 0, 10)
 	linkedShuttle.movement_force = list("KNOCKDOWN" = calculated_speed > 5 ? 3 : 0, "THROW" = throwForce)
-	say("Calculating hyperlane jump, estimated departure in [LAZYLEN(SSbluespace_exploration.ship_traffic_queue) * 90] seconds.")
-	SSbluespace_exploration.request_ship_transit_to(shuttle_id, star)
-
-//=======
-//Handles jumping to a specific port (or custom location port)
-//=======
-/obj/machinery/computer/system_map/custom_shuttle/handle_jump_to_port(static_port_id)
-	if(!static_port_id)
+	if(!(targetLocation in params2list(possible_destinations)))
+		log_admin("[usr] attempted to launch a shuttle that has been affected by href dock exploit on [src] with target location \"[targetLocation]\"")
+		message_admins("[usr] attempted to launch a shuttle that has been affected by href dock exploit on [src] with target location \"[targetLocation]\"")
 		return
-	var/obj/docking_port/stationary/targetPort = SSshuttle.getDock(static_port_id)
-	if(!targetPort)
-		return
-	var/dist = calculate_distance_to_stationary_port(targetPort)
-	if(!can_jump(dist))
-		return
-	var/time = min(max(round(dist / calculated_speed), 10), 90)
-	var/throwForce = clamp((calculated_speed / 2) - 5, 0, 10)
-	var/obj/docking_port/mobile/linkedShuttle = SSshuttle.getShuttle(shuttle_id)
-	linkedShuttle.callTime = time * 10
-	linkedShuttle.rechargeTime = calculated_cooldown
-	linkedShuttle.ignitionTime = CUSTOM_ENGINES_START_TIME
-	linkedShuttle.movement_force = list("KNOCKDOWN" = calculated_speed > 5 ? 3 : 0, "THROW" = throwForce)
-	//Custom stuff setup, go do the jump
-	. = ..(static_port_id, dist)
-
-/obj/machinery/computer/system_map/custom_shuttle/proc/can_jump(distance)
-	var/obj/docking_port/mobile/linkedShuttle = SSshuttle.getShuttle(shuttle_id)
-	if(!linkedShuttle || linkedShuttle.mode != SHUTTLE_IDLE || !calculateStats(FALSE, 0, TRUE))
-		return FALSE
-	if(calculated_fuel_less_thrusters > 0)
-		say("Warning, [calculated_fuel_less_thrusters] do not have enough fuel for this journey, engine output may be limitted.")
-	if(calculated_speed < 1)
-		say("Insufficient engine power, shuttle requires [calculated_mass / 10]kN of thrust.")
-		return FALSE
-	//The stuff done here is for fuel consumption
-	if(!calculateStats(TRUE, distance, TRUE))
-		return FALSE
-	return TRUE
-
-/obj/machinery/computer/system_map/custom_shuttle/connect_to_shuttle(obj/docking_port/mobile/port, obj/docking_port/stationary/dock, idnum, override=FALSE)
-	if(port && (shuttle_id == initial(shuttle_id) || override))
-		linkShuttle(port.id)
-
-//Requires manual linking
-/obj/machinery/computer/system_map/custom_shuttle/get_attached_shuttle()
+	switch(SSshuttle.moveShuttle(shuttleId, targetLocation, 1))
+		if(0)
+			consumeFuel(dist)
+			say("Shuttle departing. Please stand away from the doors.")
+		if(1)
+			to_chat(usr, "<span class='warning'>Invalid shuttle requested.</span>")
+		else
+			to_chat(usr, "<span class='notice'>Unable to comply.</span>")
 	return
+
+/obj/machinery/computer/custom_shuttle/connect_to_shuttle(obj/docking_port/mobile/port, obj/docking_port/stationary/dock, idnum, override=FALSE)
+	if(port && (shuttleId == initial(shuttleId) || override))
+		linkShuttle(port.id)
 
 //Custom shuttle docker locations
 /obj/machinery/computer/camera_advanced/shuttle_docker/custom
@@ -211,8 +242,6 @@
 
 /obj/machinery/computer/camera_advanced/shuttle_docker/custom/Initialize()
 	. = ..()
-	if(GLOB.jam_consoles)
-		jammed = TRUE
 	GLOB.jam_on_wardec += src
 
 /obj/machinery/computer/camera_advanced/shuttle_docker/custom/Destroy()
@@ -222,7 +251,6 @@
 /obj/machinery/computer/camera_advanced/shuttle_docker/custom/placeLandingSpot()
 	if(!shuttleId)
 		return	//Only way this would happen is if someone else delinks the console while in use somehow
-
 	var/obj/docking_port/mobile/M = SSshuttle.getShuttle(shuttleId)
 	if(M?.mode != SHUTTLE_IDLE)
 		to_chat(usr, "<span class='warning'>You cannot target locations while in transit.</span>")
@@ -235,13 +263,6 @@
 		return
 	return ..()
 
-/obj/machinery/computer/camera_advanced/shuttle_docker/custom/proc/linkShuttle(new_id)
+/obj/machinery/computer/camera_advanced/shuttle_docker/custom/proc/linkShuttle(var/new_id)
 	shuttleId = new_id
 	shuttlePortId = "shuttle[new_id]_custom"
-
-	//Take info from connected port and calculate amendments
-	var/obj/docking_port/mobile/M = SSshuttle.getShuttle(new_id)
-	var/list/shuttlebounds = M.return_coords()
-	view_range = min(round(max(M.width, M.height)*0.5), 15)
-	x_offset = round((shuttlebounds[1] + shuttlebounds[3])*0.5) - M.x
-	y_offset = round((shuttlebounds[2] + shuttlebounds[4])*0.5) - M.y

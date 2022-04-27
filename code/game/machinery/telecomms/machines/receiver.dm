@@ -28,17 +28,8 @@
 		relay_information(signal, /obj/machinery/telecomms/bus)
 
 /obj/machinery/telecomms/receiver/proc/check_receive_level(datum/signal/subspace/signal)
-	//Check if the reciever is in the z level of sender
 	if (z in signal.levels)
 		return TRUE
-	
-	if (signal.frequency == FREQ_EXPLORATION)
-		//Exploration signals can be transmitted independantly of the z level
-		var/turf/source_turf = get_turf(signal.source)
-		if(SSmapping.level_has_any_trait(source_turf.z, list(ZTRAIT_BLUESPACE_EXPLORATION, ZTRAIT_AWAY)))
-			return TRUE
-
-	//Check for relays
 
 	for(var/obj/machinery/telecomms/hub/H in links)
 		for(var/obj/machinery/telecomms/relay/R in H.links)
@@ -64,7 +55,7 @@
 	id = "Receiver B"
 	network = "tcommsat"
 	autolinkers = list("receiverB") // link to relay
-	freq_listening = list(FREQ_COMMAND, FREQ_ENGINEERING, FREQ_SECURITY, FREQ_EXPLORATION)
+	freq_listening = list(FREQ_COMMAND, FREQ_ENGINEERING, FREQ_SECURITY)
 
 	//Common and other radio frequencies for people to freely use
 /obj/machinery/telecomms/receiver/preset_right/Initialize()

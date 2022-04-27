@@ -249,7 +249,6 @@
 	var/bulb_emergency_colour = "#FF3232"	// determines the colour of the light while it's in emergency mode
 	var/bulb_emergency_pow_mul = 0.75	// the multiplier for determining the light's power in emergency mode
 	var/bulb_emergency_pow_min = 0.5	// the minimum value for the light's power in emergency mode
-	var/force_emergency_mode = FALSE
 
 	var/obj/effect/overlay/vis/glowybit		// the light overlay
 
@@ -367,7 +366,7 @@
 	switch(status)
 		if(LIGHT_BROKEN,LIGHT_BURNED,LIGHT_EMPTY)
 			on = FALSE
-	emergency_mode = force_emergency_mode
+	emergency_mode = FALSE
 	if(on)
 		var/BR = brightness
 		var/PO = bulb_power

@@ -806,7 +806,7 @@
 
 /datum/supply_pack/engineering/bsa
 	name = "Bluespace Artillery Parts"
-	desc = "The pride of Nanotrasen Naval Command. The legendary Bluespace Artillery Cannon is a devastating feat of human engineering and testament to wartime determination. Capable of destroying hostile shuttles and designated targets through dimensional shifting. Highly advanced research is required for proper construction. "
+	desc = "The pride of Nanotrasen Naval Command. The legendary Bluespace Artillery Cannon is a devastating feat of human engineering and testament to wartime determination. Highly advanced research is required for proper construction. "
 	cost = 15000
 	special = TRUE
 	access_view = ACCESS_HEADS
@@ -871,26 +871,7 @@
 	contains = list(/obj/item/circuitboard/computer/sat_control)
 	crate_name= "shield control board crate"
 
-/datum/supply_pack/engineering/shuttle_construction
-	name = "Shuttle Construction Kit"
-	desc = "A DIY kit for building your own shuttle! Comes with all the parts you need to get your people to the stars and a free laser cannon too, not that you will need it in these friendly parts of space!"
-	cost = 6000
-	crate_type = /obj/structure/closet/crate/large/shuttle
-	contains = list(/obj/item/analyzer)
 
-/datum/supply_pack/engineering/shuttle_weapons
-	name = "Shuttle Weapons Kit"
-	desc = "A crate containing state of the art, military-grade weaponry for combat with powerful forces in hostile space. Requires armory access to open."
-	cost = 4000
-	contains = list(
-		/obj/item/wallframe/shuttle_weapon/missile,
-		/obj/item/wallframe/shuttle_weapon/missile/fire,
-		/obj/item/wallframe/shuttle_weapon/laser/triple,
-		/obj/item/wallframe/shuttle_weapon/laser/triple,
-		/obj/item/wallframe/shuttle_weapon/laser,
-		/obj/item/wallframe/shuttle_weapon/laser
-	)
-	access = ACCESS_ARMORY
 //////////////////////////////////////////////////////////////////////////////
 //////////////////////// Engine Construction /////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////

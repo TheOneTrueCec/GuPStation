@@ -56,8 +56,6 @@
 
 /obj/machinery/computer/camera_advanced/shuttle_docker/caravan/Initialize()
 	. = ..()
-	if(GLOB.jam_consoles)
-		jammed = TRUE
 	GLOB.jam_on_wardec += src
 
 /obj/machinery/computer/camera_advanced/shuttle_docker/caravan/Destroy()

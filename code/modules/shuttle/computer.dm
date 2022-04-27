@@ -59,9 +59,9 @@
 			else
 				data["status"] = "In Transit"
 	for(var/obj/docking_port/stationary/S in SSshuttle.stationary)
-		if(!options.Find(S.id))
+		if(!options.Find(S.port_destinations))
 			continue
-		if(!M.check_dock(S, silent=TRUE))
+		if(!M.check_dock(S, silent = TRUE))
 			continue
 		var/list/location_data = list(
 			id = S.id,
@@ -109,12 +109,12 @@
 				if(M.mode != SHUTTLE_IDLE)
 					to_chat(usr, "<span class='warning'>Shuttle already in transit.</span>")
 					return
-
-/* 			if(!(href_list["move"] in params2list(possible_destinations)))
-				log_admin("[usr] attempted to forge a target location through a href exploit on [src]")
-				message_admins("[ADMIN_FULLMONTY(usr)] attempted to forge a target location through a href exploit on [src]")
-				return */
-
+			var/list/options = params2list(possible_destinations)
+			var/obj/docking_port/stationary/S = SSshuttle.getDock(params["shuttle_id"])
+			if(!(S.port_destinations in options))
+				log_admin("[usr] attempted to href dock exploit on [src] with target location \"[params["shuttle_id"]]\"")
+				message_admins("[usr] just attempted to href dock exploit on [src] with target location \"[params["shuttle_id"]]\"")
+				return
 			switch(SSshuttle.moveShuttle(shuttleId, params["shuttle_id"], 1))
 				if(0)
 					say("Shuttle departing. Please stand away from the doors.")

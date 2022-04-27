@@ -175,12 +175,11 @@ SUBSYSTEM_DEF(shuttle)
 		return
 	emergencyNoRecall = FALSE
 
-/datum/controller/subsystem/shuttle/proc/getShuttle(id, warning = TRUE)
+/datum/controller/subsystem/shuttle/proc/getShuttle(id)
 	for(var/obj/docking_port/mobile/M in mobile)
 		if(M.id == id)
 			return M
-	if(warning)
-		WARNING("couldn't find shuttle with id: [id]")
+	WARNING("couldn't find shuttle with id: [id]")
 
 /datum/controller/subsystem/shuttle/proc/getDock(id)
 	for(var/obj/docking_port/stationary/S in stationary)
