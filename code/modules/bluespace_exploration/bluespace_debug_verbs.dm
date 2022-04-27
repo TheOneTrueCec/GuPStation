@@ -61,7 +61,6 @@ GLOBAL_LIST_INIT(bluespace_debug_verbs, list(
 	to_chat(src, "Subsystem Status: [SSbluespace_exploration.generating ? "GENERATING IN PROGRESS" : "Not Generating"]")
 	to_chat(src, "Ship Queue Size: [SSbluespace_exploration.ship_traffic_queue.len]")
 	to_chat(src, "Z-Level Wipe Queue Size: [SSbluespace_exploration.z_level_queue.len]")
-	to_chat(src, "Traffic Queue Contents: [SSbluespace_exploration.ship_traffic_queue]")
 	for(var/datum/space_level/level in SSbluespace_exploration.bluespace_systems)
 		var/in_use = SSbluespace_exploration.bluespace_systems[level]
 		var/status = "Invalid state"
