@@ -1525,3 +1525,12 @@ GLOBAL_DATUM_INIT(dview_mob, /mob/dview, new)
 			return 1
 	return 0
 
+/proc/invertDir(var/input_dir)
+	switch(input_dir)
+		if(UP)
+			return DOWN
+		if(DOWN)
+			return UP
+		if(-INFINITY to 0, 11 to INFINITY)
+			CRASH("Can't turn invalid directions!")
+	return turn(input_dir, 180)

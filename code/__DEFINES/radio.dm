@@ -33,6 +33,11 @@
 #define RADIO_KEY_SERVICE "v"
 #define RADIO_TOKEN_SERVICE ":v"
 
+#define RADIO_CHANNEL_EXPLORATION "Exploration"
+#define RADIO_KEY_EXPLORATION "q"
+#define RADIO_TOKEN_EXPLORATION ":q"
+
+
 #define RADIO_CHANNEL_AI_PRIVATE "AI Private"
 #define RADIO_KEY_AI_PRIVATE "o"
 #define RADIO_TOKEN_AI_PRIVATE ":o"
@@ -64,6 +69,7 @@
 #define FREQ_MEDICAL 1355  // Medical comms frequency, soft blue
 #define FREQ_ENGINEERING 1357  // Engineering comms frequency, orange
 #define FREQ_SECURITY 1359  // Security comms frequency, red
+#define FREQ_EXPLORATION 1361  //! Exploration Comms, cyan-ish
 
 #define FREQ_HOLOGRID_SOLUTION 1433
 #define FREQ_STATUS_DISPLAYS 1435

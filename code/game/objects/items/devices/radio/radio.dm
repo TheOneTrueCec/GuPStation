@@ -307,17 +307,20 @@
 	talk_into(speaker, raw_message, , spans, language=message_language)
 
 // Checks if this radio can receive on the given frequency.
-/obj/item/radio/proc/can_receive(freq, level)
+/obj/item/radio/proc/can_receive(freq, levels)
 	// deny checks
 	if (!on || !listening || wires.is_cut(WIRE_RX))
 		return FALSE
 	if (freq == FREQ_SYNDICATE && !syndie)
 		return FALSE
+	//Exploration signals can always be recieved
+	if (freq == FREQ_EXPLORATION)
+		return TRUE
 	if (freq == FREQ_CENTCOM)
 		return independent  // hard-ignores the z-level check
-	if (!(0 in level))
+	if (!(0 in levels))
 		var/turf/position = get_turf(src)
-		if(!position || !(position.z in level))
+		if(!position || !(position.z in levels))
 			return FALSE
 
 	// allow checks: are we listening on that frequency?

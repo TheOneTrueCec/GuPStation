@@ -4,6 +4,7 @@
 #define CHALLENGE_SHUTTLE_DELAY 15000 // 25 minutes, so the ops have at least 5 minutes before the shuttle is callable.
 
 GLOBAL_LIST_EMPTY(jam_on_wardec)
+GLOBAL_VAR_INIT(jam_consoles, FALSE)
 
 /obj/item/nuclear_challenge
 	name = "Declaration of War (Challenge Mode)"
@@ -94,6 +95,9 @@ GLOBAL_LIST_EMPTY(jam_on_wardec)
 
 	for(var/obj/machinery/computer/camera_advanced/shuttle_docker/D in GLOB.jam_on_wardec)
 		D.jammed = TRUE
+	
+	//Anything created after war is declared should be jammed too.
+	GLOB.jam_consoles = TRUE
 
 	distribute_tc()
 

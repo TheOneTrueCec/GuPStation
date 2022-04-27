@@ -69,6 +69,9 @@ SUBSYSTEM_DEF(mapping)
 	repopulate_sorted_areas()
 	process_teleport_locs()			//Sets up the wizard teleport locations
 	preloadTemplates()
+	// add the transit level, since this is needed
+	transit = add_new_zlevel("Transit/Reserved", list(ZTRAIT_RESERVED = TRUE))
+
 #ifndef LOWMEMORYMODE
 	// Create space ruin levels
 	while (space_levels_so_far < config.space_ruin_levels)
@@ -78,6 +81,10 @@ SUBSYSTEM_DEF(mapping)
 	for (var/i in 1 to config.space_empty_levels)
 		++space_levels_so_far
 		empty_space = add_new_zlevel("Empty Area [space_levels_so_far]", list(ZTRAIT_LINKAGE = CROSSLINKED))
+
+	//Create z-levels for BSE
+	for(var/i in 1 to CONFIG_GET(number/bluespace_exploration_levels))
+		SSbluespace_exploration.bluespace_systems[add_new_zlevel("Bluespace Exploration Level [i]", ZTRAITS_BLUESPACE_EXPLORATION)] = BS_LEVEL_IDLE
 
 	// Pick a random away mission.
 	if(CONFIG_GET(flag/roundstart_away))
@@ -116,8 +123,6 @@ SUBSYSTEM_DEF(mapping)
 		seedRuins(space_ruins, CONFIG_GET(number/space_budget), list(/area/space), space_ruins_templates)
 	loading_ruins = FALSE
 #endif
-	// Add the transit level
-	transit = add_new_zlevel("Transit/Reserved", list(ZTRAIT_RESERVED = TRUE))
 	repopulate_sorted_areas()
 	// Set up Z-level transitions.
 	setup_map_transitions()
@@ -416,6 +421,8 @@ GLOBAL_LIST_EMPTY(the_station_areas)
 			ice_ruins_templates[R.name] = R
 		else if(istype(R, /datum/map_template/ruin/space))
 			space_ruins_templates[R.name] = R
+		else if(istype(R, /datum/map_template/ruin/exploration/ruin))
+			SSbluespace_exploration.ruin_templates[R.name] = R
 
 /datum/controller/subsystem/mapping/proc/preloadShuttleTemplates()
 	var/list/unbuyable = generateMapList("[global.config.directory]/unbuyableshuttles.txt")
@@ -431,6 +438,9 @@ GLOBAL_LIST_EMPTY(the_station_areas)
 
 		shuttle_templates[S.shuttle_id] = S
 		map_templates[S.shuttle_id] = S
+
+		if(istype(S, /datum/map_template/shuttle/ship))
+			SSbluespace_exploration.spawnable_ships[S.name] = S
 
 /datum/controller/subsystem/mapping/proc/preloadShelterTemplates()
 	for(var/item in subtypesof(/datum/map_template/shelter))

@@ -1,0 +1,691 @@
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"b" = (
+/obj/structure/marker_beacon,
+/obj/structure/cable/yellow{
+	icon_state = "1-8"
+	},
+/turf/open/floor/plasteel/airless,
+/area/exploration_away/no_gravity)
+"c" = (
+/obj/structure/cable/yellow{
+	icon_state = "4-8"
+	},
+/turf/open/floor/plating/airless,
+/area/exploration_away/no_gravity)
+"d" = (
+/obj/machinery/atmospherics/pipe/manifold/purple/visible{
+	dir = 4
+	},
+/turf/open/floor/plasteel/airless,
+/area/exploration_away/no_gravity)
+"e" = (
+/obj/structure/marker_beacon,
+/turf/open/floor/plasteel/airless,
+/area/exploration_away/no_gravity)
+"f" = (
+/obj/effect/mapping_helpers/airlock/abandoned,
+/obj/machinery/door/airlock/public/glass,
+/obj/effect/mapping_helpers/airlock/locked,
+/turf/open/floor/plating/airless,
+/area/exploration_away/no_gravity)
+"g" = (
+/obj/item/stack/sheet/mineral/plasma,
+/turf/template_noop,
+/area/template_noop)
+"h" = (
+/obj/machinery/atmospherics/pipe/simple/purple/visible{
+	dir = 10
+	},
+/turf/open/floor/plasteel/airless,
+/area/exploration_away/no_gravity)
+"i" = (
+/obj/item/stack/tile/plasteel,
+/turf/template_noop,
+/area/template_noop)
+"j" = (
+/obj/structure/marker_beacon,
+/obj/structure/cable/yellow{
+	icon_state = "1-2"
+	},
+/turf/open/floor/plasteel/airless,
+/area/exploration_away/no_gravity)
+"k" = (
+/turf/template_noop,
+/area/template_noop)
+"l" = (
+/obj/machinery/atmospherics/pipe/manifold4w/purple/visible,
+/turf/open/floor/plasteel/airless,
+/area/exploration_away/no_gravity)
+"m" = (
+/obj/machinery/atmospherics/components/unary/vent_scrubber{
+	dir = 4
+	},
+/obj/structure/cable/yellow{
+	icon_state = "1-2"
+	},
+/turf/open/floor/plasteel/airless,
+/area/exploration_away/no_gravity)
+"n" = (
+/obj/structure/cable/yellow{
+	icon_state = "1-2"
+	},
+/turf/open/floor/plasteel/airless,
+/area/exploration_away/no_gravity)
+"o" = (
+/obj/machinery/atmospherics/pipe/simple/purple/visible{
+	dir = 9
+	},
+/obj/structure/cable/yellow{
+	icon_state = "0-4"
+	},
+/turf/open/floor/plasteel/airless,
+/area/exploration_away/no_gravity)
+"p" = (
+/obj/structure/cable/yellow{
+	icon_state = "4-8"
+	},
+/obj/structure/cable/yellow{
+	icon_state = "1-4"
+	},
+/turf/open/floor/plasteel/airless,
+/area/exploration_away/no_gravity)
+"q" = (
+/obj/machinery/power/port_gen/pacman,
+/obj/item/stack/sheet/mineral/plasma,
+/turf/open/floor/plating/airless,
+/area/exploration_away/no_gravity)
+"s" = (
+/obj/structure/cable/yellow{
+	icon_state = "1-2"
+	},
+/obj/structure/cable/yellow{
+	icon_state = "1-4"
+	},
+/turf/open/floor/plasteel/airless,
+/area/exploration_away/no_gravity)
+"t" = (
+/obj/structure/marker_beacon,
+/obj/machinery/atmospherics/components/unary/portables_connector{
+	dir = 4
+	},
+/turf/open/floor/plasteel/airless,
+/area/exploration_away/no_gravity)
+"u" = (
+/obj/structure/lattice,
+/turf/closed/mineral/random/high_chance,
+/area/exploration_away/outside)
+"v" = (
+/obj/structure/cable/yellow{
+	icon_state = "1-4"
+	},
+/obj/structure/cable/yellow{
+	icon_state = "1-2"
+	},
+/turf/open/floor/plasteel/airless,
+/area/exploration_away/no_gravity)
+"w" = (
+/turf/open/floor/plasteel/airless,
+/area/exploration_away/no_gravity)
+"x" = (
+/obj/item/stack/tile/plasteel,
+/obj/structure/cable/yellow{
+	icon_state = "1-4"
+	},
+/turf/open/floor/plating/airless,
+/area/exploration_away/no_gravity)
+"y" = (
+/obj/machinery/atmospherics/pipe/simple/purple/visible{
+	dir = 9
+	},
+/turf/open/floor/plasteel/airless,
+/area/exploration_away/no_gravity)
+"z" = (
+/obj/machinery/portable_atmospherics/canister/toxins,
+/turf/open/floor/plating/airless,
+/area/exploration_away/no_gravity)
+"A" = (
+/turf/open/floor/plating/airless,
+/area/exploration_away/no_gravity)
+"B" = (
+/obj/structure/lattice,
+/turf/template_noop,
+/area/exploration_away/no_gravity)
+"C" = (
+/obj/machinery/shuttle/engine/plasma{
+	dir = 4
+	},
+/turf/open/space/basic,
+/area/exploration_away/no_gravity)
+"E" = (
+/obj/structure/cable/yellow{
+	icon_state = "2-8"
+	},
+/turf/open/floor/plasteel/airless,
+/area/exploration_away/no_gravity)
+"F" = (
+/obj/structure/cable/yellow{
+	icon_state = "1-8"
+	},
+/turf/open/floor/plasteel/airless,
+/area/exploration_away/no_gravity)
+"H" = (
+/obj/structure/lattice,
+/turf/template_noop,
+/area/exploration_away/outside)
+"I" = (
+/obj/machinery/atmospherics/components/unary/portables_connector{
+	dir = 4
+	},
+/turf/open/floor/plasteel/airless,
+/area/exploration_away/no_gravity)
+"J" = (
+/obj/item/stack/tile/plasteel,
+/obj/structure/cable/yellow{
+	icon_state = "1-2"
+	},
+/turf/open/floor/plating/airless,
+/area/exploration_away/no_gravity)
+"K" = (
+/obj/structure/lattice,
+/obj/item/pickaxe,
+/turf/template_noop,
+/area/exploration_away/outside)
+"L" = (
+/obj/structure/cable/yellow{
+	icon_state = "4-8"
+	},
+/turf/open/floor/plasteel/airless,
+/area/exploration_away/no_gravity)
+"M" = (
+/obj/structure/cable/yellow{
+	icon_state = "1-2"
+	},
+/turf/open/floor/plating/airless,
+/area/exploration_away/no_gravity)
+"N" = (
+/obj/item/stack/tile/plasteel,
+/turf/open/floor/plating/airless,
+/area/exploration_away/no_gravity)
+"O" = (
+/obj/machinery/atmospherics/pipe/simple/purple/visible,
+/turf/open/floor/plasteel/airless,
+/area/exploration_away/no_gravity)
+"Q" = (
+/obj/item/stack/tile/plasteel,
+/obj/structure/cable/yellow{
+	icon_state = "2-4"
+	},
+/turf/open/floor/plating/airless,
+/area/exploration_away/no_gravity)
+"S" = (
+/obj/machinery/atmospherics/components/unary/shuttle/heater{
+	dir = 4
+	},
+/turf/open/floor/plasteel/airless,
+/area/exploration_away/no_gravity)
+"T" = (
+/obj/structure/cable/yellow{
+	icon_state = "2-4"
+	},
+/turf/open/floor/plasteel/airless,
+/area/exploration_away/no_gravity)
+"U" = (
+/obj/structure/cable/yellow{
+	icon_state = "1-8"
+	},
+/obj/structure/cable/yellow{
+	icon_state = "1-2"
+	},
+/turf/open/floor/plasteel/airless,
+/area/exploration_away/no_gravity)
+"V" = (
+/obj/machinery/atmospherics/components/unary/vent_pump{
+	dir = 4
+	},
+/turf/open/floor/plasteel/airless,
+/area/exploration_away/no_gravity)
+"W" = (
+/turf/closed/wall/mineral/titanium,
+/area/exploration_away/no_gravity)
+"X" = (
+/obj/item/stack/sheet/mineral/plasma,
+/obj/machinery/atmospherics/components/unary/portables_connector{
+	dir = 4
+	},
+/turf/open/floor/plasteel/airless,
+/area/exploration_away/no_gravity)
+"Y" = (
+/obj/structure/cable/yellow{
+	icon_state = "2-8"
+	},
+/turf/open/floor/plating/airless,
+/area/exploration_away/no_gravity)
+"Z" = (
+/turf/closed/mineral/random/high_chance,
+/area/exploration_away/outside)
+
+(1,1,1) = {"
+k
+k
+k
+k
+k
+Z
+Z
+Z
+k
+k
+k
+k
+k
+k
+k
+"}
+(2,1,1) = {"
+k
+k
+k
+Z
+Z
+Z
+Z
+Z
+Z
+Z
+k
+k
+k
+k
+k
+"}
+(3,1,1) = {"
+k
+Z
+Z
+Z
+Z
+Z
+Z
+Z
+Z
+Z
+Z
+Z
+Z
+k
+k
+"}
+(4,1,1) = {"
+Z
+Z
+Z
+Z
+Z
+Z
+Z
+Z
+Z
+Z
+Z
+Z
+Z
+Z
+u
+"}
+(5,1,1) = {"
+u
+Z
+Z
+Z
+Z
+Z
+Z
+Z
+Z
+Z
+Z
+Z
+Z
+Z
+H
+"}
+(6,1,1) = {"
+H
+k
+u
+Z
+u
+Z
+Z
+Z
+Z
+Z
+Z
+Z
+u
+k
+H
+"}
+(7,1,1) = {"
+H
+H
+K
+k
+H
+Z
+u
+Z
+Z
+Z
+Z
+Z
+H
+k
+H
+"}
+(8,1,1) = {"
+k
+k
+H
+H
+H
+k
+H
+Z
+u
+Z
+u
+k
+H
+H
+H
+"}
+(9,1,1) = {"
+k
+k
+k
+k
+H
+k
+H
+k
+H
+k
+H
+H
+H
+k
+k
+"}
+(10,1,1) = {"
+k
+k
+k
+k
+H
+H
+H
+H
+H
+H
+H
+k
+k
+k
+k
+"}
+(11,1,1) = {"
+k
+k
+k
+k
+H
+k
+H
+k
+H
+k
+H
+k
+k
+k
+k
+"}
+(12,1,1) = {"
+k
+k
+k
+k
+H
+k
+H
+k
+H
+k
+H
+k
+k
+k
+k
+"}
+(13,1,1) = {"
+k
+k
+k
+k
+W
+W
+W
+W
+W
+W
+W
+k
+k
+k
+k
+"}
+(14,1,1) = {"
+k
+k
+C
+C
+W
+w
+X
+I
+t
+w
+W
+C
+C
+k
+k
+"}
+(15,1,1) = {"
+k
+W
+S
+S
+W
+N
+h
+l
+y
+w
+W
+S
+S
+W
+k
+"}
+(16,1,1) = {"
+k
+W
+h
+d
+O
+O
+O
+d
+O
+O
+O
+d
+o
+W
+k
+"}
+(17,1,1) = {"
+k
+W
+w
+Q
+j
+m
+s
+n
+x
+V
+w
+w
+L
+W
+k
+"}
+(18,1,1) = {"
+k
+W
+w
+L
+w
+T
+b
+z
+E
+v
+J
+n
+F
+W
+k
+"}
+(19,1,1) = {"
+k
+W
+W
+Y
+n
+U
+M
+M
+M
+p
+w
+e
+W
+W
+k
+"}
+(20,1,1) = {"
+k
+k
+W
+W
+W
+w
+f
+i
+B
+c
+q
+W
+W
+k
+k
+"}
+(21,1,1) = {"
+k
+i
+k
+k
+B
+A
+B
+k
+k
+k
+B
+A
+W
+k
+k
+"}
+(22,1,1) = {"
+k
+k
+k
+k
+k
+B
+k
+k
+k
+i
+k
+B
+i
+k
+k
+"}
+(23,1,1) = {"
+k
+k
+k
+k
+i
+k
+k
+k
+g
+k
+k
+B
+k
+k
+k
+"}
+(24,1,1) = {"
+k
+k
+k
+k
+k
+k
+k
+k
+k
+k
+i
+k
+k
+k
+k
+"}
+(25,1,1) = {"
+k
+k
+k
+k
+k
+k
+k
+k
+k
+k
+k
+k
+k
+k
+k
+"}
