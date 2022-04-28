@@ -60,15 +60,14 @@
 		user.client.images -= eyeobj.user_image
 
 /obj/machinery/computer/camera_advanced/shuttle_creator/attack_hand(mob/user)
-/* 	if(!is_operational) //you cant use broken machine you chumbis
-		to_chat(user, "DEBUG BREAK 1. Var state [is_operational]")
-		return */
+	if(!is_operational) //you cant use broken machine you chumbis
+		is_operational = TRUE //Can't break a virutal machine
+		return 
 	if(current_user)
 		to_chat(user, "The console is already in use!")
 		return
 	var/mob/living/L = user
 	if(!can_use(user))
-		to_chat(user, "DEBUG BREAK 2. Var state [can_use(user)]")
 		return
 	if(!eyeobj)
 		CreateEye()
