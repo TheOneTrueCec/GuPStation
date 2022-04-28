@@ -45,8 +45,8 @@
 	var/obj/docking_port/mobile/linkedShuttle = SSshuttle.getShuttle(shuttle_id)
 	data["ship_status"] = linkedShuttle ? linkedShuttle.name : "N/A"
 	data["active_lanes"] = 1
-	data["queue_length"] = LAZYLEN(SSbluespace_exploration.ship_traffic_queue) + SSbluespace_exploration.generating
-	data["departure_time"] = (LAZYLEN(SSbluespace_exploration.ship_traffic_queue) + SSbluespace_exploration.generating) * 90
+	data["queue_length"] = LAZYLEN(SSbluespace_exploration.ship_traffic_queue)
+	data["departure_time"] = (LAZYLEN(SSbluespace_exploration.ship_traffic_queue) * 90)
 	var/datum/ship_datum/SD = SSbluespace_exploration.tracked_ships[shuttle_id]
 	data["stars"] = list()
 	if(SD)

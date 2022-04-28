@@ -220,7 +220,7 @@
 	dwidth = 8;
 	height = 13;
 	id = "set_by_code";
-	name = "Centcom Raven Cruiser";
+	name = "Felinid Bake Sale";
 	width = 12
 	},
 /turf/open/floor/plasteel/cafeteria,

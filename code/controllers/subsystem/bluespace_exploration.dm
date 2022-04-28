@@ -468,7 +468,7 @@ SUBSYSTEM_DEF(bluespace_exploration)
 
 /datum/controller/subsystem/bluespace_exploration/proc/shuttle_translation(shuttle_id, datum/data_holder/bluespace_exploration/data_holder)
 	var/obj/docking_port/mobile/shuttle = SSshuttle.getShuttle(shuttle_id)
-	if(!shuttle || generating)
+	if(!shuttle || generating < world.time)
 		return FALSE
 	generating = INFINITY
 	if(away_mission_port?.get_docked())
