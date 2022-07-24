@@ -46,6 +46,9 @@
 		if(ship == src)
 			continue
 		var/obj/shuttle_port = SSshuttle.getShuttle(ship_key)
+		//Remove ship if it has left the Z level. Bluespace weapons aren't standard issue (Yet)
+		if(ship in hostile_ships && our_port.z != shuttle_port.z)
+			hostile_ships -= ship
 		//Dont shoot nulls
 		if(!shuttle_port || !our_port || shuttle_port.z != our_port.z)
 			continue
