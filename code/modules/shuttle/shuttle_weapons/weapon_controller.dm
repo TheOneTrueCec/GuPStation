@@ -138,7 +138,7 @@
 	for(var/turf/T as() in turfs)
 		for(var/obj/machinery/shuttle_weapon/weapon in T)
 			var/list/active_weapon = list(
-				id = weapon.unique_id,
+				id = weapon.weapon_id,
 				name = weapon.name,
 				cooldownLeft = max(weapon.next_shot_world_time - world.time, 0),
 				cooldown = weapon.cooldown,

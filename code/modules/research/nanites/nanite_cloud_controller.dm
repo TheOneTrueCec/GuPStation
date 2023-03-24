@@ -232,7 +232,26 @@
 
 				investigate_log("[key_name(usr)] removed rule [rule.display()] from program [P.name] in cloud #[current_view]", INVESTIGATE_NANITES)
 			. = TRUE
-
+/* 		if("load_export")
+			. = TRUE
+		if("create_export")
+			var/datum/nanite_cloud_backup/backup = get_backup(current_view)
+			if(backup)
+				playsound(src, 'sound/machines/terminal_prompt.ogg', 50, FALSE)
+				var/datum/component/nanites/nanites = backup.nanites
+				var/list/json_encoded_program_list = list()
+				for var/datum/nanite_program/json_encoded_program in nanites.programs
+					json_encoded_program_list += json_encode(json_encoded_program)
+				playsound(src, 'sound/machines/ding.ogg', 50, FALSE)
+				playsound(src, 'sound/items/poster_ripped.ogg', 50, FALSE)
+				var/obj/item/paper/P = new/obj/item/paper(loc(src))
+				P.name = "Exported Programs for Cloud #[current_view]"
+				P.info = jointext(json_encoded_program_list, "||||")
+				P.update_icon()
+				P = null
+				investigate_log("[key_name(usr)] exported the programs from cloud #[current_view]", INVESTIGATE_NANITES)
+			. = TRUE
+ */
 /datum/nanite_cloud_backup
 	var/cloud_id = 0
 	var/datum/component/nanites/nanites

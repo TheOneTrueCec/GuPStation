@@ -19,19 +19,23 @@
 /obj/effect/proc_holder/spell/set_weapon_target/InterceptClickOn(mob/living/caller, params, atom/target)
 	if(!linked_console)
 		to_chat(caller, "<span class='warning'>No linked console.</span>")
+		remove_ranged_ability()
 		caller.RemoveSpell(/obj/effect/proc_holder/spell/set_weapon_target)
 		return FALSE
 	CHECK_TICK
 	if(..())
+		remove_ranged_ability()
 		caller.RemoveSpell(/obj/effect/proc_holder/spell/set_weapon_target)
 		return FALSE
 	CHECK_TICK
 	if(!linked_console.can_interact(caller))
 		to_chat(caller, "<span class='warning'>You are too far away!</span>")
+		remove_ranged_ability()
 		caller.RemoveSpell(/obj/effect/proc_holder/spell/set_weapon_target)
 		return FALSE
 	CHECK_TICK
 	if(!cast_check(FALSE, ranged_ability_user))
+		remove_ranged_ability()
 		caller.RemoveSpell(/obj/effect/proc_holder/spell/set_weapon_target)
 		return FALSE
 	CHECK_TICK
@@ -39,6 +43,7 @@
 	if(!istype(T))
 		T = get_turf(target)
 	if(!T)
+		remove_ranged_ability()
 		caller.RemoveSpell(/obj/effect/proc_holder/spell/set_weapon_target)
 		return FALSE
 	CHECK_TICK
@@ -47,5 +52,6 @@
 	caller.log_message("fired [weapon ? "[weapon] " : ""][linked_console] at [AREACOORD(T)]", LOG_ATTACK, color="purple")
 	log_shuttle_attack("fired [weapon ? "[weapon] " : ""][linked_console] at [AREACOORD(T)]")
 	linked_console.on_target_location(T)
+	remove_ranged_ability()
 	caller.RemoveSpell(/obj/effect/proc_holder/spell/set_weapon_target)
 	return TRUE

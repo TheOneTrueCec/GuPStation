@@ -8,7 +8,6 @@
 	icon = 'icons/obj/turrets.dmi'
 	icon_state = "syndie_lethal"
 	anchored = TRUE
-	var/unique_id
 	var/projectile_type = /obj/projectile/bullet/shuttle/beam/laser
 	var/flight_time = 10
 
